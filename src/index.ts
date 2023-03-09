@@ -1,6 +1,7 @@
 import { FormBuilder } from './core/form-builder'
 import { Layouts } from './ui/styles/layouts'
 import { Validators } from './validators/validators'
+import { Form, Form2 } from './controllers/form'
 import { CheckboxInput } from './controllers/fields/input/checkbox'
 import { DateInput } from './controllers/fields/input/date'
 import { TimeInput } from './controllers/fields/input/time'
@@ -17,7 +18,7 @@ import { AbstractSelect } from './controllers/fields/abstract-select'
 import { AbstractField } from './controllers/abstract-field'
 import { CustomSelect } from './controllers/fields/select/custom-select'
 // import './ui/components/form'; // TODO: side efects only! look for right place
-export { FormBuilder, Validators, Layouts }
+export { Form, Form2, FormBuilder, Validators, Layouts }
 export type {
   AbstractField,
   AbstractInput,
