@@ -1,0 +1,1 @@
+{"version":3,"file":"themes.js","sourceRoot":"","sources":["../../../src/ui/styles/themes.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,YAAY,EAAE,MAAM,qBAAqB,CAAA;AAClD,OAAO,EAAE,SAAS,EAAE,MAAM,kBAAkB,CAAA;AAE5C,MAAM,OAAO,MAAM;IACjB,MAAM,CAAC,SAAS,GAAG,YAAY,CAAA;IAC/B,MAAM,CAAC,MAAM,GAAG,SAAS,CAAA"}
