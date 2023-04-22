@@ -7,7 +7,9 @@
   "scripts": {
     "clear": "rm -R lib",
     "compile": "tsc",
-    "build": "npm run clear; npm run compile"
+    "build": "npm run clear; npm run compile",
+    "linting-check": "npx rome check ./src",
+    "format": "npx rome format ./src --write"
   },
   "keywords": [
     "form",
@@ -24,11 +26,12 @@
   },
   "homepage": "https://github.com/josedaniel-cb/ire-forms#readme",
   "devDependencies": {
-    "prettier": "^2.8.4",
-    "typescript": "^4.9.5"
+    "prettier": "^2.8.7",
+    "rome": "12.0.0",
+    "typescript": "^5.0.4"
   },
   "dependencies": {
-    "lit": "^2.6.1",
+    "lit": "^2.7.2",
     "rxjs": "^7.8.0"
   },
   "files": [
