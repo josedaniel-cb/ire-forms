@@ -12,7 +12,7 @@ import {
   ValuesMap,
 } from '../core/states'
 import { FieldInterfacesMap } from './fields-map'
-import { Flatten } from '../core/flatten'
+import { Flatten } from '../typing/flatten'
 
 export type FieldsMap = {
   [key: string]: AbstractFieldController<any, HTMLElement>
