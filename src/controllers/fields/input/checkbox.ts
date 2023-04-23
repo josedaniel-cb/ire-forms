@@ -43,7 +43,7 @@ export class CheckboxInputController
 
   protected _setValueToElement(
     value: boolean,
-    element: HTMLInputElement
+    element: HTMLInputElement,
   ): void {
     element.checked = value
   }
@@ -62,7 +62,7 @@ interface CheckboxInputExternalParams
 }
 
 function makeCheckboxInputExternalParams(
-  params: BuilderParams
+  params: BuilderParams,
 ): CheckboxInputExternalParams {
   return { ...params, controlType: 'checkboxInput' }
 }

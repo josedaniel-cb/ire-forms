@@ -94,7 +94,7 @@ export class TextAreaController
 
   protected _setValueToElement(
     value: string,
-    element: HTMLTextAreaElement
+    element: HTMLTextAreaElement,
   ): void {
     element.value = value
   }
@@ -223,7 +223,7 @@ interface TextAreaExternalParams
 }
 
 function makeTextAreaExternalParams(
-  params: BuilderParams
+  params: BuilderParams,
 ): TextAreaExternalParams {
   return { ...params, controlType: 'textArea' }
 }

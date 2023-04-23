@@ -55,7 +55,7 @@ export class SelectController
 
   protected _setIndexToElement(
     index: number,
-    element: HTMLSelectElement
+    element: HTMLSelectElement,
   ): void {
     element.selectedIndex = index + 1
   }
@@ -74,7 +74,7 @@ interface SelectExternalParams<T>
 }
 
 function makeSelectExternalParams<T>(
-  params: BuilderParams<T>
+  params: BuilderParams<T>,
 ): SelectExternalParams<T> {
   return { ...params, controlType: 'select' }
 }

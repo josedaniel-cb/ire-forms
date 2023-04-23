@@ -45,7 +45,7 @@ export interface AbstractField<T, E extends HTMLElement> {
 
 export abstract class AbstractFieldController<
   T = any,
-  E extends HTMLElement = any
+  E extends HTMLElement = any,
 > implements AbstractField<T, E>
 {
   // Form controller reference
@@ -101,7 +101,7 @@ export abstract class AbstractFieldController<
     this._elementNotifier = new BehaviorSubject<E | null>(null)
     if (params.onRender !== undefined)
       this.renderedElementChanges.subscribe((element) =>
-        params.onRender!(element)
+        params.onRender!(element),
       )
 
     // Buttons
@@ -143,7 +143,7 @@ export abstract class AbstractFieldController<
       map((state) => state.value),
       // distinct(),
       distinctUntilChanged(),
-      takeUntil(this.form.unsubscribe)
+      takeUntil(this.form.unsubscribe),
     )
   }
 
@@ -178,9 +178,9 @@ export abstract class AbstractFieldController<
       }),
       // distinct(({ invalidStateMessages }) => invalidStateMessages),
       distinctUntilChanged(
-        (prev, curr) => prev.invalidStateMessages === curr.invalidStateMessages
+        (prev, curr) => prev.invalidStateMessages === curr.invalidStateMessages,
       ),
-      takeUntil(this.form.unsubscribe)
+      takeUntil(this.form.unsubscribe),
     )
   }
 
@@ -222,7 +222,7 @@ export abstract class AbstractFieldController<
       filter((value) => value !== null),
       map((value) => value!),
       distinctUntilChanged(),
-      takeUntil(this.form.unsubscribe)
+      takeUntil(this.form.unsubscribe),
     )
   }
 
@@ -243,7 +243,7 @@ export abstract class AbstractFieldController<
         if (change.value !== undefined)
           element.setAttribute(change.name, change.value)
         else element.removeAttribute(change.name)
-      })
+      }),
     )
 
     this._elementNotifier.next(element)

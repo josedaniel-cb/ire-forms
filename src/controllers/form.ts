@@ -169,7 +169,7 @@ export class FormController implements Form {
   // }
 
   get(
-    fieldName: string
+    fieldName: string,
   ): AbstractFieldController<any, HTMLElement> | undefined {
     if (fieldName in this._map) return this._map[fieldName]
     return undefined
@@ -192,7 +192,7 @@ export class FormController implements Form {
   get valueChanges(): Observable<ValuesMap> {
     return this._stateNotifier.pipe(
       map((state) => state.value),
-      takeUntil(this.unsubscribe)
+      takeUntil(this.unsubscribe),
     )
   }
 
@@ -232,7 +232,7 @@ export class FormController implements Form {
           invalidStateMessages: state.invalidStateMessages,
         }
       }),
-      takeUntil(this.unsubscribe)
+      takeUntil(this.unsubscribe),
     )
   }
 
@@ -243,7 +243,7 @@ export class FormController implements Form {
   get touchedChanges(): Observable<boolean> {
     return this._stateNotifier.pipe(
       map((state) => state.touched),
-      takeUntil(this.unsubscribe)
+      takeUntil(this.unsubscribe),
     )
   }
 

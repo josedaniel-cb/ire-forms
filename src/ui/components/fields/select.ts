@@ -32,14 +32,16 @@ class SelectElement extends AbstractSelectElement {
         })}
       >
         <option hidden>
-          ${this.controller.placeholder !== undefined
-            ? this.controller.placeholder
-            : 'Seleccione una opción'}
+          ${
+            this.controller.placeholder !== undefined
+              ? this.controller.placeholder
+              : 'Seleccione una opción'
+          }
         </option>
         ${this.controller.options.map(
           (option, index) => html`
             <option value="${index}">${option.label}</option>
-          `
+          `,
         )}
       </select>
     `

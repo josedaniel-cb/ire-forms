@@ -73,7 +73,7 @@ export abstract class AbstractInputController<T = NonNullable<any> | null>
 
   protected abstract _setValueToElement(
     value: T,
-    element: HTMLInputElement
+    element: HTMLInputElement,
   ): void
 
   // Value

@@ -56,7 +56,7 @@ import {
 export function buildFieldController(
   params: AbstractFieldExternalParams<any, any>,
   form: FormController,
-  name: string
+  name: string,
 ): AbstractFieldController {
   switch (params.controlType) {
     case 'checkboxInput':

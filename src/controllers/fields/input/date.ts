@@ -47,7 +47,7 @@ export class DateInputController
 
   protected _setValueToElement(
     value: Date | null,
-    element: HTMLInputElement
+    element: HTMLInputElement,
   ): void {
     if (value !== null) {
       element.value = value.toISOString().substring(0, 10)
@@ -113,7 +113,7 @@ interface DateInputExternalParams
 }
 
 function makeDateInputExternalParams(
-  params: BuilderParams
+  params: BuilderParams,
 ): DateInputExternalParams {
   return { ...params, controlType: 'dateInput' }
 }

@@ -136,10 +136,11 @@ class MultipleSelectElement extends FieldElement {
         tabindex="0"
         @focus="${() => this.input.focus()}"
       >
-        ${this.options.length === this.value.length
-          ? this.options.map((o, i) =>
-              this.value[i]
-                ? html`
+        ${
+          this.options.length === this.value.length
+            ? this.options.map((o, i) =>
+                this.value[i]
+                  ? html`
                     <div class="chip">
                       <div class="chip__text">
                         ${o.textValue ?? `${o.value}`}
@@ -151,9 +152,10 @@ class MultipleSelectElement extends FieldElement {
                       ></div>
                     </div>
                   `
-                : undefined
-            )
-          : undefined}
+                  : undefined,
+              )
+            : undefined
+        }
         <input
           type="text"
           class="${classMap({ hidden: !this.allowInput })}"
@@ -179,7 +181,7 @@ class MultipleSelectElement extends FieldElement {
               : {
                   opacity: '0',
                   'pointer-events': 'none',
-                }
+                },
           )}
         >
           ${this.filteredOptions.map(({ option, index }) => {
@@ -189,20 +191,21 @@ class MultipleSelectElement extends FieldElement {
                   item: true,
                   selected: index === this.selectionIndex,
                 })}
-                @mousedown="${(e: Event) =>
-                  this._handleItemMouseDown(e, index)}"
+                @mousedown="${(e: Event) => this._handleItemMouseDown(e, index)}"
               >
                 ${this.itemTemplate(option)}
               </div>
             `
           })}
-          ${this.filteredOptions.length === 0
-            ? html`
+          ${
+            this.filteredOptions.length === 0
+              ? html`
                 <div class="empty-message">
                   Ninguna opción coincide con el criterio de búsqueda
                 </div>
               `
-            : undefined}
+              : undefined
+          }
         </div>
       </div>
     `

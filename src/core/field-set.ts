@@ -41,7 +41,7 @@ export class FieldSet {
   }
 
   private _toList(
-    fields: (AbstractFieldController | FieldSet)[]
+    fields: (AbstractFieldController | FieldSet)[],
   ): AbstractFieldController[] {
     const array: AbstractFieldController[] = []
 

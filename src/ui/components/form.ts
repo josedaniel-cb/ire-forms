@@ -47,9 +47,11 @@ export class FormElement extends LitElement {
     return html`
       ${renderExternalStyleSheets()}
       <form>
-        ${this.controller !== undefined
-          ? this._renderFieldSet(this.controller.tree)
-          : 'Controller is missing'}
+        ${
+          this.controller !== undefined
+            ? this._renderFieldSet(this.controller.tree)
+            : 'Controller is missing'
+        }
       </form>
     `
   }
@@ -69,12 +71,14 @@ export class FormElement extends LitElement {
         style="${ifDefined(
           layout.styles !== '' || styles !== ''
             ? `${layout.styles}; ${styles}`
-            : undefined
+            : undefined,
         )}"
       >
-        ${fieldset.legend !== undefined
-          ? html`<legend>${fieldset.legend}</legend>`
-          : ''}
+        ${
+          fieldset.legend !== undefined
+            ? html`<legend>${fieldset.legend}</legend>`
+            : ''
+        }
         ${fieldset.fields.map((child) => {
           if (child instanceof AbstractFieldController) {
             return this._renderField(child)

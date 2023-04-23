@@ -52,12 +52,12 @@ class CustomSelectElement extends AbstractSelectElement {
 
       <!-- <div
         class=${classMap({
-        'form-control': true,
-        'is-invalid': this._isInvalid,
-      })}
+          'form-control': true,
+          'is-invalid': this._isInvalid,
+        })}
         tabindex="0"
         @focus="${(e: Event) =>
-        ((e.target as HTMLElement).children.item(0)! as HTMLElement).focus()}"
+          ((e.target as HTMLElement).children.item(0)! as HTMLElement).focus()}"
       >
         <input
           id="element"
@@ -81,7 +81,7 @@ class CustomSelectElement extends AbstractSelectElement {
               : {
                   opacity: '0',
                   'pointer-events': 'none',
-                }
+                },
           )}
         >
           ${this.filteredOptions.map((option, i) => {
@@ -97,13 +97,15 @@ class CustomSelectElement extends AbstractSelectElement {
               </div>
             `
           })}
-          ${this.filteredOptions.length === 0
-            ? html`
+          ${
+            this.filteredOptions.length === 0
+              ? html`
                 <div class="empty-message">
                   Ninguna opción coincide con el criterio de búsqueda
                 </div>
               `
-            : undefined}
+              : undefined
+          }
         </div>
       </div>
     `

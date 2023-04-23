@@ -11,7 +11,7 @@ export const renderExternalStyleSheets = () => html`
         type="text/css"
         href="${s}"
       />
-    `
+    `,
   )}
 `
 
@@ -41,9 +41,11 @@ export const renderButtons = (arr: FormButton[]) =>
             @click="${() => b.onClick()}"
           >
             ${icon}
-            ${icon && label
-              ? html`<span class="label-spacer"></span>`
-              : undefined}
+            ${
+              icon && label
+                ? html`<span class="label-spacer"></span>`
+                : undefined
+            }
             ${label}
             <!-- <i class="rounded-full aspect-square items-center space"></i> -->
           </button>

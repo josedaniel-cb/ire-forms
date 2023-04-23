@@ -41,7 +41,7 @@ export interface FormButtonExternalArgs {
 }
 
 export const makeIconButtonArgs = (
-  args: FormButtonExternalArgs
+  args: FormButtonExternalArgs,
 ): FormButtonArgs => ({
   ...args,
   mode: args.mode ?? 'text',
@@ -50,7 +50,7 @@ export const makeIconButtonArgs = (
 })
 
 export const makeButtonArgs = (
-  args: FormButtonExternalArgs
+  args: FormButtonExternalArgs,
 ): FormButtonArgs => ({
   ...args,
   mode: args.mode ?? 'filled',

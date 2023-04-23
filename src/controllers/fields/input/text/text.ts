@@ -36,7 +36,7 @@ interface TextInputExternalParams
 }
 
 function makeTextInputExternalParams(
-  params: TextInputBuilderParams
+  params: TextInputBuilderParams,
 ): TextInputExternalParams {
   return { ...params, controlType: 'textInput' }
 }

@@ -52,7 +52,7 @@ export class NumberInputController
       Validators.numberRange({
         max: params.max,
         min: params.min,
-      })
+      }),
     )
 
     // Keyboard arrows gap
@@ -170,7 +170,7 @@ interface NumberInputExternalParams
 }
 
 function makeNumberInputExternalParams(
-  params: BuilderParams
+  params: BuilderParams,
 ): NumberInputExternalParams {
   return { ...params, controlType: 'numberInput' }
 }

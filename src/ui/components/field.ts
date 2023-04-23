@@ -31,9 +31,11 @@ export abstract class FieldElement extends LitElement {
       label = html`
         <span>
           ${this.controller.label}
-          ${this.controller.required
-            ? html`<span class="text-danger">*</span>`
-            : undefined}
+          ${
+            this.controller.required
+              ? html`<span class="text-danger">*</span>`
+              : undefined
+          }
         </span>
       `
     }

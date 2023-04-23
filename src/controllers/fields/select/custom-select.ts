@@ -66,7 +66,7 @@ export interface CustomSelectExternalParams<T>
 }
 
 export const makeCustomSelectExternalParams = <T>(
-  params: CustomSelectBuilderParams<T>
+  params: CustomSelectBuilderParams<T>,
 ): CustomSelectExternalParams<T> => {
   return { ...params, controlType: 'customSelect' }
 }

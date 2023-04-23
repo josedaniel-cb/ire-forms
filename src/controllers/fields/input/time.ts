@@ -46,7 +46,7 @@ export class TimeInputController
 
   protected _setValueToElement(
     value: string | null,
-    element: HTMLInputElement
+    element: HTMLInputElement,
   ): void {
     if (value !== null) {
       element.value = value
@@ -116,7 +116,7 @@ interface TimeInputExternalParams
 }
 
 function makeTimeInputExternalParams(
-  params: BuilderParams
+  params: BuilderParams,
 ): TimeInputExternalParams {
   return { ...params, controlType: 'timeInput' }
 }

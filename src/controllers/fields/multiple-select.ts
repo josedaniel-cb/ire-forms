@@ -108,7 +108,7 @@ export class MultipleSelectController<T>
   async setValue(value: boolean[]): Promise<void> {
     if (value.length !== this.options.length) {
       throw new Error(
-        '[ire-forms] Value length has to have the same length of options'
+        '[ire-forms] Value length has to have the same length of options',
       )
     }
     this._setValueToElement(value, await this.elementAsync)
@@ -196,7 +196,7 @@ interface MultipleSelectExternalParams<T>
 }
 
 export function makeMultipleSelectExternalParams<T>(
-  params: BuilderParams<T>
+  params: BuilderParams<T>,
 ): MultipleSelectExternalParams<T> {
   return { ...params, controlType: 'multipleSelect' }
 }

@@ -38,7 +38,7 @@ export class FileInputController
   // Html
   connectElements(
     textElement: HTMLInputElement,
-    fileElement: HTMLInputElement
+    fileElement: HTMLInputElement,
   ) {
     textElement.setAttribute('placeholder', this.placeholder)
 
@@ -54,7 +54,7 @@ export class FileInputController
         if (change.value !== undefined)
           textElement.setAttribute(change.name, change.value)
         else textElement.removeAttribute(change.name)
-      })
+      }),
     )
 
     // Initialize value
@@ -90,7 +90,7 @@ export class FileInputController
 
   protected _setValueToElement(
     value: File | null,
-    element: HTMLInputElement
+    element: HTMLInputElement,
   ): void {
     if (value === null) {
       element.setAttribute('placeholder', this.placeholder)
@@ -120,7 +120,7 @@ interface FileInputExternalParams
 }
 
 function makeFileInputExternalParams(
-  params: BuilderParams
+  params: BuilderParams,
 ): FileInputExternalParams {
   return { ...params, controlType: 'fileInput' }
 }

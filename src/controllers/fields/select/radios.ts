@@ -94,7 +94,7 @@ interface RadiosConstructorParams<T>
     AbstractSelectConstructorParams<T, SimpleOption<T>, HTMLElement> {}
 
 function makeRadiosExternalParams<T>(
-  params: BuilderParams<T>
+  params: BuilderParams<T>,
 ): RadiosExternalParams<T> {
   return { ...params, controlType: 'radios' }
 }

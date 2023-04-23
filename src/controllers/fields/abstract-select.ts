@@ -13,7 +13,7 @@ import { Option } from './select/options'
 export interface AbstractSelect<
   T extends NonNullable<any>,
   O extends Option<T>,
-  E extends HTMLElement
+  E extends HTMLElement,
 > extends AbstractField<T, E> {
   get options(): O[]
   updateOptions(params: { options: O[]; index?: number }): void
@@ -29,7 +29,7 @@ export abstract class AbstractSelectController<
     // O extends Option<T> = Option<T>,
     O extends Option<T> = any,
     // E extends HTMLElement = HTMLElement
-    E extends HTMLElement = any
+    E extends HTMLElement = any,
   >
   extends AbstractFieldController<T | null, E>
   implements AbstractSelect<T | null, O, E>
@@ -184,7 +184,7 @@ export abstract class AbstractSelectController<
 
   protected abstract _setIndexToElement(
     index: number,
-    element: HTMLElement
+    element: HTMLElement,
   ): void
 
   // General
@@ -202,7 +202,7 @@ export abstract class AbstractSelectController<
 interface AbstractSelectBuilderParams<
   T,
   O extends Option<T>,
-  E extends HTMLElement
+  E extends HTMLElement,
 > extends AbstractFieldBuilderParams<T, E> {
   index?: number
   // options: Option<NonNullable<T>>[];
@@ -213,14 +213,14 @@ interface AbstractSelectBuilderParams<
 interface AbstractSelectExternalParams<
   T,
   O extends Option<T>,
-  E extends HTMLElement
+  E extends HTMLElement,
 > extends AbstractSelectBuilderParams<T, O, E>,
     AbstractFieldExternalParams<T, E> {}
 
 interface AbstractSelectConstructorParams<
   T,
   O extends Option<T>,
-  E extends HTMLElement
+  E extends HTMLElement,
 > extends AbstractSelectBuilderParams<T, O, E>,
     AbstractFieldConstructorParams<T, E> {}
 

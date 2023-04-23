@@ -29,7 +29,7 @@ class RadiosElement extends AbstractSelectElement {
                 ${option.label}
               </label>
             </div>
-          `
+          `,
         )}
       </div>
     `

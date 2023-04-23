@@ -28,7 +28,7 @@ interface PasswordInputExternalParams
 }
 
 function makePasswordInputExternalParams(
-  params: BuilderParams
+  params: BuilderParams,
 ): PasswordInputExternalParams {
   return { ...params, controlType: 'passwordInput' }
 }
