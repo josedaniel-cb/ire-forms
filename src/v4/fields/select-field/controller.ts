@@ -1,5 +1,13 @@
-import { FieldProps, FieldController } from '../field-controller'
-import { SelectFieldState } from './state'
+import {
+  FieldProps,
+  FieldController,
+  FieldState,
+  FieldParams,
+} from '../field-controller'
+
+export interface SelectFieldState<T> extends FieldState<T> {
+  options: { label: string; value: T }[]
+}
 
 export interface SelectFieldProps<T>
   extends FieldProps<T, SelectFieldState<T>> {
@@ -14,3 +22,5 @@ export abstract class SelectFieldController<T> extends FieldController<
     super(params)
   }
 }
+
+export type SelectFieldParams<T> = FieldParams<SelectFieldState<T>, 'select'>

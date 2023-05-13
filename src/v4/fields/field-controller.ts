@@ -2,19 +2,31 @@ import { BehaviorSubject, Subscription } from 'rxjs'
 import { FieldType } from './field-type'
 
 export interface FieldState<T> {
+  // Value
   value: T
-
-  label: string
 
   defaultValue?: T
 
+  // Visual
+  label: string
+
+  // Validation
   required?: boolean
+
+  validators?: ((value: T) => string | undefined)[]
+
+  errorMessage?: string
+
+  isValid: boolean
+
+  touched: boolean
 
   enabled?: boolean
 }
 
 export interface FieldProps<T, S extends FieldState<T>> {
   readonly state: S
+
   onValueChange(
     callbackFn: (value: T, field: FieldProps<T, S>) => void,
   ): Subscription
@@ -42,10 +54,14 @@ export abstract class FieldController<T, S extends FieldState<T>>
   }
 }
 
+type FieldStateOptionalParams = 'value' | 'errorMessage' | 'isValid' | 'touched'
+
 export type FieldParams<
-  T extends FieldState<unknown>,
+  // T extends FieldState<never>,
+  // T extends FieldState<unknown>,
+  T extends FieldState<any>,
   K extends FieldType,
-> = Omit<T, 'value'> & {
+> = Omit<T, FieldStateOptionalParams> & {
   type: K
   value?: T['value']
 }

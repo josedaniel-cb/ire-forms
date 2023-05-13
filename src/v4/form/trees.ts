@@ -1,26 +1,26 @@
 import {
-  MultiSelectField,
   MultiSelectFieldParams,
+  MultiSelectFieldProps,
   MultiSelectFieldState,
-} from '../fields/multiple-select-field'
+} from '../fields/multiple-select-field/controller'
 import {
-  SelectField,
   SelectFieldParams,
+  SelectFieldProps,
   SelectFieldState,
-} from '../fields/select-field'
+} from '../fields/select-field/controller'
 import {
-  TextField,
   TextFieldParams,
+  TextFieldProps,
   TextFieldState,
-} from '../fields/text-field'
+} from '../fields/text-field/controller'
 
 export type FormFields<T extends FormParams> = {
   [K in keyof T['fields']]: T['fields'][K] extends TextFieldParams
-    ? TextField
+    ? TextFieldProps
     : T['fields'][K] extends SelectFieldParams<infer R>
-    ? SelectField<R>
+    ? SelectFieldProps<R>
     : T['fields'][K] extends MultiSelectFieldParams<infer R>
-    ? MultiSelectField<R>
+    ? MultiSelectFieldProps<R>
     : T['fields'][K] extends FieldSet
     ? FormFields<T['fields'][K]>
     : never
@@ -38,17 +38,6 @@ export type FormValue<T extends FormParams> = {
     : never
 }
 
-// export type FormFieldsPatch<T extends FormParams> = {
-//   [K in keyof T['fields']]?: T['fields'][K] extends TextFieldParams
-//     ? Partial<Omit<TextFieldParams, 'type'>>
-//     : T['fields'][K] extends SelectFieldParams<infer R>
-//     ? Partial<Omit<SelectFieldParams<R>, 'type'>>
-//     : T['fields'][K] extends MultiSelectFieldParams<infer R>
-//     ? Partial<Omit<MultiSelectFieldParams<R>, 'type'>>
-//     : T['fields'][K] extends FieldSet
-//     ? FormFieldsPatch<T['fields'][K]>
-//     : never
-// }
 export type FormFieldsPatch<T extends FormParams> = {
   [K in keyof T['fields']]?: T['fields'][K] extends TextFieldParams
     ? Partial<TextFieldState>
@@ -79,8 +68,8 @@ export interface FieldSet {
 
 export type FormNode =
   | TextFieldParams
-  | SelectFieldParams<unknown>
-  | MultiSelectFieldParams<unknown>
+  | SelectFieldParams<any>
+  | MultiSelectFieldParams<any>
   | FieldSet
 
 export type FormParams = {
