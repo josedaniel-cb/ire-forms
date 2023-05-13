@@ -1,24 +1,6 @@
-import { Form } from './form/form-controller'
-import {
-  FormFields,
-  FormParams,
-  FormFieldsPatch,
-  FormValuePatch,
-  FormValue,
-} from './form/trees'
+import { FormBuilder } from './form/form-builder'
 
-function defineForm<T extends FormParams>(config: T): Form<T> {
-  // Aquí va la implementación de la función, por ejemplo, la creación y configuración de elementos del DOM
-  // ...
-  return {
-    value: {} as FormValue<T>, // Esto es solo un ejemplo, debes reemplazarlo con la implementación real
-    fields: {} as FormFields<T>,
-    patch: {} as (config: FormFieldsPatch<T>) => void,
-    patchValues: {} as (config: FormValuePatch<T>) => void,
-  }
-}
-
-const form = defineForm({
+const form = FormBuilder.build({
   fields: {
     textField: {
       type: 'text',
@@ -100,12 +82,12 @@ const form = defineForm({
   },
 })
 
-form.fields.multipleSelectField
-form.value.multipleSelectField
+form.fields.multipleSelectField // MultiSelectFieldProps<string>
+form.value.multipleSelectField // string[]
 
-form.value.aFieldSet.nestedMultipleSelectField
-form.fields.aFieldSet.nestedMultipleSelectField.state.value
-form.fields.aFieldSet.aFieldSet.nestedMultipleSelectField
+form.value.aFieldSet.nestedMultipleSelectField // string[]
+form.fields.aFieldSet.nestedMultipleSelectField.state.value // string[]
+form.fields.aFieldSet.aFieldSet.nestedMultipleSelectField // MultiSelectFieldProps<string>
 
 form.patch({
   aFieldSet: {

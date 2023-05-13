@@ -1,14 +1,15 @@
-import { Field } from '../field'
+import { FieldProps, FieldController } from '../field-controller'
 import { TextFieldState } from './state'
 
-export interface TextField extends Field<string> {
+export interface TextFieldProps extends FieldProps<string, TextFieldState> {
   readonly state: TextFieldState
 }
 
-export abstract class TextFieldController implements TextField {
-  readonly state: TextFieldState
-
-  constructor(params: TextField) {
-    this.state = params.state
+export abstract class TextFieldController<T> extends FieldController<
+  string,
+  TextFieldState
+> {
+  constructor(params: TextFieldProps) {
+    super(params)
   }
 }

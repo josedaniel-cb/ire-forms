@@ -9,8 +9,8 @@ import {
 export interface Form<T extends FormParams> {
   fields: FormFields<T>
   value: FormValue<T>
-  patch(config: FormFieldsPatch<T>): void
-  patchValues(values: FormValuePatch<T>): void
+  patch(patch: FormFieldsPatch<T>): void
+  patchValues(patch: FormValuePatch<T>): void
 }
 
 export class FormController<T extends FormParams> implements Form<T> {
@@ -30,7 +30,7 @@ export class FormController<T extends FormParams> implements Form<T> {
     throw new Error('Method not implemented.')
   }
 
-  patchValues(values: FormValuePatch<T>): void {
+  patchValues(patch: FormValuePatch<T>): void {
     throw new Error('Method not implemented.')
   }
 }

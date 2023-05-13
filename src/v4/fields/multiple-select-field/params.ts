@@ -1,4 +1,4 @@
-import { FieldParams } from '../field-params'
+import { FieldParams } from '../field-controller'
 import { MultiSelectFieldState } from './state'
 
 export type MultiSelectFieldParams<T> = FieldParams<

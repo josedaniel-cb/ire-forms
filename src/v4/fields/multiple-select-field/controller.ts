@@ -1,16 +1,16 @@
-import { Field } from '../field'
+import { FieldProps, FieldController } from '../field-controller'
 import { MultiSelectFieldState } from './state'
 
-export interface MultiSelectField<T> extends Field<T[]> {
+export interface MultiSelectFieldProps<T>
+  extends FieldProps<T[], MultiSelectFieldState<T>> {
   readonly state: MultiSelectFieldState<T>
 }
 
-export abstract class MultiSelectFieldController<T>
-  implements MultiSelectField<T>
-{
-  readonly state: MultiSelectFieldState<T>
-
-  constructor(params: MultiSelectField<T>) {
-    this.state = params.state
+export abstract class MultiSelectFieldController<T> extends FieldController<
+  T[],
+  MultiSelectFieldState<T>
+> {
+  constructor(params: MultiSelectFieldProps<T>) {
+    super(params)
   }
 }
