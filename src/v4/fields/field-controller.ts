@@ -54,14 +54,12 @@ export abstract class FieldController<T, S extends FieldState<T>>
   }
 }
 
-type FieldStateOptionalParams = 'value' | 'errorMessage' | 'isValid' | 'touched'
+type FieldStateExcludedPropsFromParams = 'errorMessage' | 'isValid' | 'touched'
 
-export type FieldParams<
-  // T extends FieldState<never>,
-  // T extends FieldState<unknown>,
-  T extends FieldState<any>,
-  K extends FieldType,
-> = Omit<T, FieldStateOptionalParams> & {
+export type FieldParams<T extends FieldState<any>, K extends FieldType> = Omit<
+  T,
+  'value' | FieldStateExcludedPropsFromParams
+> & {
   type: K
   value?: T['value']
 }

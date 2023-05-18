@@ -1,14 +1,9 @@
 import { Form } from './form-controller'
-import {
-  FormFields,
-  FormFieldsPatch,
-  FormParams,
-  FormValue,
-  FormValuePatch,
-} from './trees'
+import { FormDefinition } from './form-definition'
+import { FormFields, FormFieldsPatch, FormValue, FormValuePatch } from './trees'
 
 export class FormBuilder {
-  static build<T extends FormParams>(params: T): Form<T> {
+  static build<T extends FormDefinition>(params: T): Form<T> {
     // Aquí va la implementación de la función, por ejemplo, la creación y configuración de elementos del DOM
     // ...
     return {

@@ -1,19 +1,14 @@
-import {
-  FormParams,
-  FormValue,
-  FormValuePatch,
-  FormFields,
-  FormFieldsPatch,
-} from './trees'
+import { FormDefinition } from './form-definition'
+import { FormValue, FormValuePatch, FormFields, FormFieldsPatch } from './trees'
 
-export interface Form<T extends FormParams> {
+export interface Form<T extends FormDefinition> {
   fields: FormFields<T>
   value: FormValue<T>
   patch(patch: FormFieldsPatch<T>): void
   patchValues(patch: FormValuePatch<T>): void
 }
 
-export class FormController<T extends FormParams> implements Form<T> {
+export class FormController<T extends FormDefinition> implements Form<T> {
   fields: FormFields<T>
 
   value: FormValue<T>

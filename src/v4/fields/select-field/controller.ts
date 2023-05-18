@@ -5,17 +5,17 @@ import {
   FieldParams,
 } from '../field-controller'
 
-export interface SelectFieldState<T> extends FieldState<T> {
-  options: { label: string; value: T }[]
+export interface SelectFieldState<T> extends FieldState<NonNullable<T> | null> {
+  options: { label: string; value: NonNullable<T> }[]
 }
 
 export interface SelectFieldProps<T>
-  extends FieldProps<T, SelectFieldState<T>> {
+  extends FieldProps<NonNullable<T> | null, SelectFieldState<T>> {
   readonly state: SelectFieldState<T>
 }
 
 export abstract class SelectFieldController<T> extends FieldController<
-  T,
+  NonNullable<T> | null,
   SelectFieldState<T>
 > {
   constructor(params: SelectFieldProps<T>) {

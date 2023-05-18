@@ -13,7 +13,7 @@ export interface TextFieldProps extends FieldProps<string, TextFieldState> {
   readonly state: TextFieldState
 }
 
-export abstract class TextFieldController<T> extends FieldController<
+export abstract class TextFieldController extends FieldController<
   string,
   TextFieldState
 > {
