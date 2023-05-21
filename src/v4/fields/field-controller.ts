@@ -6,68 +6,95 @@ import {
   map,
 } from 'rxjs'
 import { FieldType } from './field-type'
-import { FieldState } from './field-state'
+import {
+  FieldValueState,
+  FieldUIState,
+  NonValidatedFieldValueState,
+} from './field-state'
 import { FieldValidationFn, FieldValidator } from './field-validator'
 
-export interface FieldProps<T, S extends FieldState<T>> {
-  readonly state: S
+export interface FieldProps<
+  T,
+  V extends FieldValueState<T>,
+  U extends FieldUIState,
+> {
+  readonly valueState: V
+  readonly uiState: U
   readonly valueChanges: Observable<T>
   readonly renderChanges: Observable<HTMLElement>
 }
 
-export interface FieldParams<T, S extends FieldState<T>> {
-  state: S
-  validator: FieldValidator<T>
+export interface FieldParams<
+  T,
+  V extends FieldValueState<T>,
+  U extends FieldUIState,
+> {
+  valueState: V
+  uiState: U
+  validator: FieldValidator<T, V>
 }
 
-export abstract class FieldController<T, S extends FieldState<T>>
-  implements FieldProps<T, S>
+export abstract class FieldController<
+  T,
+  V extends FieldValueState<T>,
+  U extends FieldUIState,
+> implements FieldProps<T, V, U>
 {
-  readonly #validator: FieldValidator<T>
+  readonly #validator: FieldValidator<T, V>
 
-  // TODO: DIVIDE VISUAL STATE FROM VALUE ESTATE (value, validation and options)
-  // TODO: CREATE A htmlElementSubject
+  // // TODO: DIVIDE VISUAL STATE FROM VALUE ESTATE (value, validation and options)
+  // TODO: CREATE A htmlElementSubject (why?)
   // TODO: PATCH method is unclear, create a method on field controller and ensure setting each property
   // being aware of proxies
-  readonly #stateSubject: BehaviorSubject<S>
+  // readonly #stateSubject: BehaviorSubject<S>
 
-  constructor({ state, validator }: FieldParams<T, S>) {
+  readonly #valueStateSubject: BehaviorSubject<V>
+
+  readonly #uiStateSubject: BehaviorSubject<U>
+
+  constructor({ valueState, uiState, validator }: FieldParams<T, V, U>) {
     this.#validator = validator
-    this.#stateSubject = new BehaviorSubject<S>(
-      new Proxy<S>(state, {
-        // get: (target: S, property: symbol | string) => {
-        //   return property in target
-        //     ? target[property as keyof typeof target]
-        //     : undefined
-        // },
-        set: (target: S, property: symbol | string, newValue: S[keyof S]) => {
-          if (property === 'value') {
-            target.validation = this.#validator.validate(newValue as S['value'])
-          } else if (property === 'validation') {
-            console.warn('You cannot set validation directly')
-            return false
-          }
-          target[property as keyof typeof target] = newValue
-          this.#stateSubject.next(target)
-          return true
-        },
-      }),
-    )
+    const valueStateProxy = new Proxy<V>(valueState, {
+      set: (target: V, property: symbol | string, newValue: V[keyof V]) => {
+        if (property === 'validation') {
+          console.warn('You cannot set validation directly')
+          return false
+        }
+
+        target[property as keyof typeof target] = newValue
+        target.validationResult = this.#validator.validate(target)
+        this.#valueStateSubject.next(valueStateProxy)
+        return true
+      },
+    })
+    this.#valueStateSubject = new BehaviorSubject<V>(valueStateProxy)
+    const uiStateProxy = new Proxy<U>(uiState, {
+      set: (target: U, property: symbol | string, newValue: U[keyof U]) => {
+        target[property as keyof typeof target] = newValue
+        this.#uiStateSubject.next(uiStateProxy)
+        return true
+      },
+    })
+    this.#uiStateSubject = new BehaviorSubject<U>(uiStateProxy)
   }
 
-  get state(): S {
-    return this.#stateSubject.value
+  get valueState(): V {
+    return this.#valueStateSubject.value
   }
 
   get valueChanges(): Observable<T> {
-    return this.#stateSubject.asObservable().pipe(
+    return this.#valueStateSubject.asObservable().pipe(
       map((state) => state.value),
       distinctUntilChanged(),
     )
   }
 
+  get uiState(): U {
+    return this.#uiStateSubject.value
+  }
+
   get renderChanges(): Observable<HTMLElement> {
-    return this.#stateSubject.asObservable().pipe(
+    return this.#uiStateSubject.asObservable().pipe(
       filter((htmlElement) => htmlElement !== null),
       map((state) => state.htmlElement!),
       distinctUntilChanged(),
@@ -83,16 +110,21 @@ type MakeNullablePropertiesUndefined<T> = {
 
 export type FieldBuilderParams<
   T,
-  S extends FieldState<T>,
   K extends FieldType,
+  V extends FieldValueState<T>,
+  U extends FieldUIState,
 > = MakeNullablePropertiesUndefined<
-  Omit<S, 'value' | 'validation' | 'touched' | 'enabled' | 'htmlElement'>
-> & {
-  type: K
-  value?: S['value']
-  required?: boolean
-  validators?: FieldValidationFn<T>[]
-  enabled?: boolean
-  onValueChange?(value: T): void
-  onRender?(htmlElement: HTMLElement): void
-}
+  Omit<V, 'value' | 'validationResult' | 'enabled'>
+> &
+  MakeNullablePropertiesUndefined<Omit<U, 'htmlElement' | 'touched'>> & {
+    type: K
+    required?: boolean
+    validators?: FieldValidationFn<T>[]
+
+    // Value state
+    value?: V['value']
+    enabled?: boolean
+
+    onValueChange?(value: T): void
+    onRender?(htmlElement: HTMLElement): void
+  }

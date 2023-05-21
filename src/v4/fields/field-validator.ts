@@ -1,3 +1,5 @@
+import { FieldValueState, NonValidatedFieldValueState } from './field-state'
+
 export type FieldValidationFn<T> = (value: T) => string | undefined
 
 export type FieldValidationResult = {
@@ -5,7 +7,7 @@ export type FieldValidationResult = {
   readonly errorMessage: string | null
 }
 
-export class FieldValidator<T> {
+export abstract class FieldValidator<T, V extends FieldValueState<T>> {
   readonly required: boolean
 
   readonly validators: FieldValidationFn<T>[] | null
@@ -21,7 +23,7 @@ export class FieldValidator<T> {
     this.validators = validators ?? null
   }
 
-  validate(value: T): FieldValidationResult {
-    throw new Error('Method not implemented.')
-  }
+  abstract validate(
+    nonValidatedValueState: NonValidatedFieldValueState<T, V>,
+  ): FieldValidationResult
 }
