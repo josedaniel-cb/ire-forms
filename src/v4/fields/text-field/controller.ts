@@ -1,25 +1,23 @@
 import {
   FieldProps,
   FieldController,
-  FieldState,
-  FieldParams,
+  FieldBuilderParams,
 } from '../field-controller'
+import { FieldState } from '../field-state'
 
 export interface TextFieldState extends FieldState<string> {
   placeholder?: string
 }
 
-export interface TextFieldProps extends FieldProps<string, TextFieldState> {
-  readonly state: TextFieldState
-}
+export type TextFieldProps = FieldProps<string, TextFieldState>
 
-export abstract class TextFieldController extends FieldController<
+export class TextFieldController extends FieldController<
   string,
   TextFieldState
-> {
-  constructor(params: TextFieldProps) {
-    super(params)
-  }
-}
+> {}
 
-export type TextFieldParams = FieldParams<TextFieldState, 'text'>
+export type TextFieldBuilderParams = FieldBuilderParams<
+  string,
+  TextFieldState,
+  'text'
+>

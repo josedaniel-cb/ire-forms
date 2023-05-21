@@ -1,65 +1,91 @@
-import { BehaviorSubject, Subscription } from 'rxjs'
+import {
+  BehaviorSubject,
+  Observable,
+  distinctUntilChanged,
+  filter,
+  map,
+} from 'rxjs'
 import { FieldType } from './field-type'
-
-export interface FieldState<T> {
-  // Value
-  value: T
-
-  defaultValue?: T
-
-  // Visual
-  label: string
-
-  // Validation
-  required?: boolean
-
-  validators?: ((value: T) => string | undefined)[]
-
-  errorMessage?: string
-
-  isValid: boolean
-
-  touched: boolean
-
-  enabled?: boolean
-}
+import { FieldState } from './field-state'
+import { FieldValidationFn, FieldValidator } from './field-validator'
 
 export interface FieldProps<T, S extends FieldState<T>> {
   readonly state: S
+  readonly valueChanges: Observable<T>
+  readonly renderChanges: Observable<HTMLElement>
+}
 
-  onValueChange(
-    callbackFn: (value: T, field: FieldProps<T, S>) => void,
-  ): Subscription
+export interface FieldParams<T, S extends FieldState<T>> {
+  state: S
+  validator: FieldValidator<T>
 }
 
 export abstract class FieldController<T, S extends FieldState<T>>
   implements FieldProps<T, S>
 {
+  readonly #validator: FieldValidator<T>
+
   readonly #stateSubject: BehaviorSubject<S>
 
-  constructor(params: FieldProps<T, S>) {
-    this.#stateSubject = new BehaviorSubject<S>(params.state)
+  constructor({ state, validator }: FieldParams<T, S>) {
+    this.#validator = validator
+    this.#stateSubject = new BehaviorSubject<S>(
+      new Proxy<S>(state, {
+        // get: (target: S, property: symbol | string) => {
+        //   return property in target
+        //     ? target[property as keyof typeof target]
+        //     : undefined
+        // },
+        set: (target: S, property: symbol | string, newValue: S[keyof S]) => {
+          if (property === 'value') {
+            target.validation = this.#validator.validate(newValue as S['value'])
+          } else if (property === 'validation') {
+            console.warn('You cannot set validation directly')
+            return false
+          }
+          target[property as keyof typeof target] = newValue
+          this.#stateSubject.next(target)
+          return true
+        },
+      }),
+    )
   }
 
   get state(): S {
     return this.#stateSubject.value
   }
 
-  onValueChange(
-    callbackFn: (value: T, field: FieldController<T, S>) => void,
-  ): Subscription {
-    return this.#stateSubject.asObservable().subscribe((state) => {
-      callbackFn(state.value, this)
-    })
+  get valueChanges(): Observable<T> {
+    return this.#stateSubject.asObservable().pipe(
+      map((state) => state.value),
+      distinctUntilChanged(),
+    )
+  }
+
+  get renderChanges(): Observable<HTMLElement> {
+    return this.#stateSubject.asObservable().pipe(
+      filter((htmlElement) => htmlElement !== null),
+      map((state) => state.htmlElement!),
+      distinctUntilChanged(),
+    )
   }
 }
 
-type FieldStateExcludedPropsFromParams = 'errorMessage' | 'isValid' | 'touched'
+// type FieldStateExcludedAttributesFromParams =
+//   | 'errorMessage'
+//   | 'isValid'
+//   | 'touched'
 
-export type FieldParams<T extends FieldState<any>, K extends FieldType> = Omit<
+export type FieldBuilderParams<
   T,
-  'value' | FieldStateExcludedPropsFromParams
-> & {
+  S extends FieldState<T>,
+  K extends FieldType,
+> = Omit<S, 'value' | 'validation' | 'touched' | 'enabled' | 'htmlElement'> & {
   type: K
-  value?: T['value']
+  value?: S['value']
+  onValueChange?(value: T): void
+  required?: boolean
+  validators?: FieldValidationFn<T>[]
+  enabled?: boolean
+  onRender?(htmlElement: HTMLElement): void
 }

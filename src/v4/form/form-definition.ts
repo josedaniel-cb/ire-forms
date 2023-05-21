@@ -1,13 +1,14 @@
-import { MultiSelectFieldParams } from '../fields/multiple-select-field/controller'
-import { SelectFieldParams } from '../fields/select-field/controller'
-import { TextFieldParams } from '../fields/text-field/controller'
+import { MultiSelectFieldBuilderParams } from '../fields/multiple-select-field/controller'
+import { SelectFieldBuilderParams } from '../fields/select-field/controller'
+import { TextFieldBuilderParams } from '../fields/text-field/controller'
 
 export type FormDefinition = {
   fields: Record<string, FormDefinitionNode>
 }
 
-export type FormDefinitionNode =
-  | TextFieldParams
-  | SelectFieldParams<any>
-  | MultiSelectFieldParams<any>
-  | FormDefinition
+export type FormDefinitionLeaf =
+  | TextFieldBuilderParams
+  | SelectFieldBuilderParams<any>
+  | MultiSelectFieldBuilderParams<any>
+
+export type FormDefinitionNode = FormDefinitionLeaf | FormDefinition

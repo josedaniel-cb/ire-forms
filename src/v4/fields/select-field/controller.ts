@@ -1,26 +1,26 @@
 import {
   FieldProps,
   FieldController,
-  FieldState,
-  FieldParams,
+  FieldBuilderParams,
 } from '../field-controller'
+import { FieldState } from '../field-state'
 
 export interface SelectFieldState<T> extends FieldState<NonNullable<T> | null> {
   options: { label: string; value: NonNullable<T> }[]
 }
 
-export interface SelectFieldProps<T>
-  extends FieldProps<NonNullable<T> | null, SelectFieldState<T>> {
-  readonly state: SelectFieldState<T>
-}
-
-export abstract class SelectFieldController<T> extends FieldController<
+export type SelectFieldProps<T> = FieldProps<
   NonNullable<T> | null,
   SelectFieldState<T>
-> {
-  constructor(params: SelectFieldProps<T>) {
-    super(params)
-  }
-}
+>
 
-export type SelectFieldParams<T> = FieldParams<SelectFieldState<T>, 'select'>
+export class SelectFieldController<T> extends FieldController<
+  NonNullable<T> | null,
+  SelectFieldState<T>
+> {}
+
+export type SelectFieldBuilderParams<T> = FieldBuilderParams<
+  NonNullable<T> | null,
+  SelectFieldState<T>,
+  'select'
+>
