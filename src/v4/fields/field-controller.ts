@@ -25,6 +25,10 @@ export abstract class FieldController<T, S extends FieldState<T>>
 {
   readonly #validator: FieldValidator<T>
 
+  // TODO: DIVIDE VISUAL STATE FROM VALUE ESTATE (value, validation and options)
+  // TODO: CREATE A htmlElementSubject
+  // TODO: PATCH method is unclear, create a method on field controller and ensure setting each property
+  // being aware of proxies
   readonly #stateSubject: BehaviorSubject<S>
 
   constructor({ state, validator }: FieldParams<T, S>) {
@@ -71,21 +75,24 @@ export abstract class FieldController<T, S extends FieldState<T>>
   }
 }
 
-// type FieldStateExcludedAttributesFromParams =
-//   | 'errorMessage'
-//   | 'isValid'
-//   | 'touched'
+type MakeNullablePropertiesUndefined<T> = {
+  [K in keyof T]: Extract<T[K], null> extends never
+    ? T[K]
+    : Exclude<T[K], null> | undefined
+}
 
 export type FieldBuilderParams<
   T,
   S extends FieldState<T>,
   K extends FieldType,
-> = Omit<S, 'value' | 'validation' | 'touched' | 'enabled' | 'htmlElement'> & {
+> = MakeNullablePropertiesUndefined<
+  Omit<S, 'value' | 'validation' | 'touched' | 'enabled' | 'htmlElement'>
+> & {
   type: K
   value?: S['value']
-  onValueChange?(value: T): void
   required?: boolean
   validators?: FieldValidationFn<T>[]
   enabled?: boolean
+  onValueChange?(value: T): void
   onRender?(htmlElement: HTMLElement): void
 }

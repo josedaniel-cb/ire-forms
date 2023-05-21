@@ -3,12 +3,15 @@ import { FieldController, FieldProps } from '../fields/field-controller'
 import { FormDefinition } from './form-definition'
 import { FormValue, FormValuePatch, FormFields, FormFieldsPatch } from './trees'
 
-export type FormChild = FieldController<any, any> | FormController<any>
-// export type FormChild = FieldProps<any, any> | FormProps<any>
+// export type FormChild = FieldController<any, any> | FormController<any>
+export type FormChild = FieldProps<any, any> | FormProps<any>
 
 export type FormChildren = Record<string, FormChild>
 
 export interface FormProps<T extends FormDefinition> {
+  /**
+   * Object that exposes fields only tree
+   */
   readonly fields: FormFields<T>
   readonly value: FormValue<T>
   patch(patch: FormFieldsPatch<T>): void
@@ -17,7 +20,7 @@ export interface FormProps<T extends FormDefinition> {
 }
 
 export class FormController<T extends FormDefinition> implements FormProps<T> {
-  readonly children: FormChildren
+  readonly #children: FormChildren
 
   readonly fields: FormFields<T>
 
@@ -28,21 +31,24 @@ export class FormController<T extends FormDefinition> implements FormProps<T> {
   }: {
     children: FormChildren
   }) {
-    this.children = children
+    this.#children = children
 
-    this.fields = Object.entries(children).reduce((fields, [key, child]) => {
-      fields[key] = 'fields' in child ? child.fields : child
-      return fields
-    }, {} as FormFields<any>)
+    this.fields = Object.entries(this.#children).reduce(
+      (fields, [key, child]) => {
+        fields[key] = 'fields' in child ? child.fields : child
+        return fields
+      },
+      {} as Partial<FormFields<any>>,
+    ) as FormFields<any>
 
     this.#valueSubject = new BehaviorSubject(
-      Object.entries(children).reduce((fields, [key, child]) => {
+      Object.entries(this.#children).reduce((fields, [key, child]) => {
         fields[key] = 'fields' in child ? child.value : child.state.value
         return fields
-      }, {} as FormValue<any>),
+      }, {} as Partial<FormValue<any>>) as FormValue<any>,
     )
 
-    Object.entries(this.children).forEach(([key, child]) => {
+    Object.entries(this.#children).forEach(([key, child]) => {
       child.valueChanges.subscribe((childValue) => {
         this.#valueSubject.next({
           ...this.#valueSubject.value,
@@ -60,11 +66,30 @@ export class FormController<T extends FormDefinition> implements FormProps<T> {
     return this.#valueSubject.asObservable()
   }
 
-  patch(patch: FormFieldsPatch<T>): void {
-    throw new Error('Method not implemented.')
+  patch(fieldsPropsPatch: FormFieldsPatch<T>): void {
+    Object.entries(fieldsPropsPatch).forEach(([key, value]) => {
+      if (value === undefined) return
+      const child = this.#children[key]
+      if ('fields' in child) {
+        child.patch(value)
+      } else {
+        Object.entries(value).forEach(([key, value]) => {
+          if (value === undefined) return
+          child.state[key] = value
+        })
+      }
+    })
   }
 
-  patchValues(patch: FormValuePatch<T>): void {
-    throw new Error('Method not implemented.')
+  patchValues(valuePatch: FormValuePatch<T>): void {
+    Object.entries(valuePatch).forEach(([key, value]) => {
+      if (value === undefined) return
+      const child = this.#children[key]
+      if ('fields' in child) {
+        child.patchValues(value)
+      } else {
+        child.state.value = value
+      }
+    })
   }
 }

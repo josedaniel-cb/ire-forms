@@ -6,7 +6,7 @@ import {
 import { FieldState } from '../field-state'
 
 export interface TextFieldState extends FieldState<string> {
-  placeholder?: string
+  placeholder: string | null
 }
 
 export type TextFieldProps = FieldProps<string, TextFieldState>

@@ -8,109 +8,82 @@ import { TextFieldController } from './text-field/controller'
 export class FieldBuilder {
   static build(params: FormDefinitionLeaf): FieldController<any, any> {
     if (params.type === 'text') {
-      const {
-        type,
-        value,
-        onValueChange,
-        required,
-        validators,
-        enabled,
-        onRender,
-        ...partialState
-      } = params
       const validator = new FieldValidator({
-        required,
-        validators,
+        required: params.required,
+        validators: params.validators,
       })
-      const firstValue = value ?? ''
+      const firstValue = params.value ?? ''
       const controller = new TextFieldController({
         state: {
-          ...partialState,
           value: firstValue,
           validation: validator.validate(firstValue),
           touched: false,
-          enabled: enabled ?? true,
+          enabled: params.enabled ?? true,
           htmlElement: null,
+          label: params.label,
+          placeholder: params.placeholder ?? null,
         },
         validator,
       })
-      if (onValueChange) {
-        controller.valueChanges.subscribe(onValueChange)
+      if (params.onValueChange) {
+        controller.valueChanges.subscribe(params.onValueChange)
       }
-      if (onRender) {
-        controller.renderChanges.subscribe(onRender)
+      if (params.onRender) {
+        controller.renderChanges.subscribe(params.onRender)
       }
       return controller
     }
 
     if (params.type === 'select') {
-      const {
-        type,
-        value,
-        onValueChange,
-        required,
-        validators,
-        enabled,
-        onRender,
-        ...partialState
-      } = params
       const validator = new FieldValidator({
-        required,
-        validators,
+        required: params.required,
+        validators: params.validators,
       })
-      const firstValue = value ?? null
+      const firstValue = params.value ?? null
       const controller = new SelectFieldController({
         state: {
-          ...partialState,
           value: firstValue,
           validation: validator.validate(firstValue),
           touched: false,
-          enabled: enabled ?? true,
+          enabled: params.enabled ?? true,
           htmlElement: null,
+          label: params.label,
+          options: params.options,
         },
         validator,
       })
-      if (onValueChange) {
-        controller.valueChanges.subscribe(onValueChange)
+      if (params.onValueChange) {
+        controller.valueChanges.subscribe(params.onValueChange)
       }
-      if (onRender) {
-        controller.renderChanges.subscribe(onRender)
+      if (params.onRender) {
+        controller.renderChanges.subscribe(params.onRender)
       }
       return controller
     }
 
     if (params.type === 'multi-select') {
-      const {
-        type,
-        value,
-        onValueChange,
-        required,
-        validators,
-        enabled,
-        onRender,
-        ...partialState
-      } = params
       const validator = new FieldValidator({
-        required,
-        validators,
+        required: params.required,
+        validators: params.validators,
       })
-      const firstValue = value ?? []
+      const firstValue = params.value ?? []
       const controller = new MultiSelectFieldController({
         state: {
-          ...partialState,
           value: firstValue,
           validation: validator.validate(firstValue),
           touched: false,
-          enabled: enabled ?? true,
+          enabled: params.enabled ?? true,
           htmlElement: null,
+          label: params.label,
+          options: params.options,
         },
         validator,
       })
-      if (onValueChange) {
-        controller.valueChanges.subscribe(onValueChange)
+      if (params.onValueChange) {
+        controller.valueChanges.subscribe(params.onValueChange)
       }
-      if (onRender) {
-        controller.renderChanges.subscribe(onRender)
+      if (params.onRender) {
+        controller.renderChanges.subscribe(params.onRender)
       }
       return controller
     }

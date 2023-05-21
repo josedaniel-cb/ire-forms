@@ -13,22 +13,25 @@ import {
   TextFieldProps,
   TextFieldState,
 } from '../fields/text-field/controller'
+import { FormProps } from './form-controller'
 import { FormDefinition } from './form-definition'
 
 export type FormFields<T extends FormDefinition> = {
-  [K in keyof T['fields']]: T['fields'][K] extends TextFieldBuilderParams
+  readonly [K in
+    keyof T['fields']]: T['fields'][K] extends TextFieldBuilderParams
     ? TextFieldProps
     : T['fields'][K] extends SelectFieldBuilderParams<infer R>
     ? SelectFieldProps<R>
     : T['fields'][K] extends MultiSelectFieldBuilderParams<infer R>
     ? MultiSelectFieldProps<R>
     : T['fields'][K] extends FormDefinition
-    ? FormFields<T['fields'][K]>
+    ? FormFields<T['fields'][K]> //  ?  FormProps<T['fields'][K]>
     : never
 }
 
 export type FormValue<T extends FormDefinition> = {
-  [K in keyof T['fields']]: T['fields'][K] extends TextFieldBuilderParams
+  readonly [K in
+    keyof T['fields']]: T['fields'][K] extends TextFieldBuilderParams
     ? string
     : T['fields'][K] extends SelectFieldBuilderParams<infer R>
     ? R | null
