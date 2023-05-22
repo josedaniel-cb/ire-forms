@@ -6,7 +6,13 @@ import {
   map,
 } from 'rxjs'
 import { FieldType } from './field-type'
-import { FieldValueState, FieldUIState, FieldMultiPatch } from './field-state'
+import {
+  FieldValueState,
+  FieldUIState,
+  FieldMultiPatch,
+  ExternalFieldValueState,
+  ExternalFieldUIState,
+} from './field-state'
 import { FieldValidationFn, FieldValidator } from './field-validator'
 
 export interface FieldProps<
@@ -14,8 +20,10 @@ export interface FieldProps<
   V extends FieldValueState<T>,
   U extends FieldUIState,
 > {
-  readonly valueState: V
-  readonly uiState: U
+  // readonly valueState: V
+  value: T
+  readonly valueState: ExternalFieldValueState<T, V>
+  readonly uiState: ExternalFieldUIState<U>
   patch(multiPatch: FieldMultiPatch<T, V, U>): void
   readonly valueChanges: Observable<T>
   readonly renderChanges: Observable<HTMLElement>
@@ -38,12 +46,6 @@ export abstract class FieldController<
 > implements FieldProps<T, V, U>
 {
   readonly #validator: FieldValidator<T, V>
-
-  // // TODO: DIVIDE VISUAL STATE FROM VALUE ESTATE (value, validation and options)
-  // // TODO: CREATE A htmlElementSubject (why?)
-  // TODO: PATCH method is unclear, create a method on field controller and ensure setting each property
-  // being aware of proxies
-  // readonly #stateSubject: BehaviorSubject<S>
 
   readonly #valueStateSubject: BehaviorSubject<V>
 
@@ -102,6 +104,14 @@ export abstract class FieldController<
     )
   }
 
+  get value(): T {
+    return this.valueState.value
+  }
+
+  set value(value: T) {
+    this.valueState.value = value
+  }
+
   patch(multiPatch: FieldMultiPatch<T, V, U>): void {
     for (const entry in Object.entries(multiPatch)) {
       const [key, value] = entry
@@ -116,11 +126,11 @@ export abstract class FieldController<
   }
 }
 
-type MakeNullablePropertiesUndefined<T> = {
-  [K in keyof T]: Extract<T[K], null> extends never
-    ? T[K]
-    : Exclude<T[K], null> | undefined
-}
+type NullableKeys<T> = {
+  [K in keyof T]: null extends T[K] ? K : never
+}[keyof T]
+type MakeNullablePropertiesUndefined<T> = Omit<T, NullableKeys<T>> &
+  Partial<{ [K in NullableKeys<T>]: Exclude<T[K], null> | undefined }>
 
 export type FieldBuilderParams<
   T,

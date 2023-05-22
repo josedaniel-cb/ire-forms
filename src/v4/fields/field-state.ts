@@ -13,12 +13,26 @@ export type NonValidatedFieldValueState<T, V extends FieldValueState<T>> = Omit<
   'validationResult'
 >
 
+export type ExternalFieldValueState<T, V extends FieldValueState<T>> = Omit<
+  V,
+  'validationResult'
+> & {
+  readonly validationResult: FieldValidationResult
+}
+
 export interface FieldUIState {
   htmlElement: HTMLElement | null // TODO: Become readonly
 
   label: string
 
   touched: boolean
+}
+
+export type ExternalFieldUIState<U extends FieldUIState> = Omit<
+  U,
+  'htmlElement'
+> & {
+  readonly htmlElement: HTMLElement | null
 }
 
 export type FieldMultiPatch<

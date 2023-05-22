@@ -2,30 +2,26 @@ import { FormBuilder } from './form/form-builder'
 
 const form = FormBuilder.build({
   fields: {
-    textField: {
-      type: 'text',
+    textField: FormBuilder.text({
       label: 'A text input field',
-    },
-    selectField: {
-      type: 'select',
+    }),
+    selectField: FormBuilder.select({
       label: 'A select field',
-      defaultValue: 1,
       options: [
         { label: 'Option 1', value: 1 },
         { label: 'Option 2', value: 2 },
         { label: 'Option 3', value: 3 },
       ],
-    },
-    multipleSelectField: {
-      type: 'multi-select',
+    }),
+    multipleSelectField: FormBuilder.multiSelect({
       label: 'A select field',
       options: [
         { label: 'Option 1', value: '1' },
         { label: 'Option 2', value: '2' },
         { label: 'Option 3', value: '3' },
       ],
-    },
-    aFieldSet: {
+    }),
+    aFieldSet: FormBuilder.fieldset({
       fields: {
         nestedTextField: {
           type: 'text',
@@ -78,7 +74,7 @@ const form = FormBuilder.build({
           },
         },
       },
-    },
+    }),
   },
 })
 
@@ -86,7 +82,7 @@ form.fields.multipleSelectField // MultiSelectFieldProps<string>
 form.value.multipleSelectField // string[]
 
 form.value.aFieldSet.nestedMultipleSelectField // string[]
-form.fields.aFieldSet.nestedMultipleSelectField.state.value // string[]
+form.fields.aFieldSet.nestedMultipleSelectField.value // string[]
 form.fields.aFieldSet.aFieldSet.nestedMultipleSelectField // MultiSelectFieldProps<string>
 
 form.patch({

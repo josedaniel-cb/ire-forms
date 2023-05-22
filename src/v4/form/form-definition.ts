@@ -6,9 +6,9 @@ export type FormDefinition = {
   fields: Record<string, FormDefinitionNode>
 }
 
+export type FormDefinitionNode = FormDefinitionLeaf | FormDefinition
+
 export type FormDefinitionLeaf =
   | TextFieldBuilderParams
   | SelectFieldBuilderParams<any>
   | MultiSelectFieldBuilderParams<any>
-
-export type FormDefinitionNode = FormDefinitionLeaf | FormDefinition
