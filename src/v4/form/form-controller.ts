@@ -3,8 +3,8 @@ import { FieldController, FieldProps } from '../fields/field-controller'
 import { FormDefinition } from './form-definition'
 import { FormValue, FormValuePatch, FormFields, FormFieldsPatch } from './trees'
 
-// export type FormChild = FieldController<any, any> | FormController<any>
-export type FormChild = FieldProps<any, any> | FormProps<any>
+// export type FormChild = FieldController<any, any, any> | FormController<any>
+export type FormChild = FieldProps<any, any, any> | FormProps<any>
 
 export type FormChildren = Record<string, FormChild>
 
@@ -68,27 +68,23 @@ export class FormController<T extends FormDefinition> implements FormProps<T> {
 
   patch(fieldsPropsPatch: FormFieldsPatch<T>): void {
     Object.entries(fieldsPropsPatch).forEach(([key, value]) => {
-      if (value === undefined) return
       const child = this.#children[key]
+      // child.patch(value)
       if ('fields' in child) {
         child.patch(value)
       } else {
-        Object.entries(value).forEach(([key, value]) => {
-          if (value === undefined) return
-          child.state[key] = value
-        })
+        child.patch(value)
       }
     })
   }
 
   patchValues(valuePatch: FormValuePatch<T>): void {
     Object.entries(valuePatch).forEach(([key, value]) => {
-      if (value === undefined) return
       const child = this.#children[key]
       if ('fields' in child) {
         child.patchValues(value)
       } else {
-        child.state.value = value
+        child.valueState.value = value
       }
     })
   }

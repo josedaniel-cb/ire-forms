@@ -7,6 +7,7 @@ import {
   FieldValueState,
   FieldUIState,
   NonValidatedFieldValueState,
+  FieldMultiPatch,
 } from '../field-state'
 import { FieldValidationResult, FieldValidator } from '../field-validator'
 
@@ -76,3 +77,6 @@ export class MultiSelectFieldValidator<
     return { isValid: !!errorMessage, errorMessage: errorMessage ?? null }
   }
 }
+
+export type MultiSelectFieldMultiPatch<T extends NonNullable<unknown>> =
+  FieldMultiPatch<T[], MultiSelectFieldValueState<T>, MultiSelectFieldUIState>

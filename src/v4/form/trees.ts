@@ -1,19 +1,18 @@
 import {
-  MultiSelectFieldBuilderParams,
-  MultiSelectFieldProps,
-  MultiSelectFieldState,
-} from '../fields/multiple-select-field/controller'
+  TextFieldBuilderParams,
+  TextFieldProps,
+  TextFieldMultiPatch,
+} from '../fields/text-field/controller'
 import {
   SelectFieldBuilderParams,
   SelectFieldProps,
-  SelectFieldState,
+  SelectFieldMultiPatch,
 } from '../fields/select-field/controller'
 import {
-  TextFieldBuilderParams,
-  TextFieldProps,
-  TextFieldState,
-} from '../fields/text-field/controller'
-import { FormProps } from './form-controller'
+  MultiSelectFieldBuilderParams,
+  MultiSelectFieldProps,
+  MultiSelectFieldMultiPatch,
+} from '../fields/multiple-select-field/controller'
 import { FormDefinition } from './form-definition'
 
 export type FormFields<T extends FormDefinition> = {
@@ -44,11 +43,11 @@ export type FormValue<T extends FormDefinition> = {
 
 export type FormFieldsPatch<T extends FormDefinition> = {
   [K in keyof T['fields']]?: T['fields'][K] extends TextFieldBuilderParams
-    ? Partial<TextFieldState>
+    ? TextFieldMultiPatch
     : T['fields'][K] extends SelectFieldBuilderParams<infer R>
-    ? Partial<SelectFieldState<R>>
+    ? SelectFieldMultiPatch<R>
     : T['fields'][K] extends MultiSelectFieldBuilderParams<infer R>
-    ? Partial<MultiSelectFieldState<R>>
+    ? MultiSelectFieldMultiPatch<R>
     : T['fields'][K] extends FormDefinition
     ? FormFieldsPatch<T['fields'][K]>
     : never

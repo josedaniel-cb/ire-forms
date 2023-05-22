@@ -6,11 +6,7 @@ import {
   map,
 } from 'rxjs'
 import { FieldType } from './field-type'
-import {
-  FieldValueState,
-  FieldUIState,
-  NonValidatedFieldValueState,
-} from './field-state'
+import { FieldValueState, FieldUIState, FieldMultiPatch } from './field-state'
 import { FieldValidationFn, FieldValidator } from './field-validator'
 
 export interface FieldProps<
@@ -20,6 +16,7 @@ export interface FieldProps<
 > {
   readonly valueState: V
   readonly uiState: U
+  patch(multiPatch: FieldMultiPatch<T, V, U>): void
   readonly valueChanges: Observable<T>
   readonly renderChanges: Observable<HTMLElement>
 }
@@ -43,7 +40,7 @@ export abstract class FieldController<
   readonly #validator: FieldValidator<T, V>
 
   // // TODO: DIVIDE VISUAL STATE FROM VALUE ESTATE (value, validation and options)
-  // TODO: CREATE A htmlElementSubject (why?)
+  // // TODO: CREATE A htmlElementSubject (why?)
   // TODO: PATCH method is unclear, create a method on field controller and ensure setting each property
   // being aware of proxies
   // readonly #stateSubject: BehaviorSubject<S>
@@ -70,6 +67,10 @@ export abstract class FieldController<
     this.#valueStateSubject = new BehaviorSubject<V>(valueStateProxy)
     const uiStateProxy = new Proxy<U>(uiState, {
       set: (target: U, property: symbol | string, newValue: U[keyof U]) => {
+        if (property === 'htmlElement') {
+          console.warn('You cannot set htmlElement directly')
+          return false
+        }
         target[property as keyof typeof target] = newValue
         this.#uiStateSubject.next(uiStateProxy)
         return true
@@ -100,6 +101,19 @@ export abstract class FieldController<
       distinctUntilChanged(),
     )
   }
+
+  patch(multiPatch: FieldMultiPatch<T, V, U>): void {
+    for (const entry in Object.entries(multiPatch)) {
+      const [key, value] = entry
+      if (key in this.valueState) {
+        this.valueState[key as keyof V] = value as V[keyof V]
+      } else if (key in this.uiState) {
+        this.uiState[key as keyof U] = value as U[keyof U]
+      } else {
+        console.warn(`Unknown property ${key}`)
+      }
+    }
+  }
 }
 
 type MakeNullablePropertiesUndefined<T> = {
@@ -125,6 +139,7 @@ export type FieldBuilderParams<
     value?: V['value']
     enabled?: boolean
 
+    // Subscriptions
     onValueChange?(value: T): void
     onRender?(htmlElement: HTMLElement): void
   }

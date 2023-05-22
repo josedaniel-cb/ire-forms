@@ -7,6 +7,7 @@ import {
   FieldValueState,
   FieldUIState,
   NonValidatedFieldValueState,
+  FieldMultiPatch,
 } from '../field-state'
 import { FieldValidationResult, FieldValidator } from '../field-validator'
 
@@ -59,3 +60,9 @@ export class TextFieldValidator extends FieldValidator<
     return { isValid: !!errorMessage, errorMessage: errorMessage ?? null }
   }
 }
+
+export type TextFieldMultiPatch = FieldMultiPatch<
+  string,
+  TextFieldValueState,
+  TextFieldUIState
+>
