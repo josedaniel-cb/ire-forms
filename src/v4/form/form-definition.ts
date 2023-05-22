@@ -1,6 +1,6 @@
-import { MultiSelectFieldBuilderParams } from '../fields/multiple-select-field/controller'
-import { SelectFieldBuilderParams } from '../fields/select-field/controller'
-import { TextFieldBuilderParams } from '../fields/text-field/controller'
+import { MultiSelectFieldDefinition } from '../fields/multiple-select-field/controller'
+import { SelectFieldDefinition } from '../fields/select-field/controller'
+import { TextFieldDefinition } from '../fields/text-field/controller'
 
 export type FormDefinition = {
   fields: Record<string, FormDefinitionNode>
@@ -9,6 +9,6 @@ export type FormDefinition = {
 export type FormDefinitionNode = FormDefinitionLeaf | FormDefinition
 
 export type FormDefinitionLeaf =
-  | TextFieldBuilderParams
-  | SelectFieldBuilderParams<any>
-  | MultiSelectFieldBuilderParams<any>
+  | TextFieldDefinition
+  | SelectFieldDefinition<any>
+  | MultiSelectFieldDefinition<any>

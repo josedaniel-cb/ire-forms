@@ -1,17 +1,11 @@
-import { FormDefinitionLeaf } from '../form/form-definition'
 import { FieldController } from './field-controller'
-import {
-  MultiSelectFieldController,
-  MultiSelectFieldValidator,
-} from './multiple-select-field/controller'
-import {
-  SelectFieldController,
-  SelectFieldValidator,
-} from './select-field/controller'
-import {
-  TextFieldController,
-  TextFieldValidator,
-} from './text-field/controller'
+import { FormDefinitionLeaf } from '../form/form-definition'
+import { MultiSelectFieldController } from './multiple-select-field/controller'
+import { MultiSelectFieldValidator } from './multiple-select-field/validator'
+import { SelectFieldController } from './select-field/controller'
+import { SelectFieldValidator } from './select-field/validator'
+import { TextFieldController } from './text-field/controller'
+import { TextFieldValidator } from './text-field/validator'
 
 export class FieldBuilder {
   static build(params: FormDefinitionLeaf): FieldController<any, any, any> {

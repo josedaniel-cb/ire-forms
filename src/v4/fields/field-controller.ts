@@ -5,22 +5,20 @@ import {
   filter,
   map,
 } from 'rxjs'
-import { FieldType } from './field-type'
 import {
   FieldValueState,
   FieldUIState,
   FieldMultiPatch,
   ExternalFieldValueState,
   ExternalFieldUIState,
-} from './field-state'
-import { FieldValidationFn, FieldValidator } from './field-validator'
+} from './field-states'
+import { FieldValidator } from './field-validator'
 
-export interface FieldProps<
+export interface Field<
   T,
   V extends FieldValueState<T>,
   U extends FieldUIState,
 > {
-  // readonly valueState: V
   value: T
   readonly valueState: ExternalFieldValueState<T, V>
   readonly uiState: ExternalFieldUIState<U>
@@ -43,7 +41,7 @@ export abstract class FieldController<
   T,
   V extends FieldValueState<T>,
   U extends FieldUIState,
-> implements FieldProps<T, V, U>
+> implements Field<T, V, U>
 {
   readonly #validator: FieldValidator<T, V>
 
@@ -125,31 +123,3 @@ export abstract class FieldController<
     }
   }
 }
-
-type NullableKeys<T> = {
-  [K in keyof T]: null extends T[K] ? K : never
-}[keyof T]
-type MakeNullablePropertiesUndefined<T> = Omit<T, NullableKeys<T>> &
-  Partial<{ [K in NullableKeys<T>]: Exclude<T[K], null> | undefined }>
-
-export type FieldBuilderParams<
-  T,
-  K extends FieldType,
-  V extends FieldValueState<T>,
-  U extends FieldUIState,
-> = MakeNullablePropertiesUndefined<
-  Omit<V, 'value' | 'validationResult' | 'enabled'>
-> &
-  MakeNullablePropertiesUndefined<Omit<U, 'htmlElement' | 'touched'>> & {
-    type: K
-    required?: boolean
-    validators?: FieldValidationFn<T>[]
-
-    // Value state
-    value?: V['value']
-    enabled?: boolean
-
-    // Subscriptions
-    onValueChange?(value: T): void
-    onRender?(htmlElement: HTMLElement): void
-  }

@@ -85,7 +85,7 @@ form.value.aFieldSet.nestedMultipleSelectField // string[]
 form.fields.aFieldSet.nestedMultipleSelectField.value // string[]
 form.fields.aFieldSet.aFieldSet.nestedMultipleSelectField // MultiSelectFieldProps<string>
 
-form.patch({
+form.patchFields({
   aFieldSet: {
     aFieldSet: {
       nestedMultipleSelectField: {

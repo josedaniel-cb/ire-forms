@@ -1,27 +1,35 @@
 import { BehaviorSubject, Observable } from 'rxjs'
-import { FieldController, FieldProps } from '../fields/field-controller'
+import { Field } from '../fields/field-controller'
 import { FormDefinition } from './form-definition'
-import { FormValue, FormValuePatch, FormFields, FormFieldsPatch } from './trees'
+import { FormFields, FormFieldsPatch } from './form-fields'
+import { FormValue, FormValuePatch } from './form-value'
 
-// export type FormChild = FieldController<any, any, any> | FormController<any>
-export type FormChild = FieldProps<any, any, any> | FormProps<any>
+export type FormChildren = Record<string, Field<any, any, any> | Form<any>>
 
-export type FormChildren = Record<string, FormChild>
-
-export interface FormProps<T extends FormDefinition> {
+export interface Form<T extends FormDefinition> {
   /**
-   * Object that exposes fields only tree
+   * Tree of {@link Field}s.
    */
   readonly fields: FormFields<T>
+  /**
+   * Tree of {@link Field}s values.
+   */
   readonly value: FormValue<T>
-  patch(patch: FormFieldsPatch<T>): void
+  patchFields(patch: FormFieldsPatch<T>): void
   patchValues(patch: FormValuePatch<T>): void
   valueChanges: Observable<FormValue<T>>
 }
 
-export class FormController<T extends FormDefinition> implements FormProps<T> {
+export class FormController<T extends FormDefinition> implements Form<T> {
+  /**
+   * Private tree of {@link Field}s and {@link Form}s.
+   */
   readonly #children: FormChildren
 
+  /**
+   * Tree of fields only
+   * @see Field
+   */
   readonly fields: FormFields<T>
 
   readonly #valueSubject: BehaviorSubject<FormValue<T>>
@@ -66,12 +74,12 @@ export class FormController<T extends FormDefinition> implements FormProps<T> {
     return this.#valueSubject.asObservable()
   }
 
-  patch(fieldsPropsPatch: FormFieldsPatch<T>): void {
+  patchFields(fieldsPropsPatch: FormFieldsPatch<T>): void {
     Object.entries(fieldsPropsPatch).forEach(([key, value]) => {
       const child = this.#children[key]
       // child.patch(value)
       if ('fields' in child) {
-        child.patch(value)
+        child.patchFields(value)
       } else {
         child.patch(value)
       }

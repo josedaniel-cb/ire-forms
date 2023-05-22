@@ -1,12 +1,12 @@
 import { FieldBuilder } from '../fields/field-builder'
-import { MultiSelectFieldBuilderParams } from '../fields/multiple-select-field/controller'
-import { SelectFieldBuilderParams } from '../fields/select-field/controller'
-import { TextFieldBuilderParams } from '../fields/text-field/controller'
-import { FormProps, FormController, FormChildren } from './form-controller'
+import { MultiSelectFieldDefinition } from '../fields/multiple-select-field/controller'
+import { SelectFieldDefinition } from '../fields/select-field/controller'
+import { TextFieldDefinition } from '../fields/text-field/controller'
+import { Form, FormController, FormChildren } from './form-controller'
 import { FormDefinition } from './form-definition'
 
 export class FormBuilder {
-  static build<T extends FormDefinition>(params: T): FormProps<T> {
+  static build<T extends FormDefinition>(params: T): Form<T> {
     const form = new FormController<T>({
       children: Object.entries(params.fields).reduce(
         (children, [key, value]) => {
@@ -27,8 +27,8 @@ export class FormBuilder {
   }
 
   static text(
-    builderParams: Omit<TextFieldBuilderParams, 'type'>,
-  ): TextFieldBuilderParams {
+    builderParams: Omit<TextFieldDefinition, 'type'>,
+  ): TextFieldDefinition {
     return {
       ...builderParams,
       type: 'text',
@@ -36,8 +36,8 @@ export class FormBuilder {
   }
 
   static select<T extends NonNullable<unknown>>(
-    builderParams: Omit<SelectFieldBuilderParams<T>, 'type'>,
-  ): SelectFieldBuilderParams<T> {
+    builderParams: Omit<SelectFieldDefinition<T>, 'type'>,
+  ): SelectFieldDefinition<T> {
     return {
       ...builderParams,
       type: 'select',
@@ -45,8 +45,8 @@ export class FormBuilder {
   }
 
   static multiSelect<T extends NonNullable<unknown>>(
-    builderParams: Omit<MultiSelectFieldBuilderParams<T>, 'type'>,
-  ): MultiSelectFieldBuilderParams<T> {
+    builderParams: Omit<MultiSelectFieldDefinition<T>, 'type'>,
+  ): MultiSelectFieldDefinition<T> {
     return {
       ...builderParams,
       type: 'multi-select',

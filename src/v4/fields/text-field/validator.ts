@@ -1,0 +1,28 @@
+import { NonValidatedFieldValueState } from '../field-states'
+import { FieldValidationResult, FieldValidator } from '../field-validator'
+import { TextFieldValueState } from './controller'
+
+export class TextFieldValidator extends FieldValidator<
+  string,
+  TextFieldValueState
+> {
+  validate({
+    enabled,
+    value,
+  }: NonValidatedFieldValueState<
+    string,
+    TextFieldValueState
+  >): FieldValidationResult {
+    const errorMessage = ((): string | undefined => {
+      if (!enabled) return
+      if (this.required && !value) return 'This field is required'
+      if (this.validators) {
+        for (const validator of this.validators) {
+          const errorMessage = validator(value)
+          if (errorMessage) return errorMessage
+        }
+      }
+    })()
+    return { isValid: !!errorMessage, errorMessage: errorMessage ?? null }
+  }
+}

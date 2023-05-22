@@ -5,7 +5,7 @@ export interface FieldValueState<T> {
 
   enabled: boolean
 
-  validationResult: FieldValidationResult // TODO: Become readonly
+  validationResult: FieldValidationResult
 }
 
 export type NonValidatedFieldValueState<T, V extends FieldValueState<T>> = Omit<
@@ -21,7 +21,7 @@ export type ExternalFieldValueState<T, V extends FieldValueState<T>> = Omit<
 }
 
 export interface FieldUIState {
-  htmlElement: HTMLElement | null // TODO: Become readonly
+  htmlElement: HTMLElement | null
 
   label: string
 
