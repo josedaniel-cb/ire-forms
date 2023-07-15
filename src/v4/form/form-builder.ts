@@ -2,7 +2,7 @@ import { FieldBuilder } from '../fields/field-builder'
 import { MultiSelectFieldDefinition } from '../fields/multiple-select-field/controller'
 import { SelectFieldDefinition } from '../fields/select-field/controller'
 import { TextFieldDefinition } from '../fields/text-field/controller'
-import { Form, FormController, FormChildren } from './form-controller'
+import { Form, FormController, FormControllerChildren } from './form-controller'
 import { FormDefinition } from './form-definition'
 
 export class FormBuilder {
@@ -16,7 +16,7 @@ export class FormBuilder {
               : FieldBuilder.build(value)
           return children
         },
-        {} as FormChildren,
+        {} as FormControllerChildren,
       ),
     })
     return form

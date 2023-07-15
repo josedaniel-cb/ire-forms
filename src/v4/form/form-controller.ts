@@ -4,7 +4,10 @@ import { FormDefinition } from './form-definition'
 import { FormFields, FormFieldsPatch } from './form-fields'
 import { FormValue, FormValuePatch } from './form-value'
 
-export type FormChildren = Record<string, Field<any, any, any> | Form<any>>
+export type FormControllerChildren = Record<
+  string,
+  Field<any, any, any> | Form<any>
+>
 
 export interface Form<T extends FormDefinition> {
   /**
@@ -20,11 +23,17 @@ export interface Form<T extends FormDefinition> {
   valueChanges: Observable<FormValue<T>>
 }
 
+// TODO: IMPLEMENT THE FOLLOWING REACTIVE ATTRIBUTES FOR FORM CONTROLLER:
+// - LAYOUTS
+
+// TODO: WE NEED TO BUILD A ROOT FORM CONTROLLER THAT SUPPORTS:
+// - STYLESHEETS LINKS
+
 export class FormController<T extends FormDefinition> implements Form<T> {
   /**
-   * Private tree of {@link Field}s and {@link Form}s.
+   * Tree of {@link Field}s and {@link Form}s.
    */
-  readonly #children: FormChildren
+  readonly children: FormControllerChildren
 
   /**
    * Tree of fields only
@@ -37,11 +46,11 @@ export class FormController<T extends FormDefinition> implements Form<T> {
   constructor({
     children,
   }: {
-    children: FormChildren
+    children: FormControllerChildren
   }) {
-    this.#children = children
+    this.children = children
 
-    this.fields = Object.entries(this.#children).reduce(
+    this.fields = Object.entries(this.children).reduce(
       (fields, [key, child]) => {
         fields[key] = 'fields' in child ? child.fields : child
         return fields
@@ -50,13 +59,13 @@ export class FormController<T extends FormDefinition> implements Form<T> {
     ) as FormFields<any>
 
     this.#valueSubject = new BehaviorSubject(
-      Object.entries(this.#children).reduce((fields, [key, child]) => {
+      Object.entries(this.children).reduce((fields, [key, child]) => {
         fields[key] = 'fields' in child ? child.value : child.state.value
         return fields
       }, {} as Partial<FormValue<any>>) as FormValue<any>,
     )
 
-    Object.entries(this.#children).forEach(([key, child]) => {
+    Object.entries(this.children).forEach(([key, child]) => {
       child.valueChanges.subscribe((childValue) => {
         this.#valueSubject.next({
           ...this.#valueSubject.value,
@@ -76,7 +85,7 @@ export class FormController<T extends FormDefinition> implements Form<T> {
 
   patchFields(fieldsPropsPatch: FormFieldsPatch<T>): void {
     Object.entries(fieldsPropsPatch).forEach(([key, value]) => {
-      const child = this.#children[key]
+      const child = this.children[key]
       // child.patch(value)
       if ('fields' in child) {
         child.patchFields(value)
@@ -88,7 +97,7 @@ export class FormController<T extends FormDefinition> implements Form<T> {
 
   patchValues(valuePatch: FormValuePatch<T>): void {
     Object.entries(valuePatch).forEach(([key, value]) => {
-      const child = this.#children[key]
+      const child = this.children[key]
       if ('fields' in child) {
         child.patchValues(value)
       } else {
