@@ -7,7 +7,8 @@ import { SelectFieldValidator } from './select-field/validator'
 import { TextFieldController } from './text-field/controller'
 import { TextFieldValidator } from './text-field/validator'
 import { Subject } from 'rxjs'
-import { FieldUIState, FieldValueState } from './field-states'
+import { FieldValueState } from './field-value-state'
+import { FieldUIState } from './field-ui-state'
 
 type GenericFieldController = FieldController<
   // rome-ignore lint/suspicious/noExplicitAny: any is required here

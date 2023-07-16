@@ -6,8 +6,6 @@ import { layoutsCss } from '../form-ui/base-css/layout-css'
 import { baseCss } from '../form-ui/base-css/base-css'
 import { FieldController } from '../fields/field-controller'
 import { renderStyleSheetLinks } from './stateless/external-style-sheets'
-import { FieldUIState, FieldValueState } from '../fields/field-states'
-import { FieldValidationResult } from '../fields/field-validator'
 
 export abstract class FieldElement extends LitElement {
   static override styles: CSSResult[] = []
@@ -15,6 +13,11 @@ export abstract class FieldElement extends LitElement {
   // @property({ attribute: false })
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
   controller!: FieldController<any, any, any>
+
+  constructor() {
+    super()
+    FieldElement.styles = [FormBuilder.uiConfig.theme.css, layoutsCss, baseCss]
+  }
 
   override render() {
     return html`
@@ -64,10 +67,10 @@ export abstract class FieldElement extends LitElement {
     `
   }
 
-  override connectedCallback(): void {
-    super.connectedCallback()
-    FieldElement.styles = [FormBuilder.uiConfig.theme.css, layoutsCss, baseCss]
-  }
+  // override connectedCallback(): void {
+  //   super.connectedCallback()
+  //   FieldElement.styles = [FormBuilder.uiConfig.theme.css, layoutsCss, baseCss]
+  // }
 
   override disconnectedCallback(): void {
     this.controller.disconnect()

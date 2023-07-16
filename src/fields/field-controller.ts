@@ -7,8 +7,10 @@ import {
   map,
   takeUntil,
 } from 'rxjs'
-import { FieldValueState, FieldUIState, FieldMultiPatch } from './field-states'
+import { FieldMultiPatch } from './field-multi-patch'
 import { FieldValidationResult, FieldValidator } from './field-validator'
+import { FieldValueState, FieldValueStateBuilder } from './field-value-state'
+import { FieldUIState, FieldUIStateBuilder } from './field-ui-state'
 
 export interface Field<
   T,
@@ -68,30 +70,15 @@ export abstract class FieldController<
   }: FieldParams<T, V, U>) {
     this.#validator = validator
     this.#unsubscribeSubject = unsubscribeSubject
-    const valueStateProxy = new Proxy<V>(valueState, {
-      set: (target: V, property: symbol | string, newValue: V[keyof V]) => {
-        if (property === 'validation') {
-          console.warn('You cannot set validation directly')
-          return false
-        }
-
-        target[property as keyof typeof target] = newValue
-        target.validationResult = this.#validator.validate(target)
-        this.#valueStateSubject.next(valueStateProxy)
-        return true
-      },
+    const valueStateProxy = FieldValueStateBuilder.proxy<T, V>({
+      valueState,
+      validator: this.#validator,
+      valueStateSubject: () => this.#valueStateSubject,
     })
     this.#valueStateSubject = new BehaviorSubject<V>(valueStateProxy)
-    const uiStateProxy = new Proxy<U>(uiState, {
-      set: (target: U, property: symbol | string, newValue: U[keyof U]) => {
-        if (property === 'htmlElement') {
-          console.warn('You cannot set htmlElement directly')
-          return false
-        }
-        target[property as keyof typeof target] = newValue
-        this.#uiStateSubject.next(uiStateProxy)
-        return true
-      },
+    const uiStateProxy = FieldUIStateBuilder.proxy({
+      uiState,
+      uiStateSubject: () => this.#uiStateSubject,
     })
     this.#uiStateSubject = new BehaviorSubject<U>(uiStateProxy)
   }
@@ -173,17 +160,19 @@ export abstract class FieldController<
   }
 
   connect(htmlElement: HTMLElement): void {
-    this.#uiStateSubject.next({
-      ...this.#uiStateSubject.value,
-      htmlElement,
-    })
+    // this.#uiStateSubject.next({
+    //   ...this.#uiStateSubject.value,
+    //   htmlElement,
+    // })
+    this.#uiStateSubject.value.htmlElement = htmlElement
   }
 
   disconnect(): void {
-    this.#uiStateSubject.next({
-      ...this.#uiStateSubject.value,
-      htmlElement: null,
-    })
+    // this.#uiStateSubject.next({
+    //   ...this.#uiStateSubject.value,
+    //   htmlElement: null,
+    // })
+    this.#uiStateSubject.value.htmlElement = null
   }
 
   markAsTouched(): void {

@@ -1,4 +1,7 @@
-import { FieldValueState, NonValidatedFieldValueState } from './field-states'
+import {
+  FieldValueState,
+  NonValidatedFieldValueState,
+} from './field-value-state'
 
 export type FieldValidationFn<T> = (value: T) => string | undefined
 

@@ -31,7 +31,7 @@ import { TextFieldController } from '../fields/text-field/controller'
 // import { layoutsCss } from '../styles/css/layouts-css'
 // import { FormConfig } from '../../core/config'
 
-// import './fields/input'
+import './fields/input'
 // import './fields/input/password'
 // import './fields/input/checkbox'
 // import './fields/input/file'

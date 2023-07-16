@@ -1,6 +1,8 @@
 import { Field, FieldController } from '../field-controller'
 import { FieldDefinition } from '../field-definition'
-import { FieldValueState, FieldUIState, FieldMultiPatch } from '../field-states'
+import { FieldMultiPatch } from '../field-multi-patch'
+import { FieldUIState } from '../field-ui-state'
+import { FieldValueState } from '../field-value-state'
 
 export interface SelectFieldValueState<T extends NonNullable<unknown>>
   extends FieldValueState<T | null> {

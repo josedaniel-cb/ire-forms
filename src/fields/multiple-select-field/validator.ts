@@ -1,5 +1,5 @@
-import { NonValidatedFieldValueState } from '../field-states'
 import { FieldValidationResult, FieldValidator } from '../field-validator'
+import { NonValidatedFieldValueState } from '../field-value-state'
 import { MultiSelectFieldValueState } from './controller'
 
 export class MultiSelectFieldValidator<

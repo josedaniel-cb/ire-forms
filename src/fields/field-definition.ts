@@ -1,6 +1,7 @@
-import { FieldUIState, FieldValueState } from './field-states'
 import { FieldType } from './field-type'
+import { FieldUIState } from './field-ui-state'
 import { FieldValidationFn } from './field-validator'
+import { FieldValueState } from './field-value-state'
 
 type NullableKeys<T> = {
   [K in keyof T]: null extends T[K] ? K : never
