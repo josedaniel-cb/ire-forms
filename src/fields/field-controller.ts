@@ -1,30 +1,38 @@
 import {
   BehaviorSubject,
   Observable,
+  Subject,
   distinctUntilChanged,
   filter,
   map,
+  takeUntil,
 } from 'rxjs'
-import {
-  FieldValueState,
-  FieldUIState,
-  FieldMultiPatch,
-  ExternalFieldValueState,
-  ExternalFieldUIState,
-} from './field-states'
-import { FieldValidator } from './field-validator'
+import { FieldValueState, FieldUIState, FieldMultiPatch } from './field-states'
+import { FieldValidationResult, FieldValidator } from './field-validator'
 
 export interface Field<
   T,
   V extends FieldValueState<T>,
   U extends FieldUIState,
 > {
-  value: T
-  readonly valueState: ExternalFieldValueState<T, V>
-  readonly uiState: ExternalFieldUIState<U>
-  patch(multiPatch: FieldMultiPatch<T, V, U>): void
+  // value: T
+  // readonly valueState: ExternalFieldValueState<T, V>
+  // readonly uiState: ExternalFieldUIState<U>
+  // patch(multiPatch: FieldMultiPatch<T, V, U>): void
+  // readonly valueChanges: Observable<T>
+  // readonly renderChanges: Observable<HTMLElement>
+  readonly valueStateChanges: Observable<V>
+  readonly valueState: V
   readonly valueChanges: Observable<T>
+  value: T
+  readonly validation: FieldValidationResult
+  readonly validationChanges: Observable<FieldValidationResult>
+  readonly uiStateChanges: Observable<U>
+  readonly uiState: U
   readonly renderChanges: Observable<HTMLElement>
+  readonly required: boolean
+  patch(multiPatch: FieldMultiPatch<T, V, U>): void
+  markAsTouched(): void
 }
 
 export interface FieldParams<
@@ -35,6 +43,7 @@ export interface FieldParams<
   valueState: V
   uiState: U
   validator: FieldValidator<T, V>
+  unsubscribeSubject: Subject<void>
 }
 
 export abstract class FieldController<
@@ -49,8 +58,16 @@ export abstract class FieldController<
 
   readonly #uiStateSubject: BehaviorSubject<U>
 
-  constructor({ valueState, uiState, validator }: FieldParams<T, V, U>) {
+  readonly #unsubscribeSubject: Subject<void>
+
+  constructor({
+    valueState,
+    uiState,
+    validator,
+    unsubscribeSubject,
+  }: FieldParams<T, V, U>) {
     this.#validator = validator
+    this.#unsubscribeSubject = unsubscribeSubject
     const valueStateProxy = new Proxy<V>(valueState, {
       set: (target: V, property: symbol | string, newValue: V[keyof V]) => {
         if (property === 'validation') {
@@ -79,6 +96,10 @@ export abstract class FieldController<
     this.#uiStateSubject = new BehaviorSubject<U>(uiStateProxy)
   }
 
+  get valueStateChanges(): Observable<V> {
+    return this.#valueStateSubject.asObservable()
+  }
+
   get valueState(): V {
     return this.#valueStateSubject.value
   }
@@ -87,18 +108,7 @@ export abstract class FieldController<
     return this.#valueStateSubject.asObservable().pipe(
       map((state) => state.value),
       distinctUntilChanged(),
-    )
-  }
-
-  get uiState(): U {
-    return this.#uiStateSubject.value
-  }
-
-  get renderChanges(): Observable<HTMLElement> {
-    return this.#uiStateSubject.asObservable().pipe(
-      filter((htmlElement) => htmlElement !== null),
-      map((state) => state.htmlElement!),
-      distinctUntilChanged(),
+      takeUntil(this.#unsubscribeSubject),
     )
   }
 
@@ -108,6 +118,45 @@ export abstract class FieldController<
 
   set value(value: T) {
     this.valueState.value = value
+  }
+
+  get validation(): FieldValidationResult {
+    return this.#valueStateSubject.value.validationResult
+  }
+
+  get validationChanges(): Observable<FieldValidationResult> {
+    return this.#valueStateSubject.asObservable().pipe(
+      map((state) => state.validationResult),
+      distinctUntilChanged((previous, current) => {
+        return (
+          previous.isValid === current.isValid &&
+          previous.errorMessage === current.errorMessage
+        )
+      }),
+      takeUntil(this.#unsubscribeSubject),
+    )
+  }
+
+  get uiStateChanges(): Observable<U> {
+    return this.#uiStateSubject.asObservable()
+  }
+
+  get uiState(): U {
+    return this.#uiStateSubject.value
+  }
+
+  get renderChanges(): Observable<HTMLElement> {
+    return this.#uiStateSubject.asObservable().pipe(
+      filter((htmlElement) => htmlElement !== null),
+      // rome-ignore lint/style/noNonNullAssertion: it filters out nulls
+      map((state) => state.htmlElement!),
+      distinctUntilChanged(),
+      takeUntil(this.#unsubscribeSubject),
+    )
+  }
+
+  get required(): boolean {
+    return this.#validator.required
   }
 
   patch(multiPatch: FieldMultiPatch<T, V, U>): void {
@@ -121,5 +170,23 @@ export abstract class FieldController<
         console.warn(`Unknown property ${key}`)
       }
     }
+  }
+
+  connect(htmlElement: HTMLElement): void {
+    this.#uiStateSubject.next({
+      ...this.#uiStateSubject.value,
+      htmlElement,
+    })
+  }
+
+  disconnect(): void {
+    this.#uiStateSubject.next({
+      ...this.#uiStateSubject.value,
+      htmlElement: null,
+    })
+  }
+
+  markAsTouched(): void {
+    this.uiState.touched = true
   }
 }

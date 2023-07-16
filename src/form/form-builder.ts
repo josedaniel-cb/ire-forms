@@ -1,25 +1,43 @@
+import { Subject } from 'rxjs'
 import { FieldBuilder } from '../fields/field-builder'
 import { MultiSelectFieldDefinition } from '../fields/multiple-select-field/controller'
 import { SelectFieldDefinition } from '../fields/select-field/controller'
 import { TextFieldDefinition } from '../fields/text-field/controller'
+import { FormBuilderUI } from '../form-ui/form-builder-ui'
 import { Form, FormController, FormControllerChildren } from './form-controller'
 import { FormDefinition } from './form-definition'
 
+type FormBuilderConfig = {
+  stylesheets: string[]
+}
+
 export class FormBuilder {
-  static build<T extends FormDefinition>(params: T): Form<T> {
+  static readonly uiConfig = FormBuilderUI.default()
+
+  static #build<T extends FormDefinition>(
+    definition: T,
+    unsubscribeSubject: Subject<void>,
+  ): FormController<T> {
     const form = new FormController<T>({
-      children: Object.entries(params.fields).reduce(
+      unsubscribeSubject,
+      uiConfig: definition.uiConfig,
+      children: Object.entries(definition.fields).reduce(
         (children, [key, value]) => {
           children[key] =
             'fields' in value
-              ? FormBuilder.build(value)
-              : FieldBuilder.build(value)
+              ? FormBuilder.#build(value, unsubscribeSubject)
+              : FieldBuilder.build(value, unsubscribeSubject)
           return children
         },
         {} as FormControllerChildren,
       ),
     })
     return form
+  }
+
+  static build<T extends FormDefinition>(params: T): Form<T> {
+    const unsubscribeSubject = new Subject<void>()
+    return FormBuilder.#build(params, unsubscribeSubject)
   }
 
   static fieldset<T extends FormDefinition>(params: T): T {
@@ -51,5 +69,22 @@ export class FormBuilder {
       ...builderParams,
       type: 'multi-select',
     }
+  }
+
+  static #config: FormBuilderConfig = {
+    stylesheets: [],
+  }
+
+  static get config() {
+    return FormBuilder.#config
+  }
+
+  static patchConfig(config: Partial<FormBuilderConfig>) {
+    // FormBuilder.#settings = settings
+    Object.entries(config).forEach(([key, value]) => {
+      if (key in FormBuilder.#config) {
+        FormBuilder.#config[key as keyof FormBuilderConfig] = value
+      }
+    })
   }
 }

@@ -6,9 +6,23 @@ import { SelectFieldController } from './select-field/controller'
 import { SelectFieldValidator } from './select-field/validator'
 import { TextFieldController } from './text-field/controller'
 import { TextFieldValidator } from './text-field/validator'
+import { Subject } from 'rxjs'
+import { FieldUIState, FieldValueState } from './field-states'
+
+type GenericFieldController = FieldController<
+  // rome-ignore lint/suspicious/noExplicitAny: any is required here
+  any,
+  // rome-ignore lint/suspicious/noExplicitAny: any is required here
+  FieldValueState<any>,
+  FieldUIState
+>
 
 export class FieldBuilder {
-  static build(params: FormDefinitionLeaf): FieldController<any, any, any> {
+  static build(
+    params: FormDefinitionLeaf,
+    unsubscribeSubject: Subject<void>,
+  ): GenericFieldController {
+    // rome-ignore lint/suspicious/noExplicitAny: any is required here
     let controller: FieldController<any, any, any> | undefined = undefined
 
     if (params.type === 'text') {
@@ -32,6 +46,7 @@ export class FieldBuilder {
           placeholder: params.placeholder ?? null,
         },
         validator,
+        unsubscribeSubject,
       })
     }
 
@@ -56,6 +71,7 @@ export class FieldBuilder {
           label: params.label,
         },
         validator,
+        unsubscribeSubject,
       })
     }
 
@@ -80,6 +96,7 @@ export class FieldBuilder {
           label: params.label,
         },
         validator,
+        unsubscribeSubject,
       })
     }
 

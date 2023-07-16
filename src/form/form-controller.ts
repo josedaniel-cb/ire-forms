@@ -1,13 +1,11 @@
-import { BehaviorSubject, Observable } from 'rxjs'
-import { Field } from '../fields/field-controller'
+import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs'
+import { Field, FieldController } from '../fields/field-controller'
 import { FormDefinition } from './form-definition'
 import { FormFields, FormFieldsPatch } from './form-fields'
 import { FormValue, FormValuePatch } from './form-value'
-
-export type FormControllerChildren = Record<
-  string,
-  Field<any, any, any> | Form<any>
->
+import { FormUILayout } from '../form-ui/form-ui-layout'
+import { CSSResult } from 'lit'
+import { FormNodeUI } from '../form-ui/form-node-ui'
 
 export interface Form<T extends FormDefinition> {
   /**
@@ -21,13 +19,15 @@ export interface Form<T extends FormDefinition> {
   patchFields(patch: FormFieldsPatch<T>): void
   patchValues(patch: FormValuePatch<T>): void
   valueChanges: Observable<FormValue<T>>
+  dispose(): void
 }
 
-// TODO: IMPLEMENT THE FOLLOWING REACTIVE ATTRIBUTES FOR FORM CONTROLLER:
-// - LAYOUTS
-
-// TODO: WE NEED TO BUILD A ROOT FORM CONTROLLER THAT SUPPORTS:
-// - STYLESHEETS LINKS
+export type FormControllerChildren = Record<
+  string,
+  // rome-ignore lint/suspicious/noExplicitAny: any is required here
+  FieldController<any, any, any> | FormController<any>
+  // Field<any, any, any> | Form<any>
+>
 
 export class FormController<T extends FormDefinition> implements Form<T> {
   /**
@@ -43,25 +43,42 @@ export class FormController<T extends FormDefinition> implements Form<T> {
 
   readonly #valueSubject: BehaviorSubject<FormValue<T>>
 
+  // UI
+  readonly uiConfig?: FormNodeUI
+
+  // Subscriptions
+  readonly #unsubscribeSubject: Subject<void>
+
   constructor({
+    uiConfig,
     children,
+    unsubscribeSubject,
   }: {
+    uiConfig?: FormNodeUI
     children: FormControllerChildren
+    unsubscribeSubject: Subject<void>
   }) {
+    this.uiConfig = uiConfig
     this.children = children
+    this.#unsubscribeSubject = unsubscribeSubject
 
     this.fields = Object.entries(this.children).reduce(
       (fields, [key, child]) => {
         fields[key] = 'fields' in child ? child.fields : child
         return fields
       },
+      // rome-ignore lint/suspicious/noExplicitAny: any is required here
       {} as Partial<FormFields<any>>,
+
+      // rome-ignore lint/suspicious/noExplicitAny: any is required here
     ) as FormFields<any>
 
     this.#valueSubject = new BehaviorSubject(
       Object.entries(this.children).reduce((fields, [key, child]) => {
-        fields[key] = 'fields' in child ? child.value : child.state.value
+        fields[key] = 'fields' in child ? child.value : child.value
         return fields
+
+        // rome-ignore lint/suspicious/noExplicitAny: any is required here
       }, {} as Partial<FormValue<any>>) as FormValue<any>,
     )
 
@@ -80,13 +97,14 @@ export class FormController<T extends FormDefinition> implements Form<T> {
   }
 
   get valueChanges(): Observable<FormValue<T>> {
-    return this.#valueSubject.asObservable()
+    return this.#valueSubject
+      .asObservable()
+      .pipe(takeUntil(this.#unsubscribeSubject))
   }
 
   patchFields(fieldsPropsPatch: FormFieldsPatch<T>): void {
     Object.entries(fieldsPropsPatch).forEach(([key, value]) => {
       const child = this.children[key]
-      // child.patch(value)
       if ('fields' in child) {
         child.patchFields(value)
       } else {
@@ -104,5 +122,10 @@ export class FormController<T extends FormDefinition> implements Form<T> {
         child.valueState.value = value
       }
     })
+  }
+
+  dispose(): void {
+    this.#unsubscribeSubject.next()
+    this.#unsubscribeSubject.complete()
   }
 }

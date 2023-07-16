@@ -11,10 +11,7 @@
     "linting-check": "npx rome check ./src",
     "format": "npx rome format ./src --write"
   },
-  "keywords": [
-    "form",
-    "lit"
-  ],
+  "keywords": ["form", "lit"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/josedaniel-cb/ire-forms.git"
@@ -27,14 +24,12 @@
   "homepage": "https://github.com/josedaniel-cb/ire-forms#readme",
   "devDependencies": {
     "prettier": "^2.8.7",
-    "rome": "12.0.0",
-    "typescript": "^5.0.4"
+    "rome": "^12.1.3",
+    "typescript": "^5.1.6"
   },
   "dependencies": {
-    "lit": "^2.7.2",
-    "rxjs": "^7.8.0"
+    "lit": "^2.7.6",
+    "rxjs": "^7.8.1"
   },
-  "files": [
-    "lib/**/*"
-  ]
+  "files": ["lib/**/*"]
 }
