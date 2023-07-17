@@ -9,7 +9,11 @@ import {
 } from 'rxjs'
 import { FieldMultiPatch } from './field-multi-patch'
 import { FieldValidationResult, FieldValidator } from './field-validator'
-import { FieldValueState, FieldValueStateBuilder } from './field-value-state'
+import {
+  ExternalFieldValueState,
+  FieldValueState,
+  FieldValueStateBuilder,
+} from './field-value-state'
 import { FieldUIState, FieldUIStateBuilder } from './field-ui-state'
 
 export interface Field<
@@ -17,14 +21,10 @@ export interface Field<
   V extends FieldValueState<T>,
   U extends FieldUIState,
 > {
-  // value: T
-  // readonly valueState: ExternalFieldValueState<T, V>
-  // readonly uiState: ExternalFieldUIState<U>
-  // patch(multiPatch: FieldMultiPatch<T, V, U>): void
-  // readonly valueChanges: Observable<T>
-  // readonly renderChanges: Observable<HTMLElement>
-  readonly valueStateChanges: Observable<V>
-  readonly valueState: V
+  // readonly valueStateChanges: Observable<V>
+  // readonly valueState: V
+  readonly valueStateChanges: Observable<ExternalFieldValueState<T, V>>
+  readonly valueState: ExternalFieldValueState<T, V>
   readonly valueChanges: Observable<T>
   value: T
   readonly validation: FieldValidationResult

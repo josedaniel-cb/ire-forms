@@ -1,24 +1,28 @@
-import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs'
+import { BehaviorSubject, Observable, Subject, map, takeUntil } from 'rxjs'
 import { Field, FieldController } from '../fields/field-controller'
 import { FormDefinition } from './form-definition'
 import { FormFields, FormFieldsPatch } from './form-fields'
-import { FormValue, FormValuePatch } from './form-value'
-import { FormUILayout } from '../form-ui/form-ui-layout'
-import { CSSResult } from 'lit'
+import { FormValue, FormValueBuilder, FormValuePatch } from './form-value'
 import { FormNodeUI } from '../form-ui/form-node-ui'
+import { FormValueState } from './form-value-state'
 
 export interface Form<T extends FormDefinition> {
   /**
-   * Tree of {@link Field}s.
+   * Tree of {@link Field}s
    */
   readonly fields: FormFields<T>
+  patchFields(patch: FormFieldsPatch<T>): void
+
+  readonly valueState: FormValueState<T>
+  valueStateChanges: Observable<FormValueState<T>>
+
   /**
-   * Tree of {@link Field}s values.
+   * Tree of {@link Field} values.
    */
   readonly value: FormValue<T>
-  patchFields(patch: FormFieldsPatch<T>): void
-  patchValues(patch: FormValuePatch<T>): void
   valueChanges: Observable<FormValue<T>>
+  patchValues(patch: FormValuePatch<T>): void
+
   dispose(): void
 }
 
@@ -26,22 +30,21 @@ export type FormControllerChildren = Record<
   string,
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
   FieldController<any, any, any> | FormController<any>
-  // Field<any, any, any> | Form<any>
 >
 
 export class FormController<T extends FormDefinition> implements Form<T> {
   /**
-   * Tree of {@link Field}s and {@link Form}s.
+   * Tree of {@link FieldController}s and {@link FormController}s.
    */
   readonly children: FormControllerChildren
 
   /**
-   * Tree of fields only
-   * @see Field
+   * Tree of {@link Field}s only
    */
   readonly fields: FormFields<T>
 
-  readonly #valueSubject: BehaviorSubject<FormValue<T>>
+  // readonly #valueSubject: BehaviorSubject<FormValue<T>>
+  readonly #valueStateSubject: BehaviorSubject<FormValueState<T>>
 
   // UI
   readonly uiConfig?: FormNodeUI
@@ -73,33 +76,57 @@ export class FormController<T extends FormDefinition> implements Form<T> {
       // rome-ignore lint/suspicious/noExplicitAny: any is required here
     ) as FormFields<any>
 
-    this.#valueSubject = new BehaviorSubject(
+    this.#valueStateSubject = new BehaviorSubject(
       Object.entries(this.children).reduce((fields, [key, child]) => {
-        fields[key] = 'fields' in child ? child.value : child.value
+        fields[key] = 'fields' in child ? child.valueState : child.valueState
         return fields
 
         // rome-ignore lint/suspicious/noExplicitAny: any is required here
-      }, {} as Partial<FormValue<any>>) as FormValue<any>,
+      }, {} as Partial<FormValueState<any>>) as FormValueState<any>,
     )
 
     Object.entries(this.children).forEach(([key, child]) => {
-      child.valueChanges.subscribe((childValue) => {
-        this.#valueSubject.next({
-          ...this.#valueSubject.value,
-          [key]: childValue,
+      if ('fields' in child) {
+        const formController = child
+        formController.valueStateChanges.subscribe((valueState) => {
+          this.#valueStateSubject.next({
+            ...this.#valueStateSubject.value,
+            [key]: valueState,
+          })
+        })
+        return
+      }
+      const fieldController = child
+      fieldController.valueStateChanges.subscribe((valueState) => {
+        this.#valueStateSubject.next({
+          ...this.#valueStateSubject.value,
+          [key]: valueState,
         })
       })
     })
   }
 
+  get valueState(): FormValueState<T> {
+    return this.#valueStateSubject.value
+  }
+
+  get valueStateChanges(): Observable<FormValueState<T>> {
+    return this.#valueStateSubject
+      .asObservable()
+      .pipe(takeUntil(this.#unsubscribeSubject))
+  }
+
   get value(): FormValue<T> {
-    return this.#valueSubject.value
+    return FormValueBuilder.fromValueState(this.#valueStateSubject.value)
   }
 
   get valueChanges(): Observable<FormValue<T>> {
-    return this.#valueSubject
-      .asObservable()
-      .pipe(takeUntil(this.#unsubscribeSubject))
+    return this.#valueStateSubject.asObservable().pipe(
+      map((valueState) => {
+        return FormValueBuilder.fromValueState(valueState)
+      }),
+      takeUntil(this.#unsubscribeSubject),
+    )
   }
 
   patchFields(fieldsPropsPatch: FormFieldsPatch<T>): void {

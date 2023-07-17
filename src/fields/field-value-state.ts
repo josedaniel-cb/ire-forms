@@ -9,11 +9,17 @@ export interface FieldValueState<T> {
   validationResult: FieldValidationResult
 }
 
+/**
+ * Used by {@link FieldValidator} validate function
+ */
 export type NonValidatedFieldValueState<T, V extends FieldValueState<T>> = Omit<
   V,
   'validationResult'
 >
 
+/**
+ * Used by {@link Field} for prevent setting validationResult
+ */
 export type ExternalFieldValueState<T, V extends FieldValueState<T>> = Omit<
   V,
   'validationResult'
