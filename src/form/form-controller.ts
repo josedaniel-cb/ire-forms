@@ -23,6 +23,8 @@ export interface Form<T extends FormDefinition> {
   valueChanges: Observable<FormValue<T>>
   patchValues(patch: FormValuePatch<T>): void
 
+  readonly isValid: boolean
+
   dispose(): void
 }
 
@@ -43,7 +45,6 @@ export class FormController<T extends FormDefinition> implements Form<T> {
    */
   readonly fields: FormFields<T>
 
-  // readonly #valueSubject: BehaviorSubject<FormValue<T>>
   readonly #valueStateSubject: BehaviorSubject<FormValueState<T>>
 
   // UI
@@ -51,6 +52,8 @@ export class FormController<T extends FormDefinition> implements Form<T> {
 
   // Subscriptions
   readonly #unsubscribeSubject: Subject<void>
+
+  #isValid: boolean
 
   constructor({
     uiConfig,
@@ -85,22 +88,26 @@ export class FormController<T extends FormDefinition> implements Form<T> {
       }, {} as Partial<FormValueState<any>>) as FormValueState<any>,
     )
 
+    this.#isValid = false
     Object.entries(this.children).forEach(([key, child]) => {
-      if ('fields' in child) {
-        const formController = child
-        formController.valueStateChanges.subscribe((valueState) => {
-          this.#valueStateSubject.next({
-            ...this.#valueStateSubject.value,
-            [key]: valueState,
-          })
-        })
-        return
-      }
-      const fieldController = child
-      fieldController.valueStateChanges.subscribe((valueState) => {
+      child.valueStateChanges.subscribe((valueState) => {
+        // Notifies the parent of the change
         this.#valueStateSubject.next({
           ...this.#valueStateSubject.value,
           [key]: valueState,
+        })
+
+        // Updates the validity of the form
+        if (!child.isValid) {
+          this.#isValid = false
+          return
+        }
+        this.#isValid = Object.keys(this.children).every((key) => {
+          const child = this.children[key]
+          if ('fields' in child) {
+            return child.isValid
+          }
+          return child.isValid
         })
       })
     })
@@ -154,5 +161,9 @@ export class FormController<T extends FormDefinition> implements Form<T> {
   dispose(): void {
     this.#unsubscribeSubject.next()
     this.#unsubscribeSubject.complete()
+  }
+
+  get isValid(): boolean {
+    return this.#isValid
   }
 }

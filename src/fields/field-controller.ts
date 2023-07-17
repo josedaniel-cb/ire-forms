@@ -29,6 +29,7 @@ export interface Field<
   value: T
   readonly validation: FieldValidationResult
   readonly validationChanges: Observable<FieldValidationResult>
+  readonly isValid: boolean
   readonly uiStateChanges: Observable<U>
   readonly uiState: U
   readonly renderChanges: Observable<HTMLElement>
@@ -122,6 +123,10 @@ export abstract class FieldController<
       }),
       takeUntil(this.#unsubscribeSubject),
     )
+  }
+
+  get isValid(): boolean {
+    return this.validation.isValid
   }
 
   get uiStateChanges(): Observable<U> {
