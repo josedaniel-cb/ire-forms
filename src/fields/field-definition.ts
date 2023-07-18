@@ -1,7 +1,8 @@
+import { Field } from './field-controller'
 import { FieldType } from './field-type'
 import { FieldUIState } from './field-ui-state'
-import { FieldValidationFn } from './field-validator'
-import { FieldValueState } from './field-value-state'
+import { FieldValidationFn, FieldValidationResult } from './field-validator'
+import { ExternalFieldValueState, FieldValueState } from './field-value-state'
 
 type NullableKeys<T> = {
   [K in keyof T]: null extends T[K] ? K : never
@@ -27,6 +28,15 @@ export type FieldDefinition<
     enabled?: boolean
 
     // Subscriptions
-    onValueChange?(value: T): void
-    onRender?(htmlElement: HTMLElement): void
+    onValueStateChange?: (
+      valueState: ExternalFieldValueState<T, V>,
+      field: Field<T, V, U>,
+    ) => void
+    onValueChange?: (value: T, field: Field<T, V, U>) => void
+    onValidation?: (
+      validation: FieldValidationResult,
+      field: Field<T, V, U>,
+    ) => void
+    onUiStateChange?: (uiState: U, field: Field<T, V, U>) => void
+    onRender?: (el: HTMLElement, field: Field<T, V, U>) => void
   }

@@ -21,8 +21,6 @@ export interface Field<
   V extends FieldValueState<T>,
   U extends FieldUIState,
 > {
-  // readonly valueStateChanges: Observable<V>
-  // readonly valueState: V
   readonly valueStateChanges: Observable<ExternalFieldValueState<T, V>>
   readonly valueState: ExternalFieldValueState<T, V>
   readonly valueChanges: Observable<T>

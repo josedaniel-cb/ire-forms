@@ -101,17 +101,33 @@ export class FieldBuilder {
       })
     }
 
-    if (controller) {
-      if (params.onValueChange) {
-        controller.valueChanges.subscribe(params.onValueChange)
-      }
-      if (params.onRender) {
-        controller.renderChanges.subscribe(params.onRender)
-      }
-      return controller
+    if (controller === undefined) {
+      const { type } = params
+      throw new Error(`Unknown field type: ${type}`)
     }
 
-    const { type } = params
-    throw new Error(`Unknown field type: ${type}`)
+    const c = controller
+    const {
+      onValueStateChange,
+      onValueChange,
+      onValidation,
+      onUiStateChange,
+      onRender,
+    } = params
+    // Subscriptions
+    if (onValueStateChange !== undefined)
+      c.valueStateChanges.subscribe((valueState) =>
+        onValueStateChange(valueState, c),
+      )
+    if (onValueChange !== undefined)
+      c.valueChanges.subscribe((value) => onValueChange(value, c))
+    if (onValidation !== undefined)
+      c.validationChanges.subscribe((validation) => onValidation(validation, c))
+    if (onUiStateChange !== undefined)
+      c.uiStateChanges.subscribe((uiState) => onUiStateChange(uiState, c))
+    if (onRender !== undefined)
+      c.renderChanges.subscribe((el) => onRender(el, c))
+
+    return c
   }
 }
