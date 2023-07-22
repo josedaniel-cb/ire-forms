@@ -27,8 +27,6 @@ export type FormValuePatch<T extends FormDefinition> = {
     ? FormValuePatch<T['fields'][K]>
     : never
 }
-// TODO: TEST THIS
-// export type FormValuePatch<T extends FormDefinition> = Partial<FormValue<T>>
 
 export class FormValueBuilder {
   static fromValueState<T extends FormDefinition>(
@@ -36,7 +34,17 @@ export class FormValueBuilder {
   ): FormValue<T> {
     return Object.keys(valueState).reduce(
       (value, key) => {
-        value[key] = valueState[key].value
+        const valueStateAttr = valueState[key]
+        if ('value' in valueStateAttr) {
+          // It's a leaf (field)
+          value[key] = valueStateAttr.value
+        } else {
+          // It's a branch (form or fieldset)
+          value[key] = FormValueBuilder.fromValueState(
+            // rome-ignore lint/suspicious/noExplicitAny: any is required here
+            valueStateAttr as FormValueState<any>,
+          )
+        }
         return value
       },
       // rome-ignore lint/suspicious/noExplicitAny: any is required here

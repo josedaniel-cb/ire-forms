@@ -6,6 +6,10 @@ import { TextFieldDefinition } from '../fields/text-field/controller'
 import { FormBuilderUI } from '../form-ui/form-builder-ui'
 import { Form, FormController, FormControllerChildren } from './form-controller'
 import { FormDefinition } from './form-definition'
+import {
+  // RootFormBuildDefinition,
+  FormBuildDefinition,
+} from './form-build-definition'
 
 type FormBuilderConfig = {
   stylesheets: string[]
@@ -15,7 +19,7 @@ export class FormBuilder {
   static readonly uiConfig = FormBuilderUI.default()
 
   static #build<T extends FormDefinition>(
-    definition: T,
+    definition: FormBuildDefinition<T>,
     unsubscribeSubject: Subject<void>,
   ): FormController<T> {
     const form = new FormController<T>({
@@ -32,15 +36,20 @@ export class FormBuilder {
         {} as FormControllerChildren,
       ),
     })
+
     return form
   }
 
-  static build<T extends FormDefinition>(params: T): Form<T> {
+  static build<T extends FormDefinition>(
+    params: FormBuildDefinition<T>,
+  ): Form<T> {
     const unsubscribeSubject = new Subject<void>()
-    return FormBuilder.#build(params, unsubscribeSubject)
+    return FormBuilder.#build<T>(params, unsubscribeSubject)
   }
 
-  static fieldset<T extends FormDefinition>(params: T): T {
+  static fieldset<T extends FormDefinition>(
+    params: FormBuildDefinition<T>,
+  ): FormBuildDefinition<T> {
     return params
   }
 

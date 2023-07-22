@@ -2,10 +2,12 @@ import { MultiSelectFieldDefinition } from '../fields/multiple-select-field/cont
 import { SelectFieldDefinition } from '../fields/select-field/controller'
 import { TextFieldDefinition } from '../fields/text-field/controller'
 import { FormNodeUI } from '../form-ui/form-node-ui'
+import { FormValue } from './form-value'
+import { FormValueState } from './form-value-state'
 
 export type FormDefinition = {
   fields: Record<string, FormDefinitionNode>
-  uiConfig?: FormNodeUI
+  // uiConfig?: FormNodeUI
 }
 
 export type FormDefinitionNode = FormDefinitionLeaf | FormDefinition

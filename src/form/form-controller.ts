@@ -82,6 +82,7 @@ export class FormController<T extends FormDefinition> implements Form<T> {
     this.#valueStateSubject = new BehaviorSubject(
       Object.entries(this.children).reduce((fields, [key, child]) => {
         fields[key] = 'fields' in child ? child.valueState : child.valueState
+        console.log(`[😸] fields[${key}] = `, fields[key])
         return fields
 
         // rome-ignore lint/suspicious/noExplicitAny: any is required here
