@@ -3,7 +3,7 @@ import {
   TextFieldUIState,
   TextFieldValueState,
 } from '../../fields/text-field/controller'
-import { FieldElement } from '../field-element'
+import { FieldElement } from './field-element'
 import { HTMLTemplateResult, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import { query, state } from 'lit/decorators.js'

@@ -1,4 +1,4 @@
-import './components/form-element'
+import './components/stateful/form-element'
 import { TextFieldController } from './fields/text-field/controller'
 import { FormBuilder } from './form/form-builder'
 import { Form } from './form/form-controller'
