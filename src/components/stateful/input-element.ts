@@ -20,32 +20,13 @@ export class IreInputElement extends FieldElement {
   @property({ attribute: false })
   override controller!: TextFieldController
 
-  // @state()
-  // private _valueState?: TextFieldValueState
   #valueState?: TextFieldValueState
 
-  // @state()
-  // private _uiState?: TextFieldUIState
   #uiState?: TextFieldUIState
 
   protected _renderField(): HTMLTemplateResult {
-    // type="${this.controller.type}"
-    // placeholder="${ifDefined(this._uiState.placeholder)}"
-    // value="${this._valueState.value}"
-    // console.log(
-    //   '🚀 ~ file: input.ts:35 ~ InputElement ~ _renderField ~ this._valueState?.validationResult.isValid:',
-    //   this._valueState?.validationResult.isValid,
-    // )
-    // console.log(
-    //   '🚀 ~ file: input.ts:37 ~ InputElement ~ _renderField ~ this._uiState?.touched:',
-    //   this._uiState?.touched,
-    // )
     const isInvalid = Boolean(
-      !this.#valueState?.validationResult.isValid && this.#uiState?.touched,
-    )
-    console.log(
-      '🚀 ~ file: input.ts:36 ~ InputElement ~ _renderField ~ isInvalid:',
-      isInvalid,
+      this.#uiState?.touched && !this.#valueState?.validationResult.isValid,
     )
     return html`
       <input
@@ -58,17 +39,24 @@ export class IreInputElement extends FieldElement {
         @input="${this.#handleInput}"
         @blur="${this.#handleBlur}"
       />
+      ${this._renderValidationMessage(
+        this.#valueState?.validationResult.errorMessage,
+      )}
     `
   }
 
   override firstUpdated(): void {
     this.controller.connect(this)
+
+    // Subscribe to value and validation changes
     this.controller.valueStateChanges.subscribe((state) => {
       this.#valueState = state
       this.requestUpdate()
 
       this.el.value = state.value
     })
+
+    // Subscribe to UI changes
     this.controller.uiStateChanges.subscribe((state) => {
       this.#uiState = state
       this.requestUpdate()

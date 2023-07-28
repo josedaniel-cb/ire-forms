@@ -1,4 +1,5 @@
 import { FieldController } from '../../../fields/field-controller'
+import { FieldValueState } from '../../../fields/field-value-state'
 import { FormBuilder } from '../../../form/form-builder'
 import { baseCss } from '../../css/base-css'
 import { layoutsCss } from '../../css/layout-css'
@@ -12,21 +13,14 @@ import { styleMap } from 'lit/directives/style-map.js'
 export abstract class FieldElement extends LitElement {
   static override styles = [mosaicCss, layoutsCss, baseCss]
 
-  // @property({ attribute: false })
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
   controller!: FieldController<any, any, any>
-
-  // constructor() {
-  //   super()
-  //   FieldElement.styles = [FormBuilder.uiConfig.theme.css, layoutsCss, baseCss]
-  // }
 
   override render() {
     return html`
       ${renderStyleSheetLinks(FormBuilder.config.stylesheets)}
       ${this._renderLabel()}
       ${this._renderField()}
-      ${this._renderValidationMessage()}
     `
   }
 
@@ -54,25 +48,18 @@ export abstract class FieldElement extends LitElement {
 
   protected abstract _renderField(): HTMLTemplateResult
 
-  protected _renderValidationMessage() {
-    const errorMessage =
-      this.controller.valueState.validationResult.errorMessage
+  protected _renderValidationMessage(errorMessage: string | null | undefined) {
+    if (errorMessage === null) {
+      return
+    }
     return html`
       <div
         class="invalid-input-message"
-        style=${styleMap({
-          display: errorMessage === null ? null : 'none',
-        })}
       >
         ${errorMessage}
       </div>
     `
   }
-
-  // override connectedCallback(): void {
-  //   super.connectedCallback()
-  //   FieldElement.styles = [FormBuilder.uiConfig.theme.css, layoutsCss, baseCss]
-  // }
 
   override disconnectedCallback(): void {
     this.controller.disconnect()
