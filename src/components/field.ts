@@ -1,23 +1,25 @@
 import { FieldController } from '../fields/field-controller'
 import { baseCss } from '../form-ui/base-css/base-css'
 import { layoutsCss } from '../form-ui/base-css/layout-css'
+import { mosaicCss } from '../form-ui/theme-css/mosaic-css'
 import { FormBuilder } from '../form/form-builder'
+// import { FormComponent } from './form-component'
 import { renderStyleSheetLinks } from './stateless/external-style-sheets'
-import { CSSResult, HTMLTemplateResult, LitElement, html } from 'lit'
-import { property, query, state } from 'lit/decorators.js'
+import { HTMLTemplateResult, LitElement, html } from 'lit'
+// import { property, query, state } from 'lit/decorators.js'
 import { styleMap } from 'lit/directives/style-map.js'
 
 export abstract class FieldElement extends LitElement {
-  static override styles: CSSResult[] = []
+  static override styles = [mosaicCss, layoutsCss, baseCss]
 
   // @property({ attribute: false })
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
   controller!: FieldController<any, any, any>
 
-  constructor() {
-    super()
-    FieldElement.styles = [FormBuilder.uiConfig.theme.css, layoutsCss, baseCss]
-  }
+  // constructor() {
+  //   super()
+  //   FieldElement.styles = [FormBuilder.uiConfig.theme.css, layoutsCss, baseCss]
+  // }
 
   override render() {
     return html`

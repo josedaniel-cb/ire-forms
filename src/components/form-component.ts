@@ -31,6 +31,7 @@ import { ifDefined } from 'lit/directives/if-defined.js'
 // import { layoutsCss } from '../styles/css/layouts-css'
 // import { FormConfig } from '../../core/config'
 
+import { mosaicCss } from '../form-ui/theme-css/mosaic-css'
 import './fields/input'
 // import './fields/input/password'
 // import './fields/input/checkbox'
@@ -46,16 +47,16 @@ import './fields/input'
 
 @customElement('ire-form')
 export class FormComponent extends LitElement {
-  static override styles: CSSResult[] = []
+  static override styles = [mosaicCss, layoutsCss, baseCss]
 
   @property()
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
   controller?: FormController<any>
 
-  connectedCallback() {
-    super.connectedCallback()
-    FormComponent.styles = [FormBuilder.uiConfig.theme.css, layoutsCss, baseCss]
-  }
+  // connectedCallback() {
+  //   super.connectedCallback()
+  //   FormComponent.styles = [mosaicCss, layoutsCss, baseCss]
+  // }
 
   override render() {
     return html`
