@@ -3,7 +3,7 @@ import {
   TextFieldUIState,
   TextFieldValueState,
 } from '../../fields/text-field/controller'
-import { FieldElement } from '../field'
+import { FieldElement } from '../field-element'
 import { HTMLTemplateResult, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import { query, state } from 'lit/decorators.js'
@@ -11,7 +11,7 @@ import { classMap } from 'lit/directives/class-map.js'
 import { ifDefined } from 'lit/directives/if-defined.js'
 
 @customElement('ire-input')
-export class InputElement extends FieldElement {
+export class IreInputElement extends FieldElement {
   static override styles = FieldElement.styles
 
   @query('input')

@@ -32,7 +32,7 @@ import { ifDefined } from 'lit/directives/if-defined.js'
 // import { FormConfig } from '../../core/config'
 
 import { mosaicCss } from '../form-ui/theme-css/mosaic-css'
-import './fields/input'
+import './fields/input-element'
 // import './fields/input/password'
 // import './fields/input/checkbox'
 // import './fields/input/file'
@@ -46,7 +46,7 @@ import './fields/input'
 // import { MultipleSelectController } from '../../controllers/fields/multiple-select'
 
 @customElement('ire-form')
-export class FormComponent extends LitElement {
+export class IreFormElement extends LitElement {
   static override styles = [mosaicCss, layoutsCss, baseCss]
 
   @property()
@@ -175,6 +175,6 @@ export class FormComponent extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'ire-form': FormComponent
+    'ire-form': IreFormElement
   }
 }
