@@ -1,18 +1,18 @@
 import {
-  TextFieldDefinition,
-  TextField,
-  TextFieldMultiPatch,
-} from '../fields/text-field/controller'
+  MultiSelectField,
+  MultiSelectFieldDefinition,
+  MultiSelectFieldMultiPatch,
+} from '../fields/multiple-select-field/controller'
 import {
-  SelectFieldDefinition,
   SelectField,
+  SelectFieldDefinition,
   SelectFieldMultiPatch,
 } from '../fields/select-field/controller'
 import {
-  MultiSelectFieldDefinition,
-  MultiSelectField,
-  MultiSelectFieldMultiPatch,
-} from '../fields/multiple-select-field/controller'
+  TextField,
+  TextFieldDefinition,
+  TextFieldMultiPatch,
+} from '../fields/text-field/controller'
 import { FormDefinition } from './form-definition'
 
 export type FormFields<T extends FormDefinition> = {

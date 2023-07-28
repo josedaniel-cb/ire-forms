@@ -1,4 +1,4 @@
-import { html, HTMLTemplateResult } from 'lit'
+import { HTMLTemplateResult, html } from 'lit'
 
 export const renderStyleSheetLinks = (
   styleLinks: string[],

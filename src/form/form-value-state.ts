@@ -1,15 +1,15 @@
 import {
-  TextFieldDefinition,
-  TextFieldValueState,
-} from '../fields/text-field/controller'
+  MultiSelectFieldDefinition,
+  MultiSelectFieldValueState,
+} from '../fields/multiple-select-field/controller'
 import {
   SelectFieldDefinition,
   SelectFieldValueState,
 } from '../fields/select-field/controller'
 import {
-  MultiSelectFieldDefinition,
-  MultiSelectFieldValueState,
-} from '../fields/multiple-select-field/controller'
+  TextFieldDefinition,
+  TextFieldValueState,
+} from '../fields/text-field/controller'
 import { FormDefinition } from './form-definition'
 
 export type FormValueState<T extends FormDefinition> = {

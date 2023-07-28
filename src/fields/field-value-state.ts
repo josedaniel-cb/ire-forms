@@ -1,5 +1,5 @@
-import { BehaviorSubject } from 'rxjs'
 import { FieldValidationResult, FieldValidator } from './field-validator'
+import { BehaviorSubject } from 'rxjs'
 
 export interface FieldValueState<T> {
   value: T

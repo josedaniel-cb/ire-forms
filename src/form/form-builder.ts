@@ -1,15 +1,15 @@
-import { Subject } from 'rxjs'
 import { FieldBuilder } from '../fields/field-builder'
 import { MultiSelectFieldDefinition } from '../fields/multiple-select-field/controller'
 import { SelectFieldDefinition } from '../fields/select-field/controller'
 import { TextFieldDefinition } from '../fields/text-field/controller'
 import { FormBuilderUI } from '../form-ui/form-builder-ui'
-import { Form, FormController, FormControllerChildren } from './form-controller'
-import { FormDefinition } from './form-definition'
 import {
   // RootFormBuildDefinition,
   FormBuildDefinition,
 } from './form-build-definition'
+import { Form, FormController, FormControllerChildren } from './form-controller'
+import { FormDefinition } from './form-definition'
+import { Subject } from 'rxjs'
 
 type FormBuilderConfig = {
   stylesheets: string[]

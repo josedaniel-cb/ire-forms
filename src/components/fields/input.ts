@@ -1,14 +1,14 @@
-import { HTMLTemplateResult, html } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
-import { classMap } from 'lit/directives/class-map.js'
-import { FieldElement } from '../field'
-import { query, state } from 'lit/decorators.js'
-import { ifDefined } from 'lit/directives/if-defined.js'
 import {
   TextFieldController,
   TextFieldUIState,
   TextFieldValueState,
 } from '../../fields/text-field/controller'
+import { FieldElement } from '../field'
+import { HTMLTemplateResult, html } from 'lit'
+import { customElement, property } from 'lit/decorators.js'
+import { query, state } from 'lit/decorators.js'
+import { classMap } from 'lit/directives/class-map.js'
+import { ifDefined } from 'lit/directives/if-defined.js'
 
 @customElement('ire-input')
 export class InputElement extends FieldElement {
