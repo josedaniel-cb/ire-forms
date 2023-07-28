@@ -1,1 +1,0 @@
-{"version":3,"file":"select.d.ts","sourceRoot":"","sources":["../../../../src/ui/components/fields/select.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,wBAAwB,EAAE,MAAM,6CAA6C,CAAA;AAEtF,OAAO,EAAE,YAAY,EAAE,MAAM,UAAU,CAAA;AAEvC,8BAAsB,qBAAsB,SAAQ,YAAY;IAC9D,OAAgB,MAAM,4BAAsB;IAEpC,UAAU,EAAE,wBAAwB,CAAA;IAEnC,iBAAiB,IAAI,IAAI;CAInC"}
