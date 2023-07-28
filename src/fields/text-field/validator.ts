@@ -15,7 +15,7 @@ export class TextFieldValidator extends FieldValidator<
   >): FieldValidationResult {
     const errorMessage = ((): string | undefined => {
       if (!enabled) return
-      if (this.required && !value) return 'This field is required'
+      if (this.required && value.length === 0) return 'This field is required'
       if (this.validators) {
         for (const validator of this.validators) {
           const errorMessage = validator(value)
@@ -23,6 +23,9 @@ export class TextFieldValidator extends FieldValidator<
         }
       }
     })()
-    return { isValid: !!errorMessage, errorMessage: errorMessage ?? null }
+    return {
+      isValid: errorMessage === undefined,
+      errorMessage: errorMessage !== undefined ? errorMessage : null,
+    }
   }
 }

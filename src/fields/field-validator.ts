@@ -22,7 +22,8 @@ export abstract class FieldValidator<T, V extends FieldValueState<T>> {
     required?: boolean
     validators?: FieldValidationFn<T>[]
   }) {
-    this.required = required ?? false
+    // this.required = required ?? false
+    this.required = required ?? true
     this.validators = validators ?? null
   }
 

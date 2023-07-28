@@ -20,63 +20,66 @@ export class InputElement extends FieldElement {
   @property({ attribute: false })
   override controller!: TextFieldController
 
-  @state()
-  protected _valueState?: TextFieldValueState
+  // @state()
+  // private _valueState?: TextFieldValueState
+  #valueState?: TextFieldValueState
 
-  @state()
-  protected _uiState?: TextFieldUIState
+  // @state()
+  // private _uiState?: TextFieldUIState
+  #uiState?: TextFieldUIState
 
   protected _renderField(): HTMLTemplateResult {
     // type="${this.controller.type}"
     // placeholder="${ifDefined(this._uiState.placeholder)}"
     // value="${this._valueState.value}"
+    // console.log(
+    //   '🚀 ~ file: input.ts:35 ~ InputElement ~ _renderField ~ this._valueState?.validationResult.isValid:',
+    //   this._valueState?.validationResult.isValid,
+    // )
+    // console.log(
+    //   '🚀 ~ file: input.ts:37 ~ InputElement ~ _renderField ~ this._uiState?.touched:',
+    //   this._uiState?.touched,
+    // )
+    const isInvalid = Boolean(
+      !this.#valueState?.validationResult.isValid && this.#uiState?.touched,
+    )
+    console.log(
+      '🚀 ~ file: input.ts:36 ~ InputElement ~ _renderField ~ isInvalid:',
+      isInvalid,
+    )
     return html`
       <input
         class=${classMap({
           'form-control': true,
-          'is-invalid': !(this._valueState?.validationResult.isValid ?? true),
+          'is-invalid': isInvalid,
         })}
-        placeholder="${ifDefined(
-          this._uiState?.placeholder ? this._uiState.placeholder : undefined,
-        )}"
+        placeholder="${ifDefined(this.#uiState?.placeholder ?? undefined)}"
         type="text"
+        @input="${this.#handleInput}"
+        @blur="${this.#handleBlur}"
       />
     `
   }
 
-  // override connectedCallback(): void {
-  //   super.connectedCallback()
   override firstUpdated(): void {
-    this.controller.connect(this.el)
+    this.controller.connect(this)
     this.controller.valueStateChanges.subscribe((state) => {
-      this._valueState = state
+      this.#valueState = state
+      this.requestUpdate()
+
       this.el.value = state.value
     })
     this.controller.uiStateChanges.subscribe((state) => {
-      this._uiState = state
+      this.#uiState = state
+      this.requestUpdate()
     })
-    this.el.addEventListener('input', this.#handleInput.bind(this))
-    this.el.addEventListener('blur', this.#handleBlur.bind(this))
   }
 
-  // override disconnectedCallback(): void {
-  //   super.disconnectedCallback()
-  //   this.el.removeEventListener('input', this.#handleInput)
-  //   this.el.removeEventListener('blur', this.#handleBlur)
-  // }
-
-  #handleInput(): void {
-    // console.log(this)
-    // console.log(
-    //   '🚀 ~ file: input.ts:70 ~ #handleInput ~ this.controller:',
-    //   this.controller,
-    // )
-    // console.log('🚀 ~ file: input.ts:71 ~ #handleInput ~ this.el:', this.el)
+  #handleInput(_: Event): void {
     this.controller.value = this.el.value
-    // this.controller.value = (event.target as HTMLInputElement).value
   }
 
-  #handleBlur(): void {
+  #handleBlur(_: Event): void {
     this.controller.markAsTouched()
   }
 }

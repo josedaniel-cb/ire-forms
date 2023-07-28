@@ -163,10 +163,6 @@ export abstract class FieldController<
   }
 
   connect(htmlElement: HTMLElement): void {
-    // this.#uiStateSubject.next({
-    //   ...this.#uiStateSubject.value,
-    //   htmlElement,
-    // })
     this.#uiStateSubject.value.htmlElement = htmlElement
   }
 
