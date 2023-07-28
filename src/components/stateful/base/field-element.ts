@@ -14,7 +14,7 @@ export abstract class FieldElement extends LitElement {
   static override styles = [mosaicCss, layoutsCss, baseCss]
 
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
-  controller!: FieldController<any, any, any>
+  controller!: FieldController<any, any, any, any>
 
   override render() {
     return html`
@@ -48,10 +48,7 @@ export abstract class FieldElement extends LitElement {
 
   protected abstract _renderField(): HTMLTemplateResult
 
-  protected _renderValidationMessage(errorMessage: string | null | undefined) {
-    if (errorMessage === null) {
-      return
-    }
+  protected _renderValidationMessage(errorMessage: string) {
     return html`
       <div
         class="invalid-input-message"

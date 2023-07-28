@@ -1,3 +1,4 @@
+import { FieldElement } from '../components/stateful/base/field-element'
 import { FieldMultiPatch } from './field-multi-patch'
 import { FieldUIState, FieldUIStateBuilder } from './field-ui-state'
 import { FieldValidationResult, FieldValidator } from './field-validator'
@@ -19,7 +20,8 @@ import {
 export interface Field<
   T,
   V extends FieldValueState<T>,
-  U extends FieldUIState,
+  E extends FieldElement,
+  U extends FieldUIState<E>,
 > {
   readonly valueStateChanges: Observable<ExternalFieldValueState<T, V>>
   readonly valueState: ExternalFieldValueState<T, V>
@@ -32,14 +34,15 @@ export interface Field<
   readonly uiState: U
   readonly renderChanges: Observable<HTMLElement>
   readonly required: boolean
-  patch(multiPatch: FieldMultiPatch<T, V, U>): void
+  patch(multiPatch: FieldMultiPatch<T, V, E, U>): void
   markAsTouched(): void
 }
 
 export interface FieldParams<
   T,
   V extends FieldValueState<T>,
-  U extends FieldUIState,
+  E extends FieldElement,
+  U extends FieldUIState<E>,
 > {
   valueState: V
   uiState: U
@@ -50,8 +53,9 @@ export interface FieldParams<
 export abstract class FieldController<
   T,
   V extends FieldValueState<T>,
-  U extends FieldUIState,
-> implements Field<T, V, U>
+  E extends FieldElement,
+  U extends FieldUIState<E>,
+> implements Field<T, V, E, U>
 {
   readonly #validator: FieldValidator<T, V>
 
@@ -66,7 +70,7 @@ export abstract class FieldController<
     uiState,
     validator,
     unsubscribeSubject,
-  }: FieldParams<T, V, U>) {
+  }: FieldParams<T, V, E, U>) {
     this.#validator = validator
     this.#unsubscribeSubject = unsubscribeSubject
     const valueStateProxy = FieldValueStateBuilder.proxy<T, V>({
@@ -135,7 +139,7 @@ export abstract class FieldController<
     return this.#uiStateSubject.value
   }
 
-  get renderChanges(): Observable<HTMLElement> {
+  get renderChanges(): Observable<E> {
     return this.#uiStateSubject.asObservable().pipe(
       filter((htmlElement) => htmlElement !== null),
       // rome-ignore lint/style/noNonNullAssertion: it filters out nulls
@@ -149,7 +153,7 @@ export abstract class FieldController<
     return this.#validator.required
   }
 
-  patch(multiPatch: FieldMultiPatch<T, V, U>): void {
+  patch(multiPatch: FieldMultiPatch<T, V, E, U>): void {
     for (const entry in Object.entries(multiPatch)) {
       const [key, value] = entry
       if (key in this.valueState) {
@@ -162,7 +166,7 @@ export abstract class FieldController<
     }
   }
 
-  connect(htmlElement: HTMLElement): void {
+  connect(htmlElement: E): void {
     this.#uiStateSubject.value.htmlElement = htmlElement
   }
 

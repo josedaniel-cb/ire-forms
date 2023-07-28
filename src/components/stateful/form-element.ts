@@ -110,7 +110,7 @@ export class IreFormElement extends LitElement {
 
   protected _renderField(
     // rome-ignore lint/suspicious/noExplicitAny: any is required here
-    fieldController: FieldController<any, any, any>,
+    fieldController: FieldController<any, any, any, any>,
   ): HTMLTemplateResult | undefined {
     let template: HTMLTemplateResult | undefined = undefined
 

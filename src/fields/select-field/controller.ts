@@ -1,3 +1,4 @@
+import { IreSelectElement } from '../../components/stateful/select-element'
 import { Field, FieldController } from '../field-controller'
 import { FieldDefinition } from '../field-definition'
 import { FieldMultiPatch } from '../field-multi-patch'
@@ -9,11 +10,12 @@ export interface SelectFieldValueState<T extends NonNullable<unknown>>
   options: { label: string; value: T }[]
 }
 
-export type SelectFieldUIState = FieldUIState
+export type SelectFieldUIState = FieldUIState<IreSelectElement>
 
 export type SelectField<T extends NonNullable<unknown>> = Field<
   T | null,
   SelectFieldValueState<T>,
+  IreSelectElement,
   SelectFieldUIState
 >
 
@@ -22,6 +24,7 @@ export class SelectFieldController<
 > extends FieldController<
   T | null,
   SelectFieldValueState<T>,
+  IreSelectElement,
   SelectFieldUIState
 > {}
 
@@ -30,8 +33,14 @@ export type SelectFieldDefinition<T extends NonNullable<unknown>> =
     T | null,
     'select',
     SelectFieldValueState<T>,
+    IreSelectElement,
     SelectFieldUIState
   >
 
 export type SelectFieldMultiPatch<T extends NonNullable<unknown>> =
-  FieldMultiPatch<T | null, SelectFieldValueState<T>, SelectFieldUIState>
+  FieldMultiPatch<
+    T | null,
+    SelectFieldValueState<T>,
+    IreSelectElement,
+    SelectFieldUIState
+  >

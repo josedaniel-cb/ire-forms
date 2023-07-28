@@ -15,7 +15,10 @@ type GenericFieldController = FieldController<
   any,
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
   FieldValueState<any>,
-  FieldUIState
+  // rome-ignore lint/suspicious/noExplicitAny: any is required here
+  any,
+  // rome-ignore lint/suspicious/noExplicitAny: any is required here
+  FieldUIState<any>
 >
 
 export class FieldBuilder {
@@ -24,7 +27,7 @@ export class FieldBuilder {
     unsubscribeSubject: Subject<void>,
   ): GenericFieldController {
     // rome-ignore lint/suspicious/noExplicitAny: any is required here
-    let controller: FieldController<any, any, any> | undefined = undefined
+    let controller: FieldController<any, any, any, any> | undefined = undefined
 
     if (params.type === 'text') {
       const validator = new TextFieldValidator({

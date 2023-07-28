@@ -31,7 +31,7 @@ export interface Form<T extends FormDefinition> {
 export type FormControllerChildren = Record<
   string,
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
-  FieldController<any, any, any> | FormController<any>
+  FieldController<any, any, any, any> | FormController<any>
 >
 
 export class FormController<T extends FormDefinition> implements Form<T> {

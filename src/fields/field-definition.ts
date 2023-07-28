@@ -1,3 +1,4 @@
+import { FieldElement } from '../components/stateful/base/field-element'
 import { Field } from './field-controller'
 import { FieldType } from './field-type'
 import { FieldUIState } from './field-ui-state'
@@ -14,7 +15,8 @@ export type FieldDefinition<
   T,
   K extends FieldType,
   V extends FieldValueState<T>,
-  U extends FieldUIState,
+  E extends FieldElement,
+  U extends FieldUIState<E>,
 > = MakeNullablePropertiesUndefined<
   Omit<V, 'value' | 'validationResult' | 'enabled'>
 > &
@@ -30,13 +32,13 @@ export type FieldDefinition<
     // Subscriptions
     onValueStateChange?: (
       valueState: ExternalFieldValueState<T, V>,
-      field: Field<T, V, U>,
+      field: Field<T, V, E, U>,
     ) => void
-    onValueChange?: (value: T, field: Field<T, V, U>) => void
+    onValueChange?: (value: T, field: Field<T, V, E, U>) => void
     onValidation?: (
       validation: FieldValidationResult,
-      field: Field<T, V, U>,
+      field: Field<T, V, E, U>,
     ) => void
-    onUiStateChange?: (uiState: U, field: Field<T, V, U>) => void
-    onRender?: (el: HTMLElement, field: Field<T, V, U>) => void
+    onUiStateChange?: (uiState: U, field: Field<T, V, E, U>) => void
+    onRender?: (el: E, field: Field<T, V, E, U>) => void
   }

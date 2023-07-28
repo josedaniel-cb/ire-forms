@@ -1,22 +1,24 @@
+import { FieldElement } from '../components/stateful/base/field-element'
 import { BehaviorSubject } from 'rxjs'
 
-export interface FieldUIState {
-  htmlElement: HTMLElement | null
+export interface FieldUIState<E extends FieldElement> {
+  // htmlElement: HTMLElement | null
+  htmlElement: E | null
 
   label: string
 
   touched: boolean
 }
 
-export type ExternalFieldUIState<U extends FieldUIState> = Omit<
-  U,
-  'htmlElement'
-> & {
+export type ExternalFieldUIState<
+  E extends FieldElement,
+  U extends FieldUIState<E>,
+> = Omit<U, 'htmlElement'> & {
   readonly htmlElement: HTMLElement | null
 }
 
 export class FieldUIStateBuilder {
-  static proxy<U extends FieldUIState>({
+  static proxy<E extends FieldElement, U extends FieldUIState<E>>({
     uiState,
     uiStateSubject: getUiStateSubject,
   }: { uiState: U; uiStateSubject: () => BehaviorSubject<U> }): U {
