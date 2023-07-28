@@ -25,23 +25,25 @@ export class IreInputElement extends FieldElement {
   #uiState?: TextFieldUIState
 
   protected _renderField(): HTMLTemplateResult {
-    const isInvalid = Boolean(
-      this.#uiState?.touched && !this.#valueState?.validationResult.isValid,
-    )
+    const touched = this.#uiState?.touched ?? false
+    const errorMessage =
+      this.#valueState?.validationResult.errorMessage ?? undefined
     return html`
       <input
         class=${classMap({
           'form-control': true,
-          'is-invalid': isInvalid,
+          'is-invalid': touched && errorMessage !== undefined,
         })}
         placeholder="${ifDefined(this.#uiState?.placeholder ?? undefined)}"
         type="text"
         @input="${this.#handleInput}"
         @blur="${this.#handleBlur}"
       />
-      ${this._renderValidationMessage(
-        this.#valueState?.validationResult.errorMessage,
-      )}
+      ${
+        touched && errorMessage !== undefined
+          ? this._renderValidationMessage(errorMessage)
+          : undefined
+      }
     `
   }
 
@@ -69,5 +71,11 @@ export class IreInputElement extends FieldElement {
 
   #handleBlur(_: Event): void {
     this.controller.markAsTouched()
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ire-input': IreInputElement
   }
 }
