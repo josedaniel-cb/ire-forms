@@ -85,7 +85,7 @@ export class IreSelectElement extends FieldElement {
             'form-select': true,
             'is-invalid': touched && errorMessage !== undefined,
           })}
-          ?disabled="${this.#valueState?.enabled ?? true}"
+          ?disabled="${!(this.#valueState?.enabled ?? true)}"
           @input="${this.#handleInput}"
           @blur="${this.#handleBlur}"
         >

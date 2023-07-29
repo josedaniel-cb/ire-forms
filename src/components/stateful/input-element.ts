@@ -36,7 +36,7 @@ export class IreInputElement extends FieldElement {
           'is-invalid': touched && errorMessage !== undefined,
         })}
         placeholder="${ifDefined(this.#uiState?.placeholder ?? undefined)}"
-        ?disabled="${this.#valueState?.enabled ?? true}"
+        ?disabled="${!(this.#valueState?.enabled ?? true)}"
         @input="${this.#handleInput}"
         @blur="${this.#handleBlur}"
       />
