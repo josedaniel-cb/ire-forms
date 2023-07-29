@@ -1,5 +1,5 @@
-import { FieldController } from '../../../fields/field-controller'
-import { FieldValueState } from '../../../fields/field-value-state'
+import { FieldController } from '../../../fields/controllers/field-controller'
+import { FieldValueState } from '../../../fields/states/field-value-state'
 import { FormBuilder } from '../../../form/form-builder'
 import { baseCss } from '../../css/base-css'
 import { layoutsCss } from '../../css/layout-css'

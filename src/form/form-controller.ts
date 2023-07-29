@@ -1,4 +1,4 @@
-import { Field, FieldController } from '../fields/field-controller'
+import { Field, FieldController } from '../fields/controllers/field-controller'
 import { FormNodeUI } from '../form-ui/form-node-ui'
 import { FormDefinition } from './form-definition'
 import { FormFields, FormFieldsPatch } from './form-fields'

@@ -1,5 +1,5 @@
-import { FieldController } from '../../fields/field-controller'
-import { TextFieldController } from '../../fields/text-field/controller'
+import { FieldController } from '../../fields/controllers/field-controller'
+import { TextFieldController } from '../../fields/controllers/text-controller'
 import { FormUILayouts } from '../../form-ui/form-ui-layout'
 import { FormBuilder } from '../../form/form-builder'
 import {
@@ -34,7 +34,7 @@ import { ifDefined } from 'lit/directives/if-defined.js'
 // import { layoutsCss } from '../styles/css/layouts-css'
 // import { FormConfig } from '../../core/config'
 
-import { SelectFieldController } from '../../fields/select-field/controller'
+import { SelectFieldController } from '../../fields/controllers/select-controller'
 import { mosaicCss } from '../css/mosaic-css'
 import './input-element'
 import './select-element'

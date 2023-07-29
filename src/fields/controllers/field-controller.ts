@@ -1,12 +1,12 @@
-import { FieldElement } from '../components/stateful/base/field-element'
-import { FieldMultiPatch } from './field-multi-patch'
-import { FieldUIState, FieldUIStateBuilder } from './field-ui-state'
-import { FieldValidationResult, FieldValidator } from './field-validator'
+import { FieldElement } from '../../components/stateful/base/field-element'
+import { FieldMultiPatch } from '../states/field-multi-patch'
+import { FieldUIState, FieldUIStateBuilder } from '../states/field-ui-state'
 import {
   ExternalFieldValueState,
   FieldValueState,
   FieldValueStateBuilder,
-} from './field-value-state'
+} from '../states/field-value-state'
+import { FieldValidationResult, FieldValidator } from './field-validator'
 import {
   BehaviorSubject,
   Observable,

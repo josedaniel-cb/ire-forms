@@ -1,4 +1,4 @@
-import { FieldElement } from '../components/stateful/base/field-element'
+import { FieldElement } from '../../components/stateful/base/field-element'
 import { BehaviorSubject } from 'rxjs'
 
 export interface FieldUIState<E extends FieldElement> {

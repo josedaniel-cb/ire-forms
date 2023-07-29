@@ -1,9 +1,9 @@
 import { IreMultiSelectElement } from '../../components/stateful/multiple-select-element'
-import { Field, FieldController } from '../field-controller'
-import { FieldDefinition } from '../field-definition'
-import { FieldMultiPatch } from '../field-multi-patch'
-import { FieldUIState } from '../field-ui-state'
-import { FieldValueState } from '../field-value-state'
+import { FieldDefinition } from '../definition/field-definition'
+import { FieldMultiPatch } from '../states/field-multi-patch'
+import { FieldUIState } from '../states/field-ui-state'
+import { FieldValueState } from '../states/field-value-state'
+import { Field, FieldController } from './field-controller'
 
 export interface MultiSelectFieldValueState<T extends NonNullable<unknown>>
   extends FieldValueState<T[]> {

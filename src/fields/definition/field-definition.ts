@@ -1,9 +1,15 @@
-import { FieldElement } from '../components/stateful/base/field-element'
-import { Field } from './field-controller'
+import { FieldElement } from '../../components/stateful/base/field-element'
+import { Field } from '../controllers/field-controller'
+import {
+  FieldValidationFn,
+  FieldValidationResult,
+} from '../controllers/field-validator'
+import { FieldUIState } from '../states/field-ui-state'
+import {
+  ExternalFieldValueState,
+  FieldValueState,
+} from '../states/field-value-state'
 import { FieldType } from './field-type'
-import { FieldUIState } from './field-ui-state'
-import { FieldValidationFn, FieldValidationResult } from './field-validator'
-import { ExternalFieldValueState, FieldValueState } from './field-value-state'
 
 type NullableKeys<T> = {
   [K in keyof T]: null extends T[K] ? K : never

@@ -1,7 +1,7 @@
-import { FieldBuilder } from '../fields/field-builder'
-import { MultiSelectFieldDefinition } from '../fields/multiple-select-field/controller'
-import { SelectFieldDefinition } from '../fields/select-field/controller'
-import { TextFieldDefinition } from '../fields/text-field/controller'
+import { FieldBuilder } from '../fields/builder/field-builder'
+import { MultiSelectFieldDefinition } from '../fields/controllers/multi-select-controller'
+import { SelectFieldDefinition } from '../fields/controllers/select-controller'
+import { TextFieldDefinition } from '../fields/controllers/text-controller'
 import { FormBuilderUI } from '../form-ui/form-builder-ui'
 import {
   // RootFormBuildDefinition,

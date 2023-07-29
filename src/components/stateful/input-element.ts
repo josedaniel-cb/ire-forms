@@ -2,7 +2,7 @@ import {
   TextFieldController,
   TextFieldUIState,
   TextFieldValueState,
-} from '../../fields/text-field/controller'
+} from '../../fields/controllers/text-controller'
 import { FieldElement } from './base/field-element'
 import { HTMLTemplateResult, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'

@@ -1,9 +1,9 @@
-import { MultiSelectFieldDefinition } from '../fields/multiple-select-field/controller'
+import { MultiSelectFieldDefinition } from '../fields/controllers/multi-select-controller'
 import {
   SelectFieldDefinition,
   SelectFieldValueState,
-} from '../fields/select-field/controller'
-import { TextFieldDefinition } from '../fields/text-field/controller'
+} from '../fields/controllers/select-controller'
+import { TextFieldDefinition } from '../fields/controllers/text-controller'
 import { FormDefinition } from './form-definition'
 import { FormValueState } from './form-value-state'
 

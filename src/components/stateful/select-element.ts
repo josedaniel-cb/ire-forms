@@ -52,7 +52,7 @@ import {
   SelectFieldController,
   SelectFieldUIState,
   SelectFieldValueState,
-} from '../../fields/select-field/controller'
+} from '../../fields/controllers/select-controller'
 import { FieldElement } from './base/field-element'
 import { HTMLTemplateResult, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'

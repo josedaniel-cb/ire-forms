@@ -1,4 +1,7 @@
-import { FieldValidationResult, FieldValidator } from './field-validator'
+import {
+  FieldValidationResult,
+  FieldValidator,
+} from '../controllers/field-validator'
 import { BehaviorSubject } from 'rxjs'
 
 export interface FieldValueState<T> {
