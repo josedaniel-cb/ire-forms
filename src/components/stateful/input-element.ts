@@ -30,12 +30,13 @@ export class IreInputElement extends FieldElement {
       this.#valueState?.validationResult.errorMessage ?? undefined
     return html`
       <input
+        type="text"
         class=${classMap({
           'form-control': true,
           'is-invalid': touched && errorMessage !== undefined,
         })}
         placeholder="${ifDefined(this.#uiState?.placeholder ?? undefined)}"
-        type="text"
+        ?disabled="${this.#valueState?.enabled ?? true}"
         @input="${this.#handleInput}"
         @blur="${this.#handleBlur}"
       />

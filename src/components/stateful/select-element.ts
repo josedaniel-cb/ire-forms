@@ -56,22 +56,8 @@ import {
 import { FieldElement } from './base/field-element'
 import { HTMLTemplateResult, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
-import { query, state } from 'lit/decorators.js'
+import { query } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'
-// import { AbstractSelectController } from '../../../controllers/fields/abstract-select'
-// import { SelectController } from '../../../controllers/fields/select'
-// import { FieldElement } from '../field'
-
-// export abstract class AbstractSelectElement extends FieldElement {
-//   static override styles = FieldElement.styles
-
-//   declare controller: AbstractSelectController
-
-//   override connectedCallback(): void {
-//     super.connectedCallback()
-//     this.controller.optionsChanges.subscribe(() => this.requestUpdate())
-//   }
-// }
 
 @customElement('ire-select')
 export class IreSelectElement extends FieldElement {
@@ -95,11 +81,11 @@ export class IreSelectElement extends FieldElement {
       this.#valueState?.validationResult.errorMessage ?? undefined
     return html`
         <select
-          id="element"
           class=${classMap({
             'form-select': true,
             'is-invalid': touched && errorMessage !== undefined,
           })}
+          ?disabled="${this.#valueState?.enabled ?? true}"
           @input="${this.#handleInput}"
           @blur="${this.#handleBlur}"
         >

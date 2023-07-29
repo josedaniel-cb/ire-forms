@@ -40,9 +40,14 @@ export class SelectFieldValueState<T extends NonNullable<unknown>>
     this._value = null
     if (value != null) {
       this.value = value // Using setter
+      // If value was invalid, try index
+      if (this.value == null) {
+        this.index = index // Using setter
+      }
     } else if (index != null) {
       this.index = index // Using setter
     }
+
     this.enabled = enabled
     this.validationResult = validator.validate(this)
   }
