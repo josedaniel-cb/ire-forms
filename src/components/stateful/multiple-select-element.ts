@@ -6,7 +6,7 @@
 // import { CustomOption } from '../../../controllers/fields/select/options'
 // import { FieldElement } from '../field'
 
-// @customElement('ire-multiple-select')
+// @customElement('ire-multi-select')
 // class MultipleSelectElement extends FieldElement {
 //   static override styles = [
 //     ...FieldElement.styles,
@@ -320,8 +320,8 @@ import { customElement, query, state } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'
 import { styleMap } from 'lit/directives/style-map.js'
 
-@customElement('ire-multiple-select')
-export class IreMultipleSelectElement extends FieldElement {
+@customElement('ire-multi-select')
+export class IreMultiSelectElement extends FieldElement {
   protected _renderField(): HTMLTemplateResult {
     throw new Error('Method not implemented.')
   }
@@ -591,6 +591,6 @@ export class IreMultipleSelectElement extends FieldElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'ire-multiple-select': IreMultipleSelectElement
+    'ire-multi-select': IreMultiSelectElement
   }
 }

@@ -1,4 +1,4 @@
-import { IreMultipleSelectElement } from '../../components/stateful/multiple-select-element'
+import { IreMultiSelectElement } from '../../components/stateful/multiple-select-element'
 import { Field, FieldController } from '../field-controller'
 import { FieldDefinition } from '../field-definition'
 import { FieldMultiPatch } from '../field-multi-patch'
@@ -10,12 +10,12 @@ export interface MultiSelectFieldValueState<T extends NonNullable<unknown>>
   options: { label: string; value: T }[]
 }
 
-export type MultiSelectFieldUIState = FieldUIState<IreMultipleSelectElement>
+export type MultiSelectFieldUIState = FieldUIState<IreMultiSelectElement>
 
 export type MultiSelectField<T extends NonNullable<unknown>> = Field<
   T[],
   MultiSelectFieldValueState<T>,
-  IreMultipleSelectElement,
+  IreMultiSelectElement,
   MultiSelectFieldUIState
 >
 
@@ -24,7 +24,7 @@ export class MultiSelectFieldController<
 > extends FieldController<
   T[],
   MultiSelectFieldValueState<T>,
-  IreMultipleSelectElement,
+  IreMultiSelectElement,
   MultiSelectFieldUIState
 > {}
 
@@ -33,7 +33,7 @@ export type MultiSelectFieldDefinition<T extends NonNullable<unknown>> =
     T[],
     'multi-select',
     MultiSelectFieldValueState<T>,
-    IreMultipleSelectElement,
+    IreMultiSelectElement,
     MultiSelectFieldUIState
   >
 
@@ -41,6 +41,6 @@ export type MultiSelectFieldMultiPatch<T extends NonNullable<unknown>> =
   FieldMultiPatch<
     T[],
     MultiSelectFieldValueState<T>,
-    IreMultipleSelectElement,
+    IreMultiSelectElement,
     MultiSelectFieldUIState
   >

@@ -15,7 +15,7 @@ export class IreInputElement extends FieldElement {
   static override styles = FieldElement.styles
 
   @query('input')
-  el!: HTMLInputElement
+  inputEl!: HTMLInputElement
 
   @property({ attribute: false })
   override controller!: TextFieldController
@@ -55,7 +55,7 @@ export class IreInputElement extends FieldElement {
       this.#valueState = state
       this.requestUpdate()
 
-      this.el.value = state.value
+      this.inputEl.value = state.value
     })
 
     // Subscribe to UI changes
@@ -66,7 +66,7 @@ export class IreInputElement extends FieldElement {
   }
 
   #handleInput(_: Event): void {
-    this.controller.value = this.el.value
+    this.controller.value = this.inputEl.value
   }
 
   #handleBlur(_: Event): void {

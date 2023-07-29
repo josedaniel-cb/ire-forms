@@ -4,7 +4,10 @@ import { FieldUIState } from './field-ui-state'
 import { FieldValueState } from './field-value-state'
 import { MultiSelectFieldController } from './multiple-select-field/controller'
 import { MultiSelectFieldValidator } from './multiple-select-field/validator'
-import { SelectFieldController } from './select-field/controller'
+import {
+  SelectFieldController,
+  SelectFieldValueState,
+} from './select-field/controller'
 import { SelectFieldValidator } from './select-field/validator'
 import { TextFieldController } from './text-field/controller'
 import { TextFieldValidator } from './text-field/validator'
@@ -61,17 +64,19 @@ export class FieldBuilder {
       })
       const nonValidatedValueState = {
         value: params.value ?? null,
+        index: params.index ?? null,
         enabled: params.enabled ?? true,
         options: params.options,
       }
       controller = new SelectFieldController({
-        valueState: {
-          ...nonValidatedValueState,
-          validationResult: validator.validate(nonValidatedValueState),
-        },
+        valueState: new SelectFieldValueState(
+          nonValidatedValueState,
+          validator,
+        ),
         uiState: {
           touched: false,
           htmlElement: null,
+          placeholder: params.placeholder ?? null,
           label: params.label,
         },
         validator,

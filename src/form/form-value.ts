@@ -1,5 +1,8 @@
 import { MultiSelectFieldDefinition } from '../fields/multiple-select-field/controller'
-import { SelectFieldDefinition } from '../fields/select-field/controller'
+import {
+  SelectFieldDefinition,
+  SelectFieldValueState,
+} from '../fields/select-field/controller'
 import { TextFieldDefinition } from '../fields/text-field/controller'
 import { FormDefinition } from './form-definition'
 import { FormValueState } from './form-value-state'
@@ -36,14 +39,14 @@ export class FormValueBuilder {
       (value, key) => {
         const valueStateAttr = valueState[key]
         if ('value' in valueStateAttr) {
+          const fieldValueState = valueStateAttr
           // It's a leaf (field)
-          value[key] = valueStateAttr.value
+          value[key] = fieldValueState.value
         } else {
           // It's a branch (form or fieldset)
-          value[key] = FormValueBuilder.fromValueState(
-            // rome-ignore lint/suspicious/noExplicitAny: any is required here
-            valueStateAttr as FormValueState<any>,
-          )
+          // rome-ignore lint/suspicious/noExplicitAny: any is required here
+          const formValueState = valueStateAttr as FormValueState<any>
+          value[key] = FormValueBuilder.fromValueState(formValueState)
         }
         return value
       },

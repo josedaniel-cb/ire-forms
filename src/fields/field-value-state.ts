@@ -7,6 +7,11 @@ export interface FieldValueState<T> {
   enabled: boolean
 
   validationResult: FieldValidationResult
+
+  /**
+   * Use this for JSON.stringify
+   */
+  toJsonSerializable?(): Object
 }
 
 /**

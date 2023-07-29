@@ -1,5 +1,10 @@
 import './components/stateful/form-element'
-import { TextFieldController } from './fields/text-field/controller'
+import { IreInputElement } from './components/stateful/input-element'
+import { IreMultiSelectElement } from './components/stateful/multiple-select-element'
+import { IreSelectElement } from './components/stateful/select-element'
+import { MultiSelectField } from './fields/multiple-select-field/controller'
+import { SelectField } from './fields/select-field/controller'
+import { TextField } from './fields/text-field/controller'
 import { FormBuilder } from './form/form-builder'
 import { Form } from './form/form-controller'
 
@@ -26,5 +31,10 @@ export type {
   //   Select,
   //   CustomSelect,
   //   TextArea,
-  TextFieldController,
+  TextField,
+  IreInputElement,
+  SelectField,
+  IreSelectElement,
+  MultiSelectField,
+  IreMultiSelectElement,
 }
