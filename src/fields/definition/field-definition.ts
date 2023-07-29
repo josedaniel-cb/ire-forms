@@ -1,14 +1,14 @@
 import { FieldElement } from '../../components/stateful/base/field-element'
 import { Field } from '../controllers/field-controller'
-import {
-  FieldValidationFn,
-  FieldValidationResult,
-} from '../controllers/field-validator'
 import { FieldUIState } from '../states/field-ui-state'
 import {
   ExternalFieldValueState,
   FieldValueState,
 } from '../states/field-value-state'
+import {
+  FieldValidationFn,
+  FieldValidationResult,
+} from '../validators/field-validator'
 import { FieldType } from './field-type'
 
 type NullableKeys<T> = {

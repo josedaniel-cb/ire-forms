@@ -1,16 +1,16 @@
 import { FormDefinitionLeaf } from '../../form/form-definition'
 import { FieldController } from '../controllers/field-controller'
 import { MultiSelectFieldController } from '../controllers/multi-select-controller'
-import { MultiSelectFieldValidator } from '../controllers/multi-select-validator'
 import {
   SelectFieldController,
   SelectFieldValueState,
 } from '../controllers/select-controller'
-import { SelectFieldValidator } from '../controllers/select-validator'
 import { TextFieldController } from '../controllers/text-controller'
-import { TextFieldValidator } from '../controllers/text-validator'
 import { FieldUIState } from '../states/field-ui-state'
 import { FieldValueState } from '../states/field-value-state'
+import { MultiSelectFieldValidator } from '../validators/multi-select-validator'
+import { SelectFieldValidator } from '../validators/select-validator'
+import { TextFieldValidator } from '../validators/text-validator'
 import { Subject } from 'rxjs'
 
 type GenericFieldController = FieldController<

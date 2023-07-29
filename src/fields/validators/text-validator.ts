@@ -1,6 +1,6 @@
+import { TextFieldValueState } from '../controllers/text-controller'
 import { NonValidatedFieldValueState } from '../states/field-value-state'
 import { FieldValidationResult, FieldValidator } from './field-validator'
-import { TextFieldValueState } from './text-controller'
 
 export class TextFieldValidator extends FieldValidator<
   string,

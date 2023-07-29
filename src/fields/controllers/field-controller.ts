@@ -6,7 +6,10 @@ import {
   FieldValueState,
   FieldValueStateBuilder,
 } from '../states/field-value-state'
-import { FieldValidationResult, FieldValidator } from './field-validator'
+import {
+  FieldValidationResult,
+  FieldValidator,
+} from '../validators/field-validator'
 import {
   BehaviorSubject,
   Observable,

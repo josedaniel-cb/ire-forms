@@ -1,6 +1,6 @@
+import { MultiSelectFieldValueState } from '../controllers/multi-select-controller'
 import { NonValidatedFieldValueState } from '../states/field-value-state'
 import { FieldValidationResult, FieldValidator } from './field-validator'
-import { MultiSelectFieldValueState } from './multi-select-controller'
 
 export class MultiSelectFieldValidator<
   T extends NonNullable<unknown>,
