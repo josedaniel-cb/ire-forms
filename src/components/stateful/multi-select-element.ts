@@ -10,6 +10,12 @@ import { classMap } from 'lit/directives/class-map.js'
 import { ifDefined } from 'lit/directives/if-defined'
 import { styleMap } from 'lit/directives/style-map.js'
 
+interface Option {
+  label: string
+  // rome-ignore lint/suspicious/noExplicitAny: any is required here
+  value: any
+}
+
 @customElement('ire-multi-select')
 export class IreMultiSelectElement extends FieldElement {
   static override styles = [
@@ -92,9 +98,6 @@ export class IreMultiSelectElement extends FieldElement {
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
   override controller!: MultiSelectFieldController<any>
 
-  // @property({ type: Object })
-  // parentMousedownTarget?: HTMLElement
-
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
   #valueState?: MultiSelectFieldValueState<any>
 
@@ -130,10 +133,7 @@ export class IreMultiSelectElement extends FieldElement {
     })
 
     this.inputEl.addEventListener('blur', () => {
-      // Check if the input should remain focused due to clicking on the filtered options
-      // if (!this.filteredOptionsContainer.contains(document.activeElement)) {
       this.isInputFocused = false
-      // }
     })
 
     // Subscribe to focus changes on the filtered options container
@@ -142,10 +142,7 @@ export class IreMultiSelectElement extends FieldElement {
     })
 
     this.filteredOptionsEl.addEventListener('focusout', () => {
-      // Check if the input should remain focused due to clicking on the input or other elements
-      // if (!this.inputEl.contains(document.activeElement)) {
       this.areFilteredOptionsFocused = false
-      // }
     })
   }
 
@@ -158,11 +155,14 @@ export class IreMultiSelectElement extends FieldElement {
       <div class="container">
         ${this.#valueState?.index?.map((i) => {
           const option = this.#valueState?.options[i]
+          if (!option) {
+            return
+          }
           return html`
             <div class="chip">
-              ${option?.label}
+              ${option.label}
               <span class="remove-icon" @click=${() =>
-                this.#removeValueByIndex(i)}>x</span>
+                this.#removeValueByOption(option)}>x</span>
             </div>
           `
         })}
@@ -193,13 +193,13 @@ export class IreMultiSelectElement extends FieldElement {
     const optionsToRender = options
       .map((option, i) => {
         const isNotSelected = !index.includes(i)
-        const match = option.label.toUpperCase().includes(inputValue)
-        const show = isNotSelected && match
+        const matchWithFilter = option.label.toUpperCase().includes(inputValue)
+        const show = isNotSelected && matchWithFilter
         if (!show) {
           return
         }
         return html`
-        <div class="option" @mousedown=${() => this.#selectOption(option)}>
+        <div class="option" @mousedown=${() => this.#selectOptionByIndex(i)}>
           ${option.label}
         </div>
       `
@@ -221,40 +221,36 @@ export class IreMultiSelectElement extends FieldElement {
     `
   }
 
-  // rome-ignore lint/suspicious/noExplicitAny: any is required here
-  #selectOption(option: any): void {
-    const newValues = [...(this.#valueState?.value ?? []), option.value]
-    this.controller.valueState.value = newValues
-    this.inputEl.value = ''
-    // this.isInputFocused = false
-    // this.isInputFocused = false
+  #selectOptionByIndex(index: number): void {
+    const option = this.#valueState?.options[index]
+    if (option) {
+      this.controller.valueState.index = [
+        ...(this.#valueState?.index?.filter((i) => index !== i) ?? []),
+        index,
+      ]
+      this.inputEl.value = ''
+    }
   }
 
-  #removeValueByIndex(index: number): void {
-    const newIndexes = [
-      ...(this.#valueState?.index?.filter((i) => index !== i) ?? []),
-    ]
-    this.controller.valueState.index = newIndexes
+  #removeValueByOption(option: Option): void {
+    const newIndexes = this.#valueState?.index?.filter(
+      (index) => option !== this.#valueState?.options[index],
+    )
+    if (newIndexes) {
+      this.controller.valueState.index = newIndexes
+    }
   }
 
-  #handleSearchInput(event: Event): void {
-    // Clear the focus flag when the input text changes
-    // this.isInputFocused = false
+  #handleSearchInput(): void {
     this.requestUpdate()
   }
 
   override connectedCallback(): void {
     super.connectedCallback()
-    this.addEventListener('mousedown', this.#handleThisClick)
   }
 
   override disconnectedCallback(): void {
     super.disconnectedCallback()
-    // this.removeEventListener('mousedown', this.#handleThisClick)
-  }
-
-  #handleThisClick = (event: MouseEvent): void => {
-    // this.isInputFocused = this.contains(event.target as Node)
   }
 }
 
