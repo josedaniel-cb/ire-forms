@@ -1,10 +1,10 @@
-import { MultiSelectFieldDefinition } from '../fields/controllers/multi-select-controller'
+import { MultiSelectFieldDefinition } from '../../fields/controllers/multi-select-controller'
 import {
   SelectFieldDefinition,
   SelectFieldValueState,
-} from '../fields/controllers/select-controller'
-import { TextFieldDefinition } from '../fields/controllers/text-controller'
-import { FormDefinition } from './form-definition'
+} from '../../fields/controllers/select-controller'
+import { TextFieldDefinition } from '../../fields/controllers/text-controller'
+import { FormDefinition } from '../definition/form-definition'
 import { FormValueState } from './form-value-state'
 
 export type FormValue<T extends FormDefinition> = {

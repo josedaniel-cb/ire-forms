@@ -1,6 +1,9 @@
-import { Field, FieldController } from '../fields/controllers/field-controller'
-import { FormNodeUI } from '../form-ui/form-node-ui'
-import { FormDefinition } from './form-definition'
+import {
+  Field,
+  FieldController,
+} from '../../fields/controllers/field-controller'
+import { FormNodeUI } from '../../form-ui/form-node-ui'
+import { FormDefinition } from '../definition/form-definition'
 import { FormFields, FormFieldsPatch } from './form-fields'
 import { FormValue, FormValueBuilder, FormValuePatch } from './form-value'
 import { FormValueState } from './form-value-state'

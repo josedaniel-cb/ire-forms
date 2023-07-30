@@ -1,11 +1,11 @@
 import { FieldController } from '../../fields/controllers/field-controller'
 import { TextFieldController } from '../../fields/controllers/text-controller'
 import { FormUILayouts } from '../../form-ui/form-ui-layout'
-import { FormBuilder } from '../../form/form-builder'
+import { FormBuilder } from '../../form/builder/form-builder'
 import {
   FormController,
   FormControllerChildren,
-} from '../../form/form-controller'
+} from '../../form/controller/form-controller'
 import { baseCss } from '../css/base-css'
 import { layoutsCss } from '../css/layout-css'
 import { renderStyleSheetLinks } from '../stateless/external-style-sheets'

@@ -1,16 +1,16 @@
 import {
   MultiSelectFieldDefinition,
   MultiSelectFieldValueState,
-} from '../fields/controllers/multi-select-controller'
+} from '../../fields/controllers/multi-select-controller'
 import {
   SelectFieldDefinition,
   SelectFieldValueState,
-} from '../fields/controllers/select-controller'
+} from '../../fields/controllers/select-controller'
 import {
   TextFieldDefinition,
   TextFieldValueState,
-} from '../fields/controllers/text-controller'
-import { FormDefinition } from './form-definition'
+} from '../../fields/controllers/text-controller'
+import { FormDefinition } from '../definition/form-definition'
 
 export type FormValueState<T extends FormDefinition> = {
   readonly [K in keyof T['fields']]: T['fields'][K] extends TextFieldDefinition

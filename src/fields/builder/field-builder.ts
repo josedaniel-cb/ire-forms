@@ -1,4 +1,4 @@
-import { FormDefinitionLeaf } from '../../form/form-definition'
+import { FormDefinitionLeaf } from '../../form/definition/form-definition'
 import { FieldController } from '../controllers/field-controller'
 import { MultiSelectFieldController } from '../controllers/multi-select-controller'
 import {

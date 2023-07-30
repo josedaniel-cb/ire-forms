@@ -2,18 +2,18 @@ import {
   MultiSelectField,
   MultiSelectFieldDefinition,
   MultiSelectFieldMultiPatch,
-} from '../fields/controllers/multi-select-controller'
+} from '../../fields/controllers/multi-select-controller'
 import {
   SelectField,
   SelectFieldDefinition,
   SelectFieldMultiPatch,
-} from '../fields/controllers/select-controller'
+} from '../../fields/controllers/select-controller'
 import {
   TextField,
   TextFieldDefinition,
   TextFieldMultiPatch,
-} from '../fields/controllers/text-controller'
-import { FormDefinition } from './form-definition'
+} from '../../fields/controllers/text-controller'
+import { FormDefinition } from '../definition/form-definition'
 
 export type FormFields<T extends FormDefinition> = {
   readonly [K in keyof T['fields']]: T['fields'][K] extends TextFieldDefinition

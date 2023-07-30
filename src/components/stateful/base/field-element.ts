@@ -1,6 +1,6 @@
 import { FieldController } from '../../../fields/controllers/field-controller'
 import { FieldValueState } from '../../../fields/states/field-value-state'
-import { FormBuilder } from '../../../form/form-builder'
+import { FormBuilder } from '../../../form/builder/form-builder'
 import { baseCss } from '../../css/base-css'
 import { layoutsCss } from '../../css/layout-css'
 import { mosaicCss } from '../../css/mosaic-css'

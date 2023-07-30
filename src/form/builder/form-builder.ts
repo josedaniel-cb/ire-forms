@@ -1,14 +1,18 @@
-import { FieldBuilder } from '../fields/builder/field-builder'
-import { MultiSelectFieldDefinition } from '../fields/controllers/multi-select-controller'
-import { SelectFieldDefinition } from '../fields/controllers/select-controller'
-import { TextFieldDefinition } from '../fields/controllers/text-controller'
-import { FormBuilderUI } from '../form-ui/form-builder-ui'
+import { FieldBuilder } from '../../fields/builder/field-builder'
+import { MultiSelectFieldDefinition } from '../../fields/controllers/multi-select-controller'
+import { SelectFieldDefinition } from '../../fields/controllers/select-controller'
+import { TextFieldDefinition } from '../../fields/controllers/text-controller'
+import { FormBuilderUI } from '../../form-ui/form-builder-ui'
+import {
+  Form,
+  FormController,
+  FormControllerChildren,
+} from '../controller/form-controller'
+import { FormDefinition } from '../definition/form-definition'
 import {
   // RootFormBuildDefinition,
   FormBuildDefinition,
 } from './form-build-definition'
-import { Form, FormController, FormControllerChildren } from './form-controller'
-import { FormDefinition } from './form-definition'
 import { Subject } from 'rxjs'
 
 type FormBuilderConfig = {

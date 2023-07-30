@@ -1,6 +1,6 @@
-import { MultiSelectFieldDefinition } from '../fields/controllers/multi-select-controller'
-import { SelectFieldDefinition } from '../fields/controllers/select-controller'
-import { TextFieldDefinition } from '../fields/controllers/text-controller'
+import { MultiSelectFieldDefinition } from '../../fields/controllers/multi-select-controller'
+import { SelectFieldDefinition } from '../../fields/controllers/select-controller'
+import { TextFieldDefinition } from '../../fields/controllers/text-controller'
 
 export type FormDefinition = {
   fields: Record<string, FormDefinitionNode>
