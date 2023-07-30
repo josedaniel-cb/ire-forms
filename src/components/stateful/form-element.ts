@@ -34,9 +34,11 @@ import { ifDefined } from 'lit/directives/if-defined.js'
 // import { layoutsCss } from '../styles/css/layouts-css'
 // import { FormConfig } from '../../core/config'
 
+import { MultiSelectFieldController } from '../../fields/controllers/multi-select-controller'
 import { SelectFieldController } from '../../fields/controllers/select-controller'
 import { mosaicCss } from '../css/mosaic-css'
 import './input-element'
+import './multi-select-element'
 import './select-element'
 // import './fields/input/password'
 // import './fields/input/checkbox'
@@ -150,11 +152,11 @@ export class IreFormElement extends LitElement {
     //     <ire-custom-select .controller=${controller}></ire-custom-select>
     //   `
 
-    // if (controller instanceof MultipleSelectController)
-    //   template = html`
-    //     <ire-multi-select .controller=${controller}></ire-multi-select>
-    //   `
-
+    if (fieldController instanceof MultiSelectFieldController) {
+      template = html`
+        <ire-multi-select .controller=${fieldController}></ire-multi-select>
+      `
+    }
     // if (controller instanceof TextAreaController)
     //   template = html` <ire-textarea .controller=${controller}></ire-textarea> `
 

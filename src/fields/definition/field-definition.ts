@@ -24,7 +24,7 @@ export type FieldDefinition<
   E extends FieldElement,
   U extends FieldUIState<E>,
 > = MakeNullablePropertiesUndefined<
-  Omit<V, 'value' | 'validationResult' | 'enabled'>
+  Omit<V, 'value' | 'validationResult' | 'enabled' | 'toJsonSerializable'>
 > &
   MakeNullablePropertiesUndefined<Omit<U, 'htmlElement' | 'touched'>> & {
     type: K

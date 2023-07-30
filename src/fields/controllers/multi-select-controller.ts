@@ -12,7 +12,11 @@ export class MultiSelectFieldValueState<T extends NonNullable<unknown>>
 {
   // This couldn't be #options because this error: Cannot read private member #options
   private _options: { label: string; value: T }[]
-  private _index: number[]
+  // private _index: number[]
+  /**
+   * Required because of MakeNullablePropertiesUndefined {@link FieldDefinition}
+   */
+  private _index: number[] | null
   private _value: T[]
   enabled: boolean
   validationResult: FieldValidationResult
@@ -62,7 +66,11 @@ export class MultiSelectFieldValueState<T extends NonNullable<unknown>>
   get index() {
     return this._index
   }
-  set index(index: number[]) {
+  set index(index: number[] | null) {
+    if (index == null) {
+      this.#setEmpty()
+      return
+    }
     const sortedIndex = index.sort()
     for (const i of sortedIndex) {
       if (i < 0 || i >= this._options.length) {
@@ -112,7 +120,7 @@ export class MultiSelectFieldValueState<T extends NonNullable<unknown>>
       label: string
       value: T
     }[]
-    index: number[]
+    index: number[] | null
     value: T[]
     enabled: boolean
     validationResult: FieldValidationResult
