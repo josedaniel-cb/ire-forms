@@ -1,6 +1,6 @@
 import './components/stateful/form-element'
 import { IreInputElement } from './components/stateful/input-element'
-import { IreMultiSelectElement } from './components/stateful/multiple-select-element'
+import { IreMultiSelectElement } from './components/stateful/multi-select-element'
 import { IreSelectElement } from './components/stateful/select-element'
 import { MultiSelectField } from './fields/controllers/multi-select-controller'
 import { SelectField } from './fields/controllers/select-controller'

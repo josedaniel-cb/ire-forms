@@ -10,11 +10,9 @@ import { Field, FieldController } from './field-controller'
 export class SelectFieldValueState<T extends NonNullable<unknown>>
   implements FieldValueState<T | null>
 {
-  // #options: { label: string; value: T }[] // Cannot read private member #options
+  // This couldn't be #options because this error: Cannot read private member #options
   private _options: { label: string; value: T }[]
-  // #index: number | null
-  _index: number | null
-  // #value: T | null // Cannot read private member #value
+  private _index: number | null
   private _value: T | null
   enabled: boolean
   validationResult: FieldValidationResult

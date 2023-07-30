@@ -1,6 +1,9 @@
 import { FormDefinitionLeaf } from '../../form/definition/form-definition'
 import { FieldController } from '../controllers/field-controller'
-import { MultiSelectFieldController } from '../controllers/multi-select-controller'
+import {
+  MultiSelectFieldController,
+  MultiSelectFieldValueState,
+} from '../controllers/multi-select-controller'
 import {
   SelectFieldController,
   SelectFieldValueState,
@@ -93,12 +96,13 @@ export class FieldBuilder {
         value: params.value ?? [],
         enabled: params.enabled ?? true,
         options: params.options,
+        index: params.index ?? [],
       }
       controller = new MultiSelectFieldController({
-        valueState: {
-          ...nonValidatedValueState,
-          validationResult: validator.validate(nonValidatedValueState),
-        },
+        valueState: new MultiSelectFieldValueState(
+          nonValidatedValueState,
+          validator,
+        ),
         uiState: {
           touched: false,
           htmlElement: null,
