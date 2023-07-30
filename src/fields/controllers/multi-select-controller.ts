@@ -6,12 +6,15 @@ import { FieldValueState } from '../states/field-value-state'
 import { FieldValidationResult } from '../validators/field-validator'
 import { MultiSelectFieldValidator } from '../validators/multi-select-validator'
 import { Field, FieldController } from './field-controller'
+import { HTMLTemplateResult } from 'lit'
+
+export type SelectOption<T> = { label: string; value: T }
 
 export class MultiSelectFieldValueState<T extends NonNullable<unknown>>
   implements FieldValueState<T[]>
 {
   // This couldn't be #options because this error: Cannot read private member #options
-  private _options: { label: string; value: T }[]
+  private _options: SelectOption<T>[]
   // private _index: number[]
   /**
    * Required because of MakeNullablePropertiesUndefined {@link FieldDefinition}
@@ -28,7 +31,7 @@ export class MultiSelectFieldValueState<T extends NonNullable<unknown>>
       value,
       enabled,
     }: {
-      options: { label: string; value: T }[]
+      options: SelectOption<T>[]
       index: number[]
       value: T[]
       enabled: boolean
@@ -58,7 +61,7 @@ export class MultiSelectFieldValueState<T extends NonNullable<unknown>>
     return this._options
   }
 
-  set options(options: { label: string; value: T }[]) {
+  set options(options: SelectOption<T>[]) {
     this._options = options
     this.#setEmpty()
   }
@@ -116,10 +119,7 @@ export class MultiSelectFieldValueState<T extends NonNullable<unknown>>
   }
 
   toJsonSerializable(): {
-    options: {
-      label: string
-      value: T
-    }[]
+    options: SelectOption<T>[]
     index: number[] | null
     value: T[]
     enabled: boolean
@@ -135,14 +135,27 @@ export class MultiSelectFieldValueState<T extends NonNullable<unknown>>
   }
 }
 
-export type MultiSelectFieldUIState = FieldUIState<IreMultiSelectElement>
+// export type MultiSelectFieldUIState = FieldUIState<IreMultiSelectElement>
+export interface MultiSelectFieldUIState<T>
+  extends FieldUIState<IreMultiSelectElement> {
+  optionHtmlTemplateBuilder?: (option: SelectOption<T>) => HTMLTemplateResult
+}
 
 export type MultiSelectField<T extends NonNullable<unknown>> = Field<
   T[],
   MultiSelectFieldValueState<T>,
   IreMultiSelectElement,
-  MultiSelectFieldUIState
+  MultiSelectFieldUIState<T>
 >
+// export interface MultiSelectField<T extends NonNullable<unknown>>
+//   extends Field<
+//     T[],
+//     MultiSelectFieldValueState<T>,
+//     IreMultiSelectElement,
+//     MultiSelectFieldUIState
+//   > {
+//   optionHtmlTemplateBuilder?: (option: SelectOption<T>) => HTMLTemplateResult
+// }
 
 export class MultiSelectFieldController<
   T extends NonNullable<unknown>,
@@ -150,7 +163,7 @@ export class MultiSelectFieldController<
   T[],
   MultiSelectFieldValueState<T>,
   IreMultiSelectElement,
-  MultiSelectFieldUIState
+  MultiSelectFieldUIState<T>
 > {}
 
 export type MultiSelectFieldDefinition<T extends NonNullable<unknown>> =
@@ -159,7 +172,7 @@ export type MultiSelectFieldDefinition<T extends NonNullable<unknown>> =
     'multi-select',
     MultiSelectFieldValueState<T>,
     IreMultiSelectElement,
-    MultiSelectFieldUIState
+    MultiSelectFieldUIState<T>
   >
 
 export type MultiSelectFieldMultiPatch<T extends NonNullable<unknown>> =
@@ -167,5 +180,5 @@ export type MultiSelectFieldMultiPatch<T extends NonNullable<unknown>> =
     T[],
     MultiSelectFieldValueState<T>,
     IreMultiSelectElement,
-    MultiSelectFieldUIState
+    MultiSelectFieldUIState<T>
   >

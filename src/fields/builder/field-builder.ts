@@ -107,6 +107,7 @@ export class FieldBuilder {
           touched: false,
           htmlElement: null,
           label: params.label,
+          optionHtmlTemplateBuilder: params.optionHtmlTemplateBuilder,
         },
         validator,
         unsubscribeSubject,

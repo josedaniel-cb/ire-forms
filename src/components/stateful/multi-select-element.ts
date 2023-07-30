@@ -2,6 +2,7 @@ import {
   MultiSelectFieldController,
   MultiSelectFieldUIState,
   MultiSelectFieldValueState,
+  SelectOption,
 } from '../../fields/controllers/multi-select-controller'
 import { FieldElement } from './base/field-element'
 import { HTMLTemplateResult, css, html } from 'lit'
@@ -10,11 +11,8 @@ import { classMap } from 'lit/directives/class-map.js'
 import { ifDefined } from 'lit/directives/if-defined'
 import { styleMap } from 'lit/directives/style-map.js'
 
-interface Option {
-  label: string
-  // rome-ignore lint/suspicious/noExplicitAny: any is required here
-  value: any
-}
+// rome-ignore lint/suspicious/noExplicitAny: any is required here
+type Option = SelectOption<any>
 
 @customElement('ire-multi-select')
 export class IreMultiSelectElement extends FieldElement {
@@ -101,7 +99,8 @@ export class IreMultiSelectElement extends FieldElement {
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
   #valueState?: MultiSelectFieldValueState<any>
 
-  #uiState?: MultiSelectFieldUIState
+  // rome-ignore lint/suspicious/noExplicitAny: any is required here
+  #uiState?: MultiSelectFieldUIState<any>
 
   @query('.filtered-options')
   private filteredOptionsEl!: HTMLElement
@@ -160,7 +159,7 @@ export class IreMultiSelectElement extends FieldElement {
           }
           return html`
             <div class="chip">
-              ${option.label}
+              ${this.#renderLabel(option)}
               <span class="remove-icon" @click=${() =>
                 this.#removeValueByOption(option)}>x</span>
             </div>
@@ -182,6 +181,13 @@ export class IreMultiSelectElement extends FieldElement {
     `
   }
 
+  #renderLabel(option: Option) {
+    if (this.#uiState?.optionHtmlTemplateBuilder) {
+      return this.#uiState?.optionHtmlTemplateBuilder(option)
+    }
+    return option.label
+  }
+
   #renderFilteredOptions(): HTMLTemplateResult {
     if (!this.isInputFocused && !this.areFilteredOptionsFocused) {
       return html``
@@ -200,7 +206,7 @@ export class IreMultiSelectElement extends FieldElement {
         }
         return html`
         <div class="option" @mousedown=${() => this.#selectOptionByIndex(i)}>
-          ${option.label}
+          ${this.#renderLabel(option)}
         </div>
       `
       })
