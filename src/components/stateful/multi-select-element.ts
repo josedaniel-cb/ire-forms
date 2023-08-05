@@ -5,6 +5,7 @@ import {
   SelectOption,
 } from '../../fields/controllers/multi-select-controller'
 import { FieldElement } from './base/field-element'
+import { multiSelectElementCss } from './multi-select-element-css'
 import { HTMLTemplateResult, css, html } from 'lit'
 import { customElement, property, query, state } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'
@@ -14,84 +15,7 @@ type Option = SelectOption<any>
 
 @customElement('ire-multi-select')
 export class IreMultiSelectElement extends FieldElement {
-  static override styles = [
-    ...FieldElement.styles,
-    css`
-      /* Styles for the ire-multi-select */
-      .container {
-        position: relative;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 4px;
-        align-items: center;
-        border: 1px solid #ced4da;
-        border-radius: 4px;
-        padding: 4px;
-        background-color: #f7f7f7;
-      }
-
-      /* Styles for the chips of selected elements */
-      .chip {
-        display: flex;
-        align-items: center;
-        padding: 2px 8px;
-        background-color: #007bff;
-        color: #fff;
-        border-radius: 16px;
-      }
-
-      /* Styles for the "x" icon inside the chips */
-      .chip .remove-icon {
-        margin-left: 4px;
-        cursor: pointer;
-      }
-
-      /* Styles for the input search */
-      input[type='text'] {
-        flex: 1;
-        border: none;
-        outline: none;
-        background-color: transparent;
-      }
-
-      /* Styles for the filtered options */
-      .filtered-options {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        max-height: 200px;
-        overflow-y: auto;
-        background-color: #fff;
-        border: 1px solid #ced4da;
-        border-radius: 4px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        z-index: 1;
-      }
-
-      /* Styles for each option in the filtered options */
-      .option {
-        padding: 8px;
-        cursor: pointer;
-      }
-
-      .option:hover {
-        background-color: #f1f1f1;
-      }
-
-      .no-match {
-        padding: 8px;
-        text-align: center;
-        color: #888;
-      }
-
-      /* New styles for the highlighted option */
-      .option.highlighted {
-        background-color: #007bff;
-        color: #fff;
-      }
-    `,
-  ]
+  static override styles = [...FieldElement.styles, multiSelectElementCss]
 
   @query('input')
   inputEl!: HTMLInputElement
@@ -129,8 +53,6 @@ export class IreMultiSelectElement extends FieldElement {
       this.#uiState = state
       this.requestUpdate()
     })
-
-    // TODO: handle enter for selecting an option
   }
 
   protected _renderField(): HTMLTemplateResult {
@@ -254,13 +176,14 @@ export class IreMultiSelectElement extends FieldElement {
     const option = this.#valueState?.options[index]
     if (option) {
       this.controller.valueState.indexes = [
+        // Remove any indexes that are already in the array
         ...(this.#valueState?.indexes?.filter((i) => index !== i) ?? []),
+        // Add the new index to the end of the array
         index,
       ]
       this.inputEl.value = ''
     }
 
-    // Close the filtered options
     this._isInputFocused = false
     this._areFilteredOptionsFocused = false
   }
@@ -302,28 +225,42 @@ export class IreMultiSelectElement extends FieldElement {
   }
 
   #highlightPreviousOption(): void {
+    // Get the number of options
     const numOptions = this.#valueState?.options.length ?? 0
+
+    // Decrement the index and wrap around if needed
     this._highlightedOptionIndex =
       (this._highlightedOptionIndex + numOptions - 1) % numOptions
+
+    // If the index points to an option that is disabled, decrement again
     while (this.#valueState?.indexes?.includes(this._highlightedOptionIndex)) {
       this._highlightedOptionIndex--
       if (this._highlightedOptionIndex < 0) {
         this._highlightedOptionIndex = numOptions - 1
       }
     }
+
+    // Scroll the option into view
     this.#scrollOptionIntoView()
   }
 
   #highlightNextOption(): void {
+    // Get the number of options.
     const numOptions = this.#valueState?.options.length ?? 0
+
+    // Increment the index, and wrap around if necessary.
     this._highlightedOptionIndex =
       (this._highlightedOptionIndex + 1) % numOptions
+
+    // If the option is hidden, skip it.
     while (
       this.#valueState?.indexes?.includes(this._highlightedOptionIndex) &&
       this._highlightedOptionIndex < numOptions - 1
     ) {
       this._highlightedOptionIndex++
     }
+
+    // Scroll the option into view.
     this.#scrollOptionIntoView()
   }
 
