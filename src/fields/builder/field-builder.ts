@@ -96,7 +96,7 @@ export class FieldBuilder {
         value: params.value ?? [],
         enabled: params.enabled ?? true,
         options: params.options,
-        index: params.index ?? [],
+        indexes: params.indexes ?? [],
       }
       controller = new MultiSelectFieldController({
         valueState: new MultiSelectFieldValueState(

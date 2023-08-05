@@ -19,7 +19,7 @@ export class MultiSelectFieldValueState<T extends NonNullable<unknown>>
   /**
    * Required because of MakeNullablePropertiesUndefined {@link FieldDefinition}
    */
-  private _index: number[] | null
+  private _indexes: number[] | null
   private _value: T[]
   enabled: boolean
   validationResult: FieldValidationResult
@@ -27,30 +27,30 @@ export class MultiSelectFieldValueState<T extends NonNullable<unknown>>
   constructor(
     {
       options,
-      index,
+      indexes,
       value,
       enabled,
     }: {
       options: SelectOption<T>[]
-      index: number[]
+      indexes: number[]
       value: T[]
       enabled: boolean
     },
     validator: MultiSelectFieldValidator<T>,
   ) {
     this._options = options
-    // We must validate the index and value against the options
-    // and give value priority over index
-    this._index = []
+    // We must validate the indexes and value against the options
+    // and give value priority over indexes
+    this._indexes = []
     this._value = []
     if (value.length > 0) {
       this.value = value // Using setter
-      // If value was invalid, try index
+      // If value was invalid, try indexes
       if (this.value.length === 0) {
-        this.index = index // Using setter
+        this.indexes = indexes // Using setter
       }
-    } else if (index.length > 0) {
-      this.index = index // Using setter
+    } else if (indexes.length > 0) {
+      this.indexes = indexes // Using setter
     }
 
     this.enabled = enabled
@@ -66,16 +66,16 @@ export class MultiSelectFieldValueState<T extends NonNullable<unknown>>
     this.#setEmpty()
   }
 
-  get index() {
-    return this._index
+  get indexes() {
+    return this._indexes
   }
-  set index(index: number[] | null) {
-    if (index == null) {
+  set indexes(indexes: number[] | null) {
+    if (indexes == null) {
       this.#setEmpty()
       return
     }
-    const sortedIndex = index.sort()
-    for (const i of sortedIndex) {
+    const sortedIndexes = indexes.sort()
+    for (const i of sortedIndexes) {
       if (i < 0 || i >= this._options.length) {
         this.#setEmpty()
         // TODO: Throw error
@@ -83,8 +83,8 @@ export class MultiSelectFieldValueState<T extends NonNullable<unknown>>
       }
     }
 
-    this._index = sortedIndex
-    this._value = sortedIndex.map((i) => this._options[i].value)
+    this._indexes = sortedIndexes
+    this._value = sortedIndexes.map((i) => this._options[i].value)
   }
 
   get value() {
@@ -96,7 +96,7 @@ export class MultiSelectFieldValueState<T extends NonNullable<unknown>>
       this.#setEmpty()
       return
     }
-    const index: number[] = []
+    const indexes: number[] = []
     for (const v of value) {
       const actualIndex = this._options.findIndex(
         (option) => option.value === v,
@@ -106,28 +106,28 @@ export class MultiSelectFieldValueState<T extends NonNullable<unknown>>
         // TODO: Throw error
         return
       }
-      index.push(actualIndex)
+      indexes.push(actualIndex)
     }
-    const sortedIndex = index.sort()
-    this._index = sortedIndex
+    const sortedIndex = indexes.sort()
+    this._indexes = sortedIndex
     this._value = sortedIndex.map((i) => this._options[i].value)
   }
 
   #setEmpty(): void {
-    this._index = []
+    this._indexes = []
     this._value = []
   }
 
   toJsonSerializable(): {
     options: SelectOption<T>[]
-    index: number[] | null
+    indexes: number[] | null
     value: T[]
     enabled: boolean
     validationResult: FieldValidationResult
   } {
     return {
       options: this._options,
-      index: this._index,
+      indexes: this._indexes,
       value: this._value,
       enabled: this.enabled,
       validationResult: this.validationResult,

@@ -86,6 +86,12 @@ export class IreMultiSelectElement extends FieldElement {
         text-align: center;
         color: #888;
       }
+
+      /* New styles for the highlighted option */
+      .option.highlighted {
+        background-color: #007bff;
+        color: #fff;
+      }
     `,
   ]
 
@@ -102,14 +108,19 @@ export class IreMultiSelectElement extends FieldElement {
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
   #uiState?: MultiSelectFieldUIState<any>
 
-  @query('.filtered-options')
-  private filteredOptionsEl!: HTMLElement
-
   @state()
   private isInputFocused = false
 
   @state()
   private areFilteredOptionsFocused = false
+
+  // Add these constants for arrow key navigation
+  private ARROW_UP = 'ArrowUp'
+  private ARROW_DOWN = 'ArrowDown'
+  private ENTER = 'Enter'
+
+  @state()
+  private highlightedOptionIndex = -1
 
   override firstUpdated(): void {
     this.controller.connect(this)
@@ -126,22 +137,26 @@ export class IreMultiSelectElement extends FieldElement {
       this.requestUpdate()
     })
 
-    // Subscribe to focus changes on the input element
-    this.inputEl.addEventListener('focus', () => {
-      this.isInputFocused = true
-    })
+    // TODO: WHAT IS MISSING
+    // ESC to close the filtered options
+    // WHEN SOME OP ARE SELECTED, INDEX ARE CRAZY (HIGHLIGHTED OPTION)
 
-    this.inputEl.addEventListener('blur', () => {
-      this.isInputFocused = false
-    })
-
-    // Subscribe to focus changes on the filtered options container
-    this.filteredOptionsEl.addEventListener('mousedown', (event) => {
-      this.areFilteredOptionsFocused = true
-    })
-
-    this.filteredOptionsEl.addEventListener('focusout', () => {
-      this.areFilteredOptionsFocused = false
+    // Subscribe to keydown event on input for arrow key navigation
+    this.inputEl.addEventListener('keydown', (event) => {
+      switch (event.key) {
+        case this.ARROW_UP:
+          event.preventDefault()
+          this.highlightPreviousOption()
+          break
+        case this.ARROW_DOWN:
+          event.preventDefault()
+          this.highlightNextOption()
+          break
+        case this.ENTER:
+          event.preventDefault()
+          this.selectHighlightedOption()
+          break
+      }
     })
   }
 
@@ -152,11 +167,12 @@ export class IreMultiSelectElement extends FieldElement {
 
     return html`
       <div class="container">
-        ${this.#valueState?.index?.map((i) => {
+        ${this.#valueState?.indexes?.map((i) => {
           const option = this.#valueState?.options[i]
           if (!option) {
             return
           }
+          // Add classMap to conditionally apply 'highlighted' class to the selected option
           return html`
             <div class="chip">
               ${this.#renderLabel(option)}
@@ -168,8 +184,17 @@ export class IreMultiSelectElement extends FieldElement {
         <input
           type="text"
           placeholder="${'Search...'}"
+          ?disabled="${!this.#valueState?.enabled}"
           @input=${this.#handleSearchInput}
-          ?disabled="${!(this.#valueState?.enabled ?? true)}"
+          @click=${() => {
+            this.isInputFocused = true
+          }}
+          @focus=${() => {
+            this.isInputFocused = true
+          }}
+          @blur=${() => {
+            this.isInputFocused = false
+          }}
         />
         ${this.#renderFilteredOptions()}
       </div>
@@ -193,34 +218,56 @@ export class IreMultiSelectElement extends FieldElement {
       return html``
     }
 
-    const index = this.#valueState?.index ?? []
+    const index = this.#valueState?.indexes ?? []
     const options = this.#valueState?.options ?? []
     const inputValue = this.inputEl?.value ?? ''
     const optionsToRender = options
       .map((option, i) => {
-        const isNotSelected = !index.includes(i)
+        const isSelected = index.includes(i)
         const matchWithFilter = option.label.toUpperCase().includes(inputValue)
-        const show = isNotSelected && matchWithFilter
-        if (!show) {
+
+        if (isSelected || !matchWithFilter) {
           return
         }
+
         return html`
-        <div class="option" @mousedown=${() => this.#selectOptionByIndex(i)}>
-          ${this.#renderLabel(option)}
-        </div>
-      `
+          <div
+            class="option ${classMap({
+              highlighted: this.highlightedOptionIndex === i,
+            })}"
+            @mousedown=${(event: MouseEvent) => {
+              event.preventDefault()
+              event.stopPropagation()
+              this.#selectOptionByIndex(i)
+            }}
+            @mouseenter=${() => {
+              this.highlightedOptionIndex = i
+            }}
+          >
+            ${this.#renderLabel(option)}
+          </div>
+        `
       })
       .filter((o) => o !== undefined)
 
     return html`
-      <div class="filtered-options">
+      <div
+        class="filtered-options"
+        @mousedown=${() => {
+          this.areFilteredOptionsFocused = true
+        }}
+        @focusout=${() => {
+          this.areFilteredOptionsFocused = false
+        }}
+      >
         ${optionsToRender}
         ${
           optionsToRender.length === 0
             ? html`
               <div class="no-match">
                 ${index.length < options.length ? 'No matches' : 'No options'}
-              </div>`
+              </div>
+            `
             : undefined
         }
       </div>
@@ -230,20 +277,26 @@ export class IreMultiSelectElement extends FieldElement {
   #selectOptionByIndex(index: number): void {
     const option = this.#valueState?.options[index]
     if (option) {
-      this.controller.valueState.index = [
-        ...(this.#valueState?.index?.filter((i) => index !== i) ?? []),
+      this.controller.valueState.indexes = [
+        ...(this.#valueState?.indexes?.filter((i) => index !== i) ?? []),
         index,
       ]
       this.inputEl.value = ''
     }
+
+    // Close the filtered options
+    this.isInputFocused = false
+    this.areFilteredOptionsFocused = false
+    // ;(this.querySelector('input') as HTMLElement).blur()
+    // ;(this.querySelector('.filtered-options') as HTMLElement)?.blur()
   }
 
   #removeValueByOption(option: Option): void {
-    const newIndexes = this.#valueState?.index?.filter(
+    const newIndexes = this.#valueState?.indexes?.filter(
       (index) => option !== this.#valueState?.options[index],
     )
     if (newIndexes) {
-      this.controller.valueState.index = newIndexes
+      this.controller.valueState.indexes = newIndexes
     }
   }
 
@@ -251,12 +304,46 @@ export class IreMultiSelectElement extends FieldElement {
     this.requestUpdate()
   }
 
-  override connectedCallback(): void {
-    super.connectedCallback()
+  private highlightPreviousOption(): void {
+    const numOptions = this.#valueState?.options.length ?? 0
+    this.highlightedOptionIndex =
+      (this.highlightedOptionIndex - 1 + numOptions) % numOptions
+    this.scrollOptionIntoView()
   }
 
-  override disconnectedCallback(): void {
-    super.disconnectedCallback()
+  private highlightNextOption(): void {
+    const numOptions = this.#valueState?.options.length ?? 0
+    this.highlightedOptionIndex = (this.highlightedOptionIndex + 1) % numOptions
+    this.scrollOptionIntoView()
+  }
+
+  private scrollOptionIntoView(): void {
+    const optionEl = this.getHighlightedOptionElement()
+    if (optionEl) {
+      optionEl.scrollIntoView({
+        block: 'nearest',
+        inline: 'nearest',
+      })
+    }
+  }
+
+  private getHighlightedOptionElement(): HTMLElement | null {
+    const options = this.shadowRoot?.querySelectorAll('.option')
+    if (
+      options &&
+      this.highlightedOptionIndex >= 0 &&
+      this.highlightedOptionIndex < options.length
+    ) {
+      return options[this.highlightedOptionIndex] as HTMLElement
+    }
+    return null
+  }
+
+  private selectHighlightedOption(): void {
+    const optionEl = this.getHighlightedOptionElement()
+    if (optionEl) {
+      optionEl.click()
+    }
   }
 }
 
