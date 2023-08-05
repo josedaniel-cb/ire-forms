@@ -8,8 +8,6 @@ import { FieldElement } from './base/field-element'
 import { HTMLTemplateResult, css, html } from 'lit'
 import { customElement, property, query, state } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'
-import { ifDefined } from 'lit/directives/if-defined'
-import { styleMap } from 'lit/directives/style-map.js'
 
 // rome-ignore lint/suspicious/noExplicitAny: any is required here
 type Option = SelectOption<any>
@@ -114,14 +112,8 @@ export class IreMultiSelectElement extends FieldElement {
   @state()
   private _areFilteredOptionsFocused = false
 
-  // Add these constants for arrow key navigation
-  private ARROW_UP = 'ArrowUp'
-  private ARROW_DOWN = 'ArrowDown'
-  private ENTER = 'Enter'
-  private ESCAPE = 'Escape'
-
   @state()
-  private highlightedOptionIndex = -1
+  private _highlightedOptionIndex = -1
 
   override firstUpdated(): void {
     this.controller.connect(this)
@@ -138,9 +130,7 @@ export class IreMultiSelectElement extends FieldElement {
       this.requestUpdate()
     })
 
-    // TODO: WHAT IS MISSING
-    // ESC to close the filtered options
-    // Open when arrow down or arrow up are pressed
+    // TODO: handle enter for selecting an option
   }
 
   protected _renderField(): HTMLTemplateResult {
@@ -178,6 +168,7 @@ export class IreMultiSelectElement extends FieldElement {
           }}
           @blur=${() => {
             this._isInputFocused = false
+            this.controller.markAsTouched()
           }}
         />
         ${this.#renderFilteredOptions()}
@@ -203,39 +194,15 @@ export class IreMultiSelectElement extends FieldElement {
     }
 
     const selectedIndexes = this.#valueState?.indexes ?? []
-    const availableOptions = this.#valueState?.options ?? []
+    const allOptions = this.#valueState?.options ?? []
     const searchQuery = this.inputEl?.value ?? ''
-
-    const optionsToRender = availableOptions
-      .map((availableOption, i) => {
+    const availableOptionEntries = allOptions
+      .map<[number, Option]>((option, i) => [i, option])
+      .filter(([i, option]) => {
         const isSelected = selectedIndexes.includes(i)
-        const matchWithFilter = availableOption.label
-          .toUpperCase()
-          .includes(searchQuery)
-
-        if (isSelected || !matchWithFilter) {
-          return
-        }
-
-        return html`
-          <div
-            class="option ${classMap({
-              highlighted: this.highlightedOptionIndex === i,
-            })}"
-            @mousedown=${(event: MouseEvent) => {
-              event.preventDefault()
-              event.stopPropagation()
-              this.#selectOptionByIndex(i)
-            }}
-            @mouseenter=${() => {
-              this.highlightedOptionIndex = i
-            }}
-          >
-            ${this.#renderLabel(availableOption)}
-          </div>
-        `
+        const matchWithFilter = option.label.toUpperCase().includes(searchQuery)
+        return !isSelected && matchWithFilter
       })
-      .filter((o) => o !== undefined)
 
     return html`
       <div
@@ -247,13 +214,31 @@ export class IreMultiSelectElement extends FieldElement {
           this._areFilteredOptionsFocused = false
         }}
       >
-        ${optionsToRender}
+        ${availableOptionEntries.map(([i, option]) => {
+          return html`
+          <div
+            class="option ${classMap({
+              highlighted: this._highlightedOptionIndex === i,
+            })}"
+            @mousedown=${(event: MouseEvent) => {
+              event.preventDefault()
+              event.stopPropagation()
+              this.#selectOptionByIndex(i)
+            }}
+            @mouseenter=${() => {
+              this._highlightedOptionIndex = i
+            }}
+          >
+            ${this.#renderLabel(option)}
+          </div>
+        `
+        })}
         ${
-          optionsToRender.length === 0
+          availableOptionEntries.length === 0
             ? html`
               <div class="no-match">
                 ${
-                  selectedIndexes.length < availableOptions.length
+                  selectedIndexes.length < allOptions.length
                     ? 'No matches'
                     : 'No options'
                 }
@@ -295,21 +280,21 @@ export class IreMultiSelectElement extends FieldElement {
 
   #handleSearchKeydown(event: KeyboardEvent) {
     switch (event.key) {
-      case this.ARROW_UP:
+      case 'ArrowUp':
         event.preventDefault()
         this._isInputFocused = true
         this.#highlightPreviousOption()
         break
-      case this.ARROW_DOWN:
+      case 'ArrowDown':
         event.preventDefault()
         this._isInputFocused = true
         this.#highlightNextOption()
         break
-      case this.ENTER:
+      case 'Enter':
         event.preventDefault()
-        this.#selectHighlightedOption()
+        this.#selectOptionByIndex(this._highlightedOptionIndex)
         break
-      case this.ESCAPE:
+      case 'Escape':
         event.preventDefault()
         this._isInputFocused = false
         break
@@ -318,12 +303,12 @@ export class IreMultiSelectElement extends FieldElement {
 
   #highlightPreviousOption(): void {
     const numOptions = this.#valueState?.options.length ?? 0
-    this.highlightedOptionIndex =
-      (this.highlightedOptionIndex + numOptions - 1) % numOptions
-    while (this.#valueState?.indexes?.includes(this.highlightedOptionIndex)) {
-      this.highlightedOptionIndex--
-      if (this.highlightedOptionIndex < 0) {
-        this.highlightedOptionIndex = numOptions - 1
+    this._highlightedOptionIndex =
+      (this._highlightedOptionIndex + numOptions - 1) % numOptions
+    while (this.#valueState?.indexes?.includes(this._highlightedOptionIndex)) {
+      this._highlightedOptionIndex--
+      if (this._highlightedOptionIndex < 0) {
+        this._highlightedOptionIndex = numOptions - 1
       }
     }
     this.#scrollOptionIntoView()
@@ -331,12 +316,13 @@ export class IreMultiSelectElement extends FieldElement {
 
   #highlightNextOption(): void {
     const numOptions = this.#valueState?.options.length ?? 0
-    this.highlightedOptionIndex = (this.highlightedOptionIndex + 1) % numOptions
+    this._highlightedOptionIndex =
+      (this._highlightedOptionIndex + 1) % numOptions
     while (
-      this.#valueState?.indexes?.includes(this.highlightedOptionIndex) &&
-      this.highlightedOptionIndex < numOptions - 1
+      this.#valueState?.indexes?.includes(this._highlightedOptionIndex) &&
+      this._highlightedOptionIndex < numOptions - 1
     ) {
-      this.highlightedOptionIndex++
+      this._highlightedOptionIndex++
     }
     this.#scrollOptionIntoView()
   }
@@ -355,19 +341,12 @@ export class IreMultiSelectElement extends FieldElement {
     const options = this.shadowRoot?.querySelectorAll('.option')
     if (
       options &&
-      this.highlightedOptionIndex >= 0 &&
-      this.highlightedOptionIndex < options.length
+      this._highlightedOptionIndex >= 0 &&
+      this._highlightedOptionIndex < options.length
     ) {
-      return options[this.highlightedOptionIndex] as HTMLElement
+      return options[this._highlightedOptionIndex] as HTMLElement
     }
     return null
-  }
-
-  #selectHighlightedOption(): void {
-    const optionEl = this.#getHighlightedOptionElement()
-    if (optionEl) {
-      optionEl.click()
-    }
   }
 }
 
