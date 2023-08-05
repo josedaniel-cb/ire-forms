@@ -74,17 +74,16 @@ export class MultiSelectFieldValueState<T extends NonNullable<unknown>>
       this.#setEmpty()
       return
     }
-    const sortedIndexes = indexes.sort()
-    for (const i of sortedIndexes) {
+    // const sortedIndexes = indexes.sort()
+    for (const i of indexes) {
       if (i < 0 || i >= this._options.length) {
         this.#setEmpty()
-        // TODO: Throw error
-        return
+        throw new Error(`Index ${i} out of bounds`)
       }
     }
 
-    this._indexes = sortedIndexes
-    this._value = sortedIndexes.map((i) => this._options[i].value)
+    this._indexes = indexes
+    this._value = indexes.map((i) => this._options[i].value)
   }
 
   get value() {
@@ -103,19 +102,25 @@ export class MultiSelectFieldValueState<T extends NonNullable<unknown>>
       )
       if (actualIndex < 0) {
         this.#setEmpty()
-        // TODO: Throw error
-        return
+        throw new Error(`Value ${v} not found in options`)
       }
       indexes.push(actualIndex)
     }
-    const sortedIndex = indexes.sort()
-    this._indexes = sortedIndex
-    this._value = sortedIndex.map((i) => this._options[i].value)
+    // const sortedIndex = indexes.sort()
+    this._indexes = indexes
+    this._value = indexes.map((i) => this._options[i].value)
   }
 
   #setEmpty(): void {
     this._indexes = []
     this._value = []
+  }
+
+  getSelectedOptions(): SelectOption<T>[] {
+    if (this._indexes === null) {
+      return []
+    }
+    return this._indexes.map((i) => this._options[i])
   }
 
   toJsonSerializable(): {

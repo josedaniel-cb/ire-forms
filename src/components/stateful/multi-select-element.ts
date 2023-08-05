@@ -109,15 +109,16 @@ export class IreMultiSelectElement extends FieldElement {
   #uiState?: MultiSelectFieldUIState<any>
 
   @state()
-  private isInputFocused = false
+  private _isInputFocused = false
 
   @state()
-  private areFilteredOptionsFocused = false
+  private _areFilteredOptionsFocused = false
 
   // Add these constants for arrow key navigation
   private ARROW_UP = 'ArrowUp'
   private ARROW_DOWN = 'ArrowDown'
   private ENTER = 'Enter'
+  private ESCAPE = 'Escape'
 
   @state()
   private highlightedOptionIndex = -1
@@ -139,25 +140,7 @@ export class IreMultiSelectElement extends FieldElement {
 
     // TODO: WHAT IS MISSING
     // ESC to close the filtered options
-    // WHEN SOME OP ARE SELECTED, INDEX ARE CRAZY (HIGHLIGHTED OPTION)
-
-    // Subscribe to keydown event on input for arrow key navigation
-    this.inputEl.addEventListener('keydown', (event) => {
-      switch (event.key) {
-        case this.ARROW_UP:
-          event.preventDefault()
-          this.highlightPreviousOption()
-          break
-        case this.ARROW_DOWN:
-          event.preventDefault()
-          this.highlightNextOption()
-          break
-        case this.ENTER:
-          event.preventDefault()
-          this.selectHighlightedOption()
-          break
-      }
-    })
+    // Open when arrow down or arrow up are pressed
   }
 
   protected _renderField(): HTMLTemplateResult {
@@ -187,13 +170,14 @@ export class IreMultiSelectElement extends FieldElement {
           ?disabled="${!this.#valueState?.enabled}"
           @input=${this.#handleSearchInput}
           @click=${() => {
-            this.isInputFocused = true
+            this._isInputFocused = true
           }}
+          @keydown=${this.#handleSearchKeydown}
           @focus=${() => {
-            this.isInputFocused = true
+            this._isInputFocused = true
           }}
           @blur=${() => {
-            this.isInputFocused = false
+            this._isInputFocused = false
           }}
         />
         ${this.#renderFilteredOptions()}
@@ -214,17 +198,20 @@ export class IreMultiSelectElement extends FieldElement {
   }
 
   #renderFilteredOptions(): HTMLTemplateResult {
-    if (!this.isInputFocused && !this.areFilteredOptionsFocused) {
+    if (!this._isInputFocused && !this._areFilteredOptionsFocused) {
       return html``
     }
 
-    const index = this.#valueState?.indexes ?? []
-    const options = this.#valueState?.options ?? []
-    const inputValue = this.inputEl?.value ?? ''
-    const optionsToRender = options
-      .map((option, i) => {
-        const isSelected = index.includes(i)
-        const matchWithFilter = option.label.toUpperCase().includes(inputValue)
+    const selectedIndexes = this.#valueState?.indexes ?? []
+    const availableOptions = this.#valueState?.options ?? []
+    const searchQuery = this.inputEl?.value ?? ''
+
+    const optionsToRender = availableOptions
+      .map((availableOption, i) => {
+        const isSelected = selectedIndexes.includes(i)
+        const matchWithFilter = availableOption.label
+          .toUpperCase()
+          .includes(searchQuery)
 
         if (isSelected || !matchWithFilter) {
           return
@@ -244,7 +231,7 @@ export class IreMultiSelectElement extends FieldElement {
               this.highlightedOptionIndex = i
             }}
           >
-            ${this.#renderLabel(option)}
+            ${this.#renderLabel(availableOption)}
           </div>
         `
       })
@@ -254,10 +241,10 @@ export class IreMultiSelectElement extends FieldElement {
       <div
         class="filtered-options"
         @mousedown=${() => {
-          this.areFilteredOptionsFocused = true
+          this._areFilteredOptionsFocused = true
         }}
         @focusout=${() => {
-          this.areFilteredOptionsFocused = false
+          this._areFilteredOptionsFocused = false
         }}
       >
         ${optionsToRender}
@@ -265,7 +252,11 @@ export class IreMultiSelectElement extends FieldElement {
           optionsToRender.length === 0
             ? html`
               <div class="no-match">
-                ${index.length < options.length ? 'No matches' : 'No options'}
+                ${
+                  selectedIndexes.length < availableOptions.length
+                    ? 'No matches'
+                    : 'No options'
+                }
               </div>
             `
             : undefined
@@ -285,10 +276,8 @@ export class IreMultiSelectElement extends FieldElement {
     }
 
     // Close the filtered options
-    this.isInputFocused = false
-    this.areFilteredOptionsFocused = false
-    // ;(this.querySelector('input') as HTMLElement).blur()
-    // ;(this.querySelector('.filtered-options') as HTMLElement)?.blur()
+    this._isInputFocused = false
+    this._areFilteredOptionsFocused = false
   }
 
   #removeValueByOption(option: Option): void {
@@ -304,21 +293,56 @@ export class IreMultiSelectElement extends FieldElement {
     this.requestUpdate()
   }
 
-  private highlightPreviousOption(): void {
+  #handleSearchKeydown(event: KeyboardEvent) {
+    switch (event.key) {
+      case this.ARROW_UP:
+        event.preventDefault()
+        this._isInputFocused = true
+        this.#highlightPreviousOption()
+        break
+      case this.ARROW_DOWN:
+        event.preventDefault()
+        this._isInputFocused = true
+        this.#highlightNextOption()
+        break
+      case this.ENTER:
+        event.preventDefault()
+        this.#selectHighlightedOption()
+        break
+      case this.ESCAPE:
+        event.preventDefault()
+        this._isInputFocused = false
+        break
+    }
+  }
+
+  #highlightPreviousOption(): void {
     const numOptions = this.#valueState?.options.length ?? 0
     this.highlightedOptionIndex =
-      (this.highlightedOptionIndex - 1 + numOptions) % numOptions
-    this.scrollOptionIntoView()
+      (this.highlightedOptionIndex + numOptions - 1) % numOptions
+    while (this.#valueState?.indexes?.includes(this.highlightedOptionIndex)) {
+      this.highlightedOptionIndex--
+      if (this.highlightedOptionIndex < 0) {
+        this.highlightedOptionIndex = numOptions - 1
+      }
+    }
+    this.#scrollOptionIntoView()
   }
 
-  private highlightNextOption(): void {
+  #highlightNextOption(): void {
     const numOptions = this.#valueState?.options.length ?? 0
     this.highlightedOptionIndex = (this.highlightedOptionIndex + 1) % numOptions
-    this.scrollOptionIntoView()
+    while (
+      this.#valueState?.indexes?.includes(this.highlightedOptionIndex) &&
+      this.highlightedOptionIndex < numOptions - 1
+    ) {
+      this.highlightedOptionIndex++
+    }
+    this.#scrollOptionIntoView()
   }
 
-  private scrollOptionIntoView(): void {
-    const optionEl = this.getHighlightedOptionElement()
+  #scrollOptionIntoView(): void {
+    const optionEl = this.#getHighlightedOptionElement()
     if (optionEl) {
       optionEl.scrollIntoView({
         block: 'nearest',
@@ -327,7 +351,7 @@ export class IreMultiSelectElement extends FieldElement {
     }
   }
 
-  private getHighlightedOptionElement(): HTMLElement | null {
+  #getHighlightedOptionElement(): HTMLElement | null {
     const options = this.shadowRoot?.querySelectorAll('.option')
     if (
       options &&
@@ -339,8 +363,8 @@ export class IreMultiSelectElement extends FieldElement {
     return null
   }
 
-  private selectHighlightedOption(): void {
-    const optionEl = this.getHighlightedOptionElement()
+  #selectHighlightedOption(): void {
+    const optionEl = this.#getHighlightedOptionElement()
     if (optionEl) {
       optionEl.click()
     }
