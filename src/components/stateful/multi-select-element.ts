@@ -10,6 +10,8 @@ import { HTMLTemplateResult, css, html } from 'lit'
 import { customElement, property, query, state } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'
 
+import 'last-icon'
+
 // rome-ignore lint/suspicious/noExplicitAny: any is required here
 type Option = SelectOption<any>
 
@@ -71,12 +73,12 @@ export class IreMultiSelectElement extends FieldElement {
           return html`
             <div class="chip">
               ${this.#renderLabel(option)}
-              <span
+              <div
                 class="remove-icon"
                 @click=${() => this.#removeValueByOption(option)}
               >
-                <i class="bi bi-x-circle-fill"></i>
-              </span>
+                <l-i set="bs" name="x-circle-fill"></l-i>
+              </div>
             </div>
           `
         })}

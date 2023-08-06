@@ -28,6 +28,31 @@ export const multiSelectElementCss = css`
 .chip .remove-icon {
   margin-left: 4px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* https://www.npmjs.com/package/last-icon */
+l-i {
+  --size: 1em;
+  display: inline-flex;
+  width: var(--size);
+  height: var(--size);
+  vertical-align: middle;
+}
+
+l-i svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+p l-i,
+button l-i,
+a l-i,
+span l-i {
+  vertical-align: -0.125em;
 }
 
 /* Styles for the input search */
