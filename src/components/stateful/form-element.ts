@@ -37,8 +37,8 @@ import { ifDefined } from 'lit/directives/if-defined.js'
 import { ChipsFieldController } from '../../fields/controllers/chips-controller'
 import { SelectFieldController } from '../../fields/controllers/native-select-controller'
 import { mosaicCss } from '../css/mosaic-css'
+import './chips-element'
 import './input-element'
-import './multi-select-element'
 import './select-element'
 // import './fields/input/password'
 // import './fields/input/checkbox'
@@ -154,7 +154,7 @@ export class IreFormElement extends LitElement {
 
     if (fieldController instanceof ChipsFieldController) {
       template = html`
-        <ire-multi-select .controller=${fieldController}></ire-multi-select>
+        <ire-chips .controller=${fieldController}></ire-chips>
       `
     }
     // if (controller instanceof TextAreaController)

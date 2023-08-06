@@ -19,8 +19,8 @@ import { ifDefined } from 'lit/directives/if-defined.js'
 // rome-ignore lint/suspicious/noExplicitAny: any is required here
 type Option = SelectOption<any>
 
-@customElement('ire-multi-select')
-export class IreMultiSelectElement extends FieldElement {
+@customElement('ire-chips')
+export class IreChipsElement extends FieldElement {
   static override styles = [...FieldElement.styles, multiSelectElementCss]
 
   @query('input')
@@ -305,6 +305,6 @@ export class IreMultiSelectElement extends FieldElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'ire-multi-select': IreMultiSelectElement
+    'ire-chips': IreChipsElement
   }
 }

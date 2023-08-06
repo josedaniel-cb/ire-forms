@@ -1,6 +1,6 @@
+import { IreChipsElement } from './components/stateful/chips-element'
 import './components/stateful/form-element'
 import { IreInputElement } from './components/stateful/input-element'
-import { IreMultiSelectElement } from './components/stateful/multi-select-element'
 import { IreSelectElement } from './components/stateful/select-element'
 import { ChipsField } from './fields/controllers/chips-controller'
 import { SelectField } from './fields/controllers/native-select-controller'
@@ -36,5 +36,5 @@ export type {
   SelectField as SelectField,
   IreSelectElement,
   ChipsField as MultiSelectField,
-  IreMultiSelectElement,
+  IreChipsElement,
 }

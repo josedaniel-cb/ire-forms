@@ -1,7 +1,7 @@
 import { css } from 'lit'
 
 export const multiSelectElementCss = css`
-/* Styles for the ire-multi-select */
+/* Styles for the ire-chips */
 .container {
   position: relative;
   display: flex;
