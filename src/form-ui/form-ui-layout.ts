@@ -17,14 +17,17 @@ class FormUILayoutStyles {
   }
 }
 
-class FormUILayoutClasses {
-  static readonly singleColumn = 'single-column'
-  static readonly autoGrid = 'auto-grid'
-  static readonly flexGrid = 'flex-grid'
-  static readonly centeredFlexGrid = 'flex-grid centered'
+enum FormUILayoutClasses {
+  singleColumn = 'single-column',
+  autoGrid = 'auto-grid',
+  flexGrid = 'flex-grid',
+  centeredFlexGrid = 'flex-grid centered',
 }
 
-export type FormUILayout = { classes: string; styles: string }
+export type FormUILayout = {
+  classes: string
+  styles: string
+}
 
 export class FormUILayouts {
   static readonly singleColumn: FormUILayout = {

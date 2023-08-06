@@ -1,58 +1,21 @@
 import { FieldController } from '../../fields/controllers/base/field-controller'
-import { TextFieldController } from '../../fields/controllers/text-controller'
-import { FormUILayouts } from '../../form-ui/form-ui-layout'
-import { FormBuilder } from '../../form/builder/form-builder'
-import {
-  FormController,
-  FormControllerChildren,
-} from '../../form/controller/form-controller'
-import { baseCss } from '../css/base-css'
-import { layoutsCss } from '../css/layout-css'
-import { renderStyleSheetLinks } from '../stateless/external-style-sheets'
-import { CSSResult, HTMLTemplateResult, LitElement, css, html } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
-import { classMap } from 'lit/directives/class-map.js'
-import { ifDefined } from 'lit/directives/if-defined.js'
-
-// import { FieldSet } from '../../core/field-set'
-
-// import { AbstractFieldController } from '../../controllers/abstract-field'
-// import { CheckboxInputController } from '../../controllers/fields/input/checkbox'
-// import { DateInputController } from '../../controllers/fields/input/date'
-// import { NumberInputController } from '../../controllers/fields/input/number'
-// import { TextInputController } from '../../controllers/fields/input/text/text'
-// import { FormController } from '../../controllers/form'
-// import { FileInputController } from '../../controllers/fields/input/file'
-// import { RadiosController } from '../../controllers/fields/select/radios'
-// import { SelectController } from '../../controllers/fields/select'
-// import { TextAreaController } from '../../controllers/fields/textarea'
-// import { TimeInputController } from '../../controllers/fields/input/time'
-// import { PasswordInputController } from '../../controllers/fields/input/text/password'
-// import { CustomSelectController } from '../../controllers/fields/select/custom-select'
-
-// import { Layouts } from '../styles/layouts'
-// import { layoutsCss } from '../styles/css/layouts-css'
-// import { FormConfig } from '../../core/config'
-
 import { CheckboxesFieldController } from '../../fields/controllers/checkboxes-controller'
 import { ChipsFieldController } from '../../fields/controllers/chips-controller'
 import { SelectFieldController } from '../../fields/controllers/native-select-controller'
+import { TextFieldController } from '../../fields/controllers/text-controller'
+import { FormUILayouts } from '../../form-ui/form-ui-layout'
+import { FormController } from '../../form/controller/form-controller'
+import { baseCss } from '../css/base-css'
+import { layoutsCss } from '../css/layout-css'
 import { mosaicCss } from '../css/mosaic-css'
 import './checkboxes-element'
 import './chips-element'
 import './input-element'
 import './select-element'
-// import './fields/input/password'
-// import './fields/input/checkbox'
-// import './fields/input/file'
-// import './fields/select'
-// import './fields/select/radios'
-// import './fields/select/custom-select'
-// import './fields/textarea'
-// import './fields/multiple-select'
-// import { renderExternalStyleSheets } from './util'
-// import { baseCss } from '../styles/css/base-css'
-// import { MultipleSelectController } from '../../controllers/fields/multiple-select'
+import { HTMLTemplateResult, LitElement, html } from 'lit'
+import { customElement, property } from 'lit/decorators.js'
+import { classMap } from 'lit/directives/class-map.js'
+import { ifDefined } from 'lit/directives/if-defined.js'
 
 @customElement('ire-form')
 export class IreFormElement extends LitElement {
@@ -61,11 +24,6 @@ export class IreFormElement extends LitElement {
   @property()
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
   controller?: FormController<any>
-
-  // connectedCallback() {
-  //   super.connectedCallback()
-  //   FormComponent.styles = [mosaicCss, layoutsCss, baseCss]
-  // }
 
   override render() {
     // ${renderStyleSheetLinks(FormBuilder.uiConfig.stylesheets)}
@@ -120,69 +78,28 @@ export class IreFormElement extends LitElement {
   ): HTMLTemplateResult | undefined {
     let template: HTMLTemplateResult | undefined = undefined
 
-    // if (
-    //   controller instanceof DateInputController ||
-    //   controller instanceof TimeInputController ||
-    //   controller instanceof TextInputController ||
-    //   controller instanceof NumberInputController
-    // )
-    //   template = html`<ire-input .controller=${controller}></ire-input>`
-
-    // if (controller instanceof PasswordInputController)
-    //   template = html`
-    //     <ire-password-input .controller=${controller}></ire-password-input>
-    //   `
-
-    // if (controller instanceof CheckboxInputController)
-    //   template = html`
-    //     <ire-checkbox-input .controller=${controller}></ire-checkbox-input>
-    //   `
-
-    // if (controller instanceof FileInputController)
-    //   template = html`
-    //     <ire-file-input .controller=${controller}></ire-file-input>
-    //   `
-
     if (fieldController instanceof SelectFieldController) {
-      template = html` <ire-select .controller=${fieldController}></ire-select> `
-    }
-    // if (controller instanceof RadiosController)
-    //   template = html` <ire-radios .controller=${controller}></ire-radios> `
-
-    // if (controller instanceof CustomSelectController)
-    //   template = html`
-    //     <ire-custom-select .controller=${controller}></ire-custom-select>
-    //   `
-
-    if (fieldController instanceof ChipsFieldController) {
+      template = html`
+        <ire-select .controller=${fieldController}></ire-select>
+      `
+    } else if (fieldController instanceof ChipsFieldController) {
       template = html`
         <ire-chips .controller=${fieldController}></ire-chips>
       `
-    }
-
-    if (fieldController instanceof CheckboxesFieldController) {
+    } else if (fieldController instanceof CheckboxesFieldController) {
       template = html`
         <ire-checkboxes .controller=${fieldController}></ire-checkboxes>
       `
+    } else if (fieldController instanceof TextFieldController) {
+      template = html`
+        <ire-input .controller=${fieldController}></ire-input>
+      `
     }
-    // if (controller instanceof TextAreaController)
-    //   template = html` <ire-textarea .controller=${controller}></ire-textarea> `
-
-    if (fieldController instanceof TextFieldController) {
-      template = html` <ire-input .controller=${fieldController}></ire-input> `
-    }
-
-    console.log(
-      '🚀 ~ file: form-element.ts:164 ~ IreFormElement ~ fieldController:',
-      fieldController,
-    )
 
     if (template === undefined) {
       return undefined
     }
 
-    // class="${ifDefined(fieldController.wrapperClasses)}"
-    // style="${ifDefined(fieldController.wrapperStyles)}"
     return html`
       <div
         class="form-child"
