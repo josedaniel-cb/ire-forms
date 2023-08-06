@@ -1,3 +1,4 @@
+import { CheckboxesFieldDefinition } from '../../fields/controllers/checkboxes-controller'
 import { ChipsFieldDefinition } from '../../fields/controllers/chips-controller'
 import { SelectFieldDefinition } from '../../fields/controllers/native-select-controller'
 import { TextFieldDefinition } from '../../fields/controllers/text-controller'
@@ -11,6 +12,8 @@ export type FormValue<T extends FormDefinition> = {
     ? R | null
     : T['fields'][K] extends ChipsFieldDefinition<infer R>
     ? R[]
+    : T['fields'][K] extends CheckboxesFieldDefinition<infer R>
+    ? R[]
     : T['fields'][K] extends FormDefinition
     ? FormValue<T['fields'][K]>
     : never
@@ -22,6 +25,8 @@ export type FormValuePatch<T extends FormDefinition> = {
     : T['fields'][K] extends SelectFieldDefinition<infer R>
     ? R | null
     : T['fields'][K] extends ChipsFieldDefinition<infer R>
+    ? R[]
+    : T['fields'][K] extends CheckboxesFieldDefinition<infer R>
     ? R[]
     : T['fields'][K] extends FormDefinition
     ? FormValuePatch<T['fields'][K]>

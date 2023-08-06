@@ -1,4 +1,9 @@
 import {
+  CheckboxesField,
+  CheckboxesFieldDefinition,
+  CheckboxesFieldMultiPatch,
+} from '../../fields/controllers/checkboxes-controller'
+import {
   ChipsField,
   ChipsFieldDefinition,
   ChipsFieldMultiPatch,
@@ -22,6 +27,8 @@ export type FormFields<T extends FormDefinition> = {
     ? SelectField<R>
     : T['fields'][K] extends ChipsFieldDefinition<infer R>
     ? ChipsField<R>
+    : T['fields'][K] extends CheckboxesFieldDefinition<infer R>
+    ? CheckboxesField<R>
     : T['fields'][K] extends FormDefinition
     ? FormFields<T['fields'][K]> //  ?  FormProps<T['fields'][K]>
     : never
@@ -34,6 +41,8 @@ export type FormFieldsPatch<T extends FormDefinition> = {
     ? SelectFieldMultiPatch<R>
     : T['fields'][K] extends ChipsFieldDefinition<infer R>
     ? ChipsFieldMultiPatch<R>
+    : T['fields'][K] extends CheckboxesFieldDefinition<infer R>
+    ? CheckboxesFieldMultiPatch<R>
     : T['fields'][K] extends FormDefinition
     ? FormFieldsPatch<T['fields'][K]>
     : never

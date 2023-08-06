@@ -1,27 +1,18 @@
 import { FieldBuilder } from '../../fields/builder/field-builder'
+import { CheckboxesFieldDefinition } from '../../fields/controllers/checkboxes-controller'
 import { ChipsFieldDefinition } from '../../fields/controllers/chips-controller'
 import { SelectFieldDefinition } from '../../fields/controllers/native-select-controller'
 import { TextFieldDefinition } from '../../fields/controllers/text-controller'
-// import { FormBuilderUI } from '../../form-ui/form-builder-ui'
 import {
   Form,
   FormController,
   FormControllerChildren,
 } from '../controller/form-controller'
 import { FormDefinition } from '../definition/form-definition'
-import {
-  // RootFormBuildDefinition,
-  FormBuildDefinition,
-} from './form-build-definition'
+import { FormBuildDefinition } from './form-build-definition'
 import { Subject } from 'rxjs'
 
-// type FormBuilderConfig = {
-//   stylesheets: string[]
-// }
-
 export class FormBuilder {
-  // static readonly uiConfig = FormBuilderUI.default()
-
   static #build<T extends FormDefinition>(
     definition: FormBuildDefinition<T>,
     unsubscribeSubject: Subject<void>,
@@ -75,29 +66,21 @@ export class FormBuilder {
     }
   }
 
-  static multiSelect<T extends NonNullable<unknown>>(
+  static chips<T extends NonNullable<unknown>>(
     builderParams: Omit<ChipsFieldDefinition<T>, 'type'>,
   ): ChipsFieldDefinition<T> {
     return {
       ...builderParams,
-      type: 'multi-select',
+      type: 'chips',
     }
   }
 
-  // static #config: FormBuilderConfig = {
-  //   stylesheets: [],
-  // }
-
-  // static get config() {
-  //   return FormBuilder.#config
-  // }
-
-  // static patchConfig(config: Partial<FormBuilderConfig>) {
-  //   // FormBuilder.#settings = settings
-  //   Object.entries(config).forEach(([key, value]) => {
-  //     if (key in FormBuilder.#config) {
-  //       FormBuilder.#config[key as keyof FormBuilderConfig] = value
-  //     }
-  //   })
-  // }
+  static checkboxes<T extends NonNullable<unknown>>(
+    builderParams: Omit<CheckboxesFieldDefinition<T>, 'type'>,
+  ): CheckboxesFieldDefinition<T> {
+    return {
+      ...builderParams,
+      type: 'checkboxes',
+    }
+  }
 }

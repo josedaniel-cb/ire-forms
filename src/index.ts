@@ -1,7 +1,9 @@
+import { IreCheckboxesElement } from './components/stateful/checkboxes-element'
 import { IreChipsElement } from './components/stateful/chips-element'
 import './components/stateful/form-element'
 import { IreInputElement } from './components/stateful/input-element'
 import { IreSelectElement } from './components/stateful/select-element'
+import { CheckboxesField } from './fields/controllers/checkboxes-controller'
 import { ChipsField } from './fields/controllers/chips-controller'
 import { SelectField } from './fields/controllers/native-select-controller'
 import { TextField } from './fields/controllers/text-controller'
@@ -14,6 +16,10 @@ export {
   FormBuilder,
   // Validators,
   // Layouts
+  IreInputElement,
+  IreSelectElement,
+  IreChipsElement,
+  IreCheckboxesElement,
 }
 export type {
   //   AbstractField,
@@ -32,9 +38,7 @@ export type {
   //   CustomSelect,
   //   TextArea,
   TextField,
-  IreInputElement,
-  SelectField as SelectField,
-  IreSelectElement,
-  ChipsField as MultiSelectField,
-  IreChipsElement,
+  SelectField,
+  ChipsField,
+  CheckboxesField,
 }

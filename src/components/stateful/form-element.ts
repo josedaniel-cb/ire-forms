@@ -34,9 +34,11 @@ import { ifDefined } from 'lit/directives/if-defined.js'
 // import { layoutsCss } from '../styles/css/layouts-css'
 // import { FormConfig } from '../../core/config'
 
+import { CheckboxesFieldController } from '../../fields/controllers/checkboxes-controller'
 import { ChipsFieldController } from '../../fields/controllers/chips-controller'
 import { SelectFieldController } from '../../fields/controllers/native-select-controller'
 import { mosaicCss } from '../css/mosaic-css'
+import './checkboxes-element'
 import './chips-element'
 import './input-element'
 import './select-element'
@@ -157,12 +159,23 @@ export class IreFormElement extends LitElement {
         <ire-chips .controller=${fieldController}></ire-chips>
       `
     }
+
+    if (fieldController instanceof CheckboxesFieldController) {
+      template = html`
+        <ire-checkboxes .controller=${fieldController}></ire-checkboxes>
+      `
+    }
     // if (controller instanceof TextAreaController)
     //   template = html` <ire-textarea .controller=${controller}></ire-textarea> `
 
     if (fieldController instanceof TextFieldController) {
       template = html` <ire-input .controller=${fieldController}></ire-input> `
     }
+
+    console.log(
+      '🚀 ~ file: form-element.ts:164 ~ IreFormElement ~ fieldController:',
+      fieldController,
+    )
 
     if (template === undefined) {
       return undefined

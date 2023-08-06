@@ -1,5 +1,6 @@
 import { FormDefinitionLeaf } from '../../form/definition/form-definition'
 import { FieldController } from '../controllers/base/field-controller'
+import { CheckboxesFieldController } from '../controllers/checkboxes-controller'
 import { ChipsFieldController } from '../controllers/chips-controller'
 import { MultiSelectFieldValueState } from '../controllers/multi-select/multi-select-value-state'
 import { SelectFieldController } from '../controllers/native-select-controller'
@@ -83,7 +84,7 @@ export class FieldBuilder {
       })
     }
 
-    if (params.type === 'multi-select') {
+    if (params.type === 'chips') {
       const validator = new MultiSelectFieldValidator({
         required: params.required,
         validators: params.validators,
@@ -105,6 +106,33 @@ export class FieldBuilder {
           label: params.label,
           optionHtmlTemplateBuilder: params.optionHtmlTemplateBuilder,
           removeIcon: params.removeIcon,
+        },
+        validator,
+        unsubscribeSubject,
+      })
+    }
+
+    if (params.type === 'checkboxes') {
+      const validator = new MultiSelectFieldValidator({
+        required: params.required,
+        validators: params.validators,
+      })
+      const nonValidatedValueState = {
+        value: params.value ?? [],
+        enabled: params.enabled ?? true,
+        options: params.options,
+        indexes: params.indexes ?? [],
+      }
+      controller = new CheckboxesFieldController({
+        valueState: new MultiSelectFieldValueState(
+          nonValidatedValueState,
+          validator,
+        ),
+        uiState: {
+          touched: false,
+          htmlElement: null,
+          label: params.label,
+          optionHtmlTemplateBuilder: params.optionHtmlTemplateBuilder,
         },
         validator,
         unsubscribeSubject,
