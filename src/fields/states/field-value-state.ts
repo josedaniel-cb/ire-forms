@@ -47,8 +47,8 @@ export class FieldValueStateBuilder {
   }): V {
     const valueStateProxy = new Proxy<V>(valueState, {
       set: (target: V, property: symbol | string, newValue: V[keyof V]) => {
-        if (property === 'validation') {
-          console.warn('You cannot set validation directly')
+        if (property === 'validationResult') {
+          console.warn('You cannot set validationResult directly')
           return false
         }
 

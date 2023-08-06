@@ -71,8 +71,12 @@ export class IreMultiSelectElement extends FieldElement {
           return html`
             <div class="chip">
               ${this.#renderLabel(option)}
-              <span class="remove-icon" @click=${() =>
-                this.#removeValueByOption(option)}>x</span>
+              <span
+                class="remove-icon"
+                @click=${() => this.#removeValueByOption(option)}
+              >
+                <i class="bi bi-x-circle-fill"></i>
+              </span>
             </div>
           `
         })}

@@ -67,7 +67,7 @@ export class IreFormElement extends LitElement {
 
   override render() {
     return html`
-      ${renderStyleSheetLinks(FormBuilder.config.stylesheets)}
+      ${renderStyleSheetLinks(FormBuilder.uiConfig.stylesheets)}
       <form>
         ${
           this.controller !== undefined

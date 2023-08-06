@@ -14,7 +14,7 @@ export abstract class FieldElement extends LitElement {
 
   override render() {
     return html`
-      ${renderStyleSheetLinks(FormBuilder.config.stylesheets)}
+      ${renderStyleSheetLinks(FormBuilder.uiConfig.stylesheets)}
       ${this._renderLabel()}
       ${this._renderField()}
     `

@@ -15,9 +15,9 @@ import {
 } from './form-build-definition'
 import { Subject } from 'rxjs'
 
-type FormBuilderConfig = {
-  stylesheets: string[]
-}
+// type FormBuilderConfig = {
+//   stylesheets: string[]
+// }
 
 export class FormBuilder {
   static readonly uiConfig = FormBuilderUI.default()
@@ -84,20 +84,20 @@ export class FormBuilder {
     }
   }
 
-  static #config: FormBuilderConfig = {
-    stylesheets: [],
-  }
+  // static #config: FormBuilderConfig = {
+  //   stylesheets: [],
+  // }
 
-  static get config() {
-    return FormBuilder.#config
-  }
+  // static get config() {
+  //   return FormBuilder.#config
+  // }
 
-  static patchConfig(config: Partial<FormBuilderConfig>) {
-    // FormBuilder.#settings = settings
-    Object.entries(config).forEach(([key, value]) => {
-      if (key in FormBuilder.#config) {
-        FormBuilder.#config[key as keyof FormBuilderConfig] = value
-      }
-    })
-  }
+  // static patchConfig(config: Partial<FormBuilderConfig>) {
+  //   // FormBuilder.#settings = settings
+  //   Object.entries(config).forEach(([key, value]) => {
+  //     if (key in FormBuilder.#config) {
+  //       FormBuilder.#config[key as keyof FormBuilderConfig] = value
+  //     }
+  //   })
+  // }
 }

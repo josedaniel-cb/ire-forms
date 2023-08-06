@@ -69,12 +69,12 @@ export class MultiSelectFieldValueState<T extends NonNullable<unknown>>
   get indexes() {
     return this._indexes
   }
+
   set indexes(indexes: number[] | null) {
     if (indexes == null) {
       this.#setEmpty()
       return
     }
-    // const sortedIndexes = indexes.sort()
     for (const i of indexes) {
       if (i < 0 || i >= this._options.length) {
         this.#setEmpty()
@@ -116,13 +116,6 @@ export class MultiSelectFieldValueState<T extends NonNullable<unknown>>
     this._value = []
   }
 
-  getSelectedOptions(): SelectOption<T>[] {
-    if (this._indexes === null) {
-      return []
-    }
-    return this._indexes.map((i) => this._options[i])
-  }
-
   toJsonSerializable(): {
     options: SelectOption<T>[]
     indexes: number[] | null
@@ -140,7 +133,6 @@ export class MultiSelectFieldValueState<T extends NonNullable<unknown>>
   }
 }
 
-// export type MultiSelectFieldUIState = FieldUIState<IreMultiSelectElement>
 export interface MultiSelectFieldUIState<T>
   extends FieldUIState<IreMultiSelectElement> {
   optionHtmlTemplateBuilder?: (option: SelectOption<T>) => HTMLTemplateResult
@@ -152,15 +144,6 @@ export type MultiSelectField<T extends NonNullable<unknown>> = Field<
   IreMultiSelectElement,
   MultiSelectFieldUIState<T>
 >
-// export interface MultiSelectField<T extends NonNullable<unknown>>
-//   extends Field<
-//     T[],
-//     MultiSelectFieldValueState<T>,
-//     IreMultiSelectElement,
-//     MultiSelectFieldUIState
-//   > {
-//   optionHtmlTemplateBuilder?: (option: SelectOption<T>) => HTMLTemplateResult
-// }
 
 export class MultiSelectFieldController<
   T extends NonNullable<unknown>,
