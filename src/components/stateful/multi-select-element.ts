@@ -4,8 +4,8 @@ import {
   MultiSelectFieldValueState,
   SelectOption,
 } from '../../fields/controllers/multi-select-controller'
+import { multiSelectElementCss } from '../css/multi-select-element-css'
 import { FieldElement } from './base/field-element'
-import { multiSelectElementCss } from './multi-select-element-css'
 import { HTMLTemplateResult, css, html } from 'lit'
 import { customElement, property, query, state } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'
