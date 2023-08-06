@@ -1,3 +1,4 @@
+import { Icon } from '../../components/icons/icon'
 import { IreMultiSelectElement } from '../../components/stateful/multi-select-element'
 import { FieldDefinition } from '../definition/field-definition'
 import { FieldMultiPatch } from '../states/field-multi-patch'
@@ -135,7 +136,11 @@ export class MultiSelectFieldValueState<T extends NonNullable<unknown>>
 
 export interface MultiSelectFieldUIState<T>
   extends FieldUIState<IreMultiSelectElement> {
-  optionHtmlTemplateBuilder?: (option: SelectOption<T>) => HTMLTemplateResult
+  removeIcon?: Icon
+  optionHtmlTemplateBuilder?: (
+    option: SelectOption<T>,
+    index: number,
+  ) => HTMLTemplateResult
 }
 
 export type MultiSelectField<T extends NonNullable<unknown>> = Field<

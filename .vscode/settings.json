@@ -6,7 +6,7 @@
   "[json]": {
     "editor.defaultFormatter": "rome.rome"
   },
-  "conventionalCommits.scopes": ["ui", "form", "fields"],
+  "conventionalCommits.scopes": [],
   "editor.codeActionsOnSave": {
     "source.organizeImports.rome": true
   }

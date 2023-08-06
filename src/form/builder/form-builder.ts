@@ -2,7 +2,7 @@ import { FieldBuilder } from '../../fields/builder/field-builder'
 import { MultiSelectFieldDefinition } from '../../fields/controllers/multi-select-controller'
 import { SelectFieldDefinition } from '../../fields/controllers/select-controller'
 import { TextFieldDefinition } from '../../fields/controllers/text-controller'
-import { FormBuilderUI } from '../../form-ui/form-builder-ui'
+// import { FormBuilderUI } from '../../form-ui/form-builder-ui'
 import {
   Form,
   FormController,
@@ -20,7 +20,7 @@ import { Subject } from 'rxjs'
 // }
 
 export class FormBuilder {
-  static readonly uiConfig = FormBuilderUI.default()
+  // static readonly uiConfig = FormBuilderUI.default()
 
   static #build<T extends FormDefinition>(
     definition: FormBuildDefinition<T>,

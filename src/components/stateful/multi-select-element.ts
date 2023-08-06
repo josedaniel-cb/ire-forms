@@ -10,7 +10,9 @@ import { HTMLTemplateResult, css, html } from 'lit'
 import { customElement, property, query, state } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'
 
+import { Icon } from '../icons/icon'
 import 'last-icon'
+import { ifDefined } from 'lit/directives/if-defined.js'
 
 // rome-ignore lint/suspicious/noExplicitAny: any is required here
 type Option = SelectOption<any>
@@ -62,6 +64,8 @@ export class IreMultiSelectElement extends FieldElement {
     const errorMessage =
       this.#valueState?.validationResult.errorMessage ?? undefined
 
+    const icon = this.#uiState?.removeIcon ?? Icon.bootstrap('x-circle-fill')
+
     return html`
       <div class="container">
         ${this.#valueState?.indexes?.map((i) => {
@@ -72,12 +76,16 @@ export class IreMultiSelectElement extends FieldElement {
           // Add classMap to conditionally apply 'highlighted' class to the selected option
           return html`
             <div class="chip">
-              ${this.#renderLabel(option)}
+              ${this.#renderLabel(option, i)}
               <div
                 class="remove-icon"
                 @click=${() => this.#removeValueByOption(option)}
               >
-                <l-i set="bs" name="x-circle-fill"></l-i>
+                <l-i
+                  set="${icon.set}"
+                  name="${icon.name}"
+                  type="${ifDefined(icon.type)}"
+                ></l-i>
               </div>
             </div>
           `
@@ -109,9 +117,9 @@ export class IreMultiSelectElement extends FieldElement {
     `
   }
 
-  #renderLabel(option: Option) {
+  #renderLabel(option: Option, index: number) {
     if (this.#uiState?.optionHtmlTemplateBuilder) {
-      return this.#uiState?.optionHtmlTemplateBuilder(option)
+      return this.#uiState?.optionHtmlTemplateBuilder(option, index)
     }
     return option.label
   }
@@ -157,7 +165,7 @@ export class IreMultiSelectElement extends FieldElement {
               this._highlightedOptionIndex = i
             }}
           >
-            ${this.#renderLabel(option)}
+            ${this.#renderLabel(option, i)}
           </div>
         `
         })}

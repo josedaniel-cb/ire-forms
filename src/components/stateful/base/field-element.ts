@@ -1,9 +1,9 @@
 import { FieldController } from '../../../fields/controllers/field-controller'
-import { FormBuilder } from '../../../form/builder/form-builder'
+// import { FormBuilder } from '../../../form/builder/form-builder'
 import { baseCss } from '../../css/base-css'
 import { layoutsCss } from '../../css/layout-css'
 import { mosaicCss } from '../../css/mosaic-css'
-import { renderStyleSheetLinks } from '../../stateless/external-style-sheets'
+// import { renderStyleSheetLinks } from '../../stateless/external-style-sheets'
 import { HTMLTemplateResult, LitElement, html } from 'lit'
 
 export abstract class FieldElement extends LitElement {
@@ -13,8 +13,8 @@ export abstract class FieldElement extends LitElement {
   controller!: FieldController<any, any, any, any>
 
   override render() {
+    // ${renderStyleSheetLinks(FormBuilder.uiConfig.stylesheets)}
     return html`
-      ${renderStyleSheetLinks(FormBuilder.uiConfig.stylesheets)}
       ${this._renderLabel()}
       ${this._renderField()}
     `
