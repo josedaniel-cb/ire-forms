@@ -1,13 +1,9 @@
 import { FormDefinitionLeaf } from '../../form/definition/form-definition'
-import { FieldController } from '../controllers/field-controller'
-import {
-  MultiSelectFieldController,
-  MultiSelectFieldValueState,
-} from '../controllers/multi-select-controller'
-import {
-  SelectFieldController,
-  SelectFieldValueState,
-} from '../controllers/select-controller'
+import { FieldController } from '../controllers/base/field-controller'
+import { ChipsFieldController } from '../controllers/chips-controller'
+import { MultiSelectFieldValueState } from '../controllers/multi-select/multi-select-value-state'
+import { SelectFieldController } from '../controllers/native-select-controller'
+import { SelectFieldValueState } from '../controllers/select/select-value-state'
 import { TextFieldController } from '../controllers/text-controller'
 import { FieldUIState } from '../states/field-ui-state'
 import { FieldValueState } from '../states/field-value-state'
@@ -98,7 +94,7 @@ export class FieldBuilder {
         options: params.options,
         indexes: params.indexes ?? [],
       }
-      controller = new MultiSelectFieldController({
+      controller = new ChipsFieldController({
         valueState: new MultiSelectFieldValueState(
           nonValidatedValueState,
           validator,

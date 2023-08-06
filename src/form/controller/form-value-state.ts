@@ -1,11 +1,7 @@
-import {
-  MultiSelectFieldDefinition,
-  MultiSelectFieldValueState,
-} from '../../fields/controllers/multi-select-controller'
-import {
-  SelectFieldDefinition,
-  SelectFieldValueState,
-} from '../../fields/controllers/select-controller'
+import { ChipsFieldDefinition } from '../../fields/controllers/chips-controller'
+import { MultiSelectFieldValueState } from '../../fields/controllers/multi-select/multi-select-value-state'
+import { SelectFieldDefinition } from '../../fields/controllers/native-select-controller'
+import { SelectFieldValueState } from '../../fields/controllers/select/select-value-state'
 import {
   TextFieldDefinition,
   TextFieldValueState,
@@ -17,7 +13,7 @@ export type FormValueState<T extends FormDefinition> = {
     ? TextFieldValueState
     : T['fields'][K] extends SelectFieldDefinition<infer R>
     ? SelectFieldValueState<R>
-    : T['fields'][K] extends MultiSelectFieldDefinition<infer R>
+    : T['fields'][K] extends ChipsFieldDefinition<infer R>
     ? MultiSelectFieldValueState<R>
     : T['fields'][K] extends FormDefinition
     ? FormValueState<T['fields'][K]>

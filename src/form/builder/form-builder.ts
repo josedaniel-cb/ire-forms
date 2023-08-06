@@ -1,6 +1,6 @@
 import { FieldBuilder } from '../../fields/builder/field-builder'
-import { MultiSelectFieldDefinition } from '../../fields/controllers/multi-select-controller'
-import { SelectFieldDefinition } from '../../fields/controllers/select-controller'
+import { ChipsFieldDefinition } from '../../fields/controllers/chips-controller'
+import { SelectFieldDefinition } from '../../fields/controllers/native-select-controller'
 import { TextFieldDefinition } from '../../fields/controllers/text-controller'
 // import { FormBuilderUI } from '../../form-ui/form-builder-ui'
 import {
@@ -76,8 +76,8 @@ export class FormBuilder {
   }
 
   static multiSelect<T extends NonNullable<unknown>>(
-    builderParams: Omit<MultiSelectFieldDefinition<T>, 'type'>,
-  ): MultiSelectFieldDefinition<T> {
+    builderParams: Omit<ChipsFieldDefinition<T>, 'type'>,
+  ): ChipsFieldDefinition<T> {
     return {
       ...builderParams,
       type: 'multi-select',

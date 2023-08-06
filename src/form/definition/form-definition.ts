@@ -1,5 +1,5 @@
-import { MultiSelectFieldDefinition } from '../../fields/controllers/multi-select-controller'
-import { SelectFieldDefinition } from '../../fields/controllers/select-controller'
+import { ChipsFieldDefinition } from '../../fields/controllers/chips-controller'
+import { SelectFieldDefinition } from '../../fields/controllers/native-select-controller'
 import { TextFieldDefinition } from '../../fields/controllers/text-controller'
 
 export type FormDefinition = {
@@ -13,4 +13,4 @@ export type FormDefinitionLeaf =
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
   | SelectFieldDefinition<any>
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
-  | MultiSelectFieldDefinition<any>
+  | ChipsFieldDefinition<any>

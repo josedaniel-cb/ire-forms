@@ -1,13 +1,13 @@
 import {
-  MultiSelectField,
-  MultiSelectFieldDefinition,
-  MultiSelectFieldMultiPatch,
-} from '../../fields/controllers/multi-select-controller'
+  ChipsField,
+  ChipsFieldDefinition,
+  ChipsFieldMultiPatch,
+} from '../../fields/controllers/chips-controller'
 import {
   SelectField,
   SelectFieldDefinition,
   SelectFieldMultiPatch,
-} from '../../fields/controllers/select-controller'
+} from '../../fields/controllers/native-select-controller'
 import {
   TextField,
   TextFieldDefinition,
@@ -20,8 +20,8 @@ export type FormFields<T extends FormDefinition> = {
     ? TextField
     : T['fields'][K] extends SelectFieldDefinition<infer R>
     ? SelectField<R>
-    : T['fields'][K] extends MultiSelectFieldDefinition<infer R>
-    ? MultiSelectField<R>
+    : T['fields'][K] extends ChipsFieldDefinition<infer R>
+    ? ChipsField<R>
     : T['fields'][K] extends FormDefinition
     ? FormFields<T['fields'][K]> //  ?  FormProps<T['fields'][K]>
     : never
@@ -32,8 +32,8 @@ export type FormFieldsPatch<T extends FormDefinition> = {
     ? TextFieldMultiPatch
     : T['fields'][K] extends SelectFieldDefinition<infer R>
     ? SelectFieldMultiPatch<R>
-    : T['fields'][K] extends MultiSelectFieldDefinition<infer R>
-    ? MultiSelectFieldMultiPatch<R>
+    : T['fields'][K] extends ChipsFieldDefinition<infer R>
+    ? ChipsFieldMultiPatch<R>
     : T['fields'][K] extends FormDefinition
     ? FormFieldsPatch<T['fields'][K]>
     : never

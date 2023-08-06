@@ -3,7 +3,7 @@ import { FieldDefinition } from '../definition/field-definition'
 import { FieldMultiPatch } from '../states/field-multi-patch'
 import { FieldUIState } from '../states/field-ui-state'
 import { FieldValueState } from '../states/field-value-state'
-import { Field, FieldController } from './field-controller'
+import { Field, FieldController } from './base/field-controller'
 
 export type TextFieldValueState = FieldValueState<string>
 

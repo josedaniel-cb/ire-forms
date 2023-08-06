@@ -1,4 +1,4 @@
-import { FieldController } from '../../fields/controllers/field-controller'
+import { FieldController } from '../../fields/controllers/base/field-controller'
 import { TextFieldController } from '../../fields/controllers/text-controller'
 import { FormUILayouts } from '../../form-ui/form-ui-layout'
 import { FormBuilder } from '../../form/builder/form-builder'
@@ -34,8 +34,8 @@ import { ifDefined } from 'lit/directives/if-defined.js'
 // import { layoutsCss } from '../styles/css/layouts-css'
 // import { FormConfig } from '../../core/config'
 
-import { MultiSelectFieldController } from '../../fields/controllers/multi-select-controller'
-import { SelectFieldController } from '../../fields/controllers/select-controller'
+import { ChipsFieldController } from '../../fields/controllers/chips-controller'
+import { SelectFieldController } from '../../fields/controllers/native-select-controller'
 import { mosaicCss } from '../css/mosaic-css'
 import './input-element'
 import './multi-select-element'
@@ -152,7 +152,7 @@ export class IreFormElement extends LitElement {
     //     <ire-custom-select .controller=${controller}></ire-custom-select>
     //   `
 
-    if (fieldController instanceof MultiSelectFieldController) {
+    if (fieldController instanceof ChipsFieldController) {
       template = html`
         <ire-multi-select .controller=${fieldController}></ire-multi-select>
       `

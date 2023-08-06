@@ -1,8 +1,5 @@
-import { MultiSelectFieldDefinition } from '../../fields/controllers/multi-select-controller'
-import {
-  SelectFieldDefinition,
-  SelectFieldValueState,
-} from '../../fields/controllers/select-controller'
+import { ChipsFieldDefinition } from '../../fields/controllers/chips-controller'
+import { SelectFieldDefinition } from '../../fields/controllers/native-select-controller'
 import { TextFieldDefinition } from '../../fields/controllers/text-controller'
 import { FormDefinition } from '../definition/form-definition'
 import { FormValueState } from './form-value-state'
@@ -12,7 +9,7 @@ export type FormValue<T extends FormDefinition> = {
     ? string
     : T['fields'][K] extends SelectFieldDefinition<infer R>
     ? R | null
-    : T['fields'][K] extends MultiSelectFieldDefinition<infer R>
+    : T['fields'][K] extends ChipsFieldDefinition<infer R>
     ? R[]
     : T['fields'][K] extends FormDefinition
     ? FormValue<T['fields'][K]>
@@ -24,7 +21,7 @@ export type FormValuePatch<T extends FormDefinition> = {
     ? string
     : T['fields'][K] extends SelectFieldDefinition<infer R>
     ? R | null
-    : T['fields'][K] extends MultiSelectFieldDefinition<infer R>
+    : T['fields'][K] extends ChipsFieldDefinition<infer R>
     ? R[]
     : T['fields'][K] extends FormDefinition
     ? FormValuePatch<T['fields'][K]>

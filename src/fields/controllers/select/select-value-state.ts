@@ -1,11 +1,6 @@
-import { IreSelectElement } from '../../components/stateful/select-element'
-import { FieldDefinition } from '../definition/field-definition'
-import { FieldMultiPatch } from '../states/field-multi-patch'
-import { FieldUIState } from '../states/field-ui-state'
-import { FieldValueState } from '../states/field-value-state'
-import { FieldValidationResult } from '../validators/field-validator'
-import { SelectFieldValidator } from '../validators/select-validator'
-import { Field, FieldController } from './field-controller'
+import { FieldValueState } from '../../states/field-value-state'
+import { FieldValidationResult } from '../../validators/field-validator'
+import { SelectFieldValidator } from '../../validators/select-validator'
 
 export class SelectFieldValueState<T extends NonNullable<unknown>>
   implements FieldValueState<T | null>
@@ -116,40 +111,3 @@ export class SelectFieldValueState<T extends NonNullable<unknown>>
     }
   }
 }
-
-export interface SelectFieldUIState extends FieldUIState<IreSelectElement> {
-  placeholder: string | null
-}
-
-export type SelectField<T extends NonNullable<unknown>> = Field<
-  T | null,
-  SelectFieldValueState<T>,
-  IreSelectElement,
-  SelectFieldUIState
->
-
-export class SelectFieldController<
-  T extends NonNullable<unknown>,
-> extends FieldController<
-  T | null,
-  SelectFieldValueState<T>,
-  IreSelectElement,
-  SelectFieldUIState
-> {}
-
-export type SelectFieldDefinition<T extends NonNullable<unknown>> =
-  FieldDefinition<
-    T | null,
-    'select',
-    SelectFieldValueState<T>,
-    IreSelectElement,
-    SelectFieldUIState
-  >
-
-export type SelectFieldMultiPatch<T extends NonNullable<unknown>> =
-  FieldMultiPatch<
-    T | null,
-    SelectFieldValueState<T>,
-    IreSelectElement,
-    SelectFieldUIState
-  >

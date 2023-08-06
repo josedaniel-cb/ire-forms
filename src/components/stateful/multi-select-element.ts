@@ -1,15 +1,17 @@
 import {
-  MultiSelectFieldController,
-  MultiSelectFieldUIState,
-  MultiSelectFieldValueState,
-  SelectOption,
-} from '../../fields/controllers/multi-select-controller'
+  ChipsFieldController,
+  ChipsFieldUIState,
+} from '../../fields/controllers/chips-controller'
 import { multiSelectElementCss } from '../css/multi-select-element-css'
 import { FieldElement } from './base/field-element'
 import { HTMLTemplateResult, css, html } from 'lit'
 import { customElement, property, query, state } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'
 
+import {
+  MultiSelectFieldValueState,
+  SelectOption,
+} from '../../fields/controllers/multi-select/multi-select-value-state'
 import { Icon } from '../icons/icon'
 import 'last-icon'
 import { ifDefined } from 'lit/directives/if-defined.js'
@@ -26,13 +28,13 @@ export class IreMultiSelectElement extends FieldElement {
 
   @property({ attribute: false })
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
-  override controller!: MultiSelectFieldController<any>
+  override controller!: ChipsFieldController<any>
 
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
   #valueState?: MultiSelectFieldValueState<any>
 
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
-  #uiState?: MultiSelectFieldUIState<any>
+  #uiState?: ChipsFieldUIState<any>
 
   @state()
   private _isInputFocused = false

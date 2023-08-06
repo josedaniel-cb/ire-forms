@@ -1,7 +1,7 @@
 import {
   Field,
   FieldController,
-} from '../../fields/controllers/field-controller'
+} from '../../fields/controllers/base/field-controller'
 import { FormNodeUI } from '../../form-ui/form-node-ui'
 import { FormDefinition } from '../definition/form-definition'
 import { FormFields, FormFieldsPatch } from './form-fields'

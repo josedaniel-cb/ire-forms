@@ -1,5 +1,5 @@
 import { FieldElement } from '../../components/stateful/base/field-element'
-import { Field } from '../controllers/field-controller'
+import { Field } from '../controllers/base/field-controller'
 import { FieldUIState } from '../states/field-ui-state'
 import {
   ExternalFieldValueState,

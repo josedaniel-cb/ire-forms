@@ -1,8 +1,8 @@
 import {
   SelectFieldController,
   SelectFieldUIState,
-  SelectFieldValueState,
-} from '../../fields/controllers/select-controller'
+} from '../../fields/controllers/native-select-controller'
+import { SelectFieldValueState } from '../../fields/controllers/select/select-value-state'
 import { FieldElement } from './base/field-element'
 import { HTMLTemplateResult, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'

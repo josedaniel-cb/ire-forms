@@ -1,13 +1,7 @@
-import { Icon } from '../../components/icons/icon'
-import { IreMultiSelectElement } from '../../components/stateful/multi-select-element'
-import { FieldDefinition } from '../definition/field-definition'
-import { FieldMultiPatch } from '../states/field-multi-patch'
-import { FieldUIState } from '../states/field-ui-state'
-import { FieldValueState } from '../states/field-value-state'
-import { FieldValidationResult } from '../validators/field-validator'
-import { MultiSelectFieldValidator } from '../validators/multi-select-validator'
-import { Field, FieldController } from './field-controller'
-import { HTMLTemplateResult } from 'lit'
+import { FieldDefinition } from '../../definition/field-definition'
+import { FieldValueState } from '../../states/field-value-state'
+import { FieldValidationResult } from '../../validators/field-validator'
+import { MultiSelectFieldValidator } from '../../validators/multi-select-validator'
 
 export type SelectOption<T> = { label: string; value: T }
 
@@ -133,45 +127,3 @@ export class MultiSelectFieldValueState<T extends NonNullable<unknown>>
     }
   }
 }
-
-export interface MultiSelectFieldUIState<T>
-  extends FieldUIState<IreMultiSelectElement> {
-  removeIcon?: Icon
-  optionHtmlTemplateBuilder?: (
-    option: SelectOption<T>,
-    index: number,
-  ) => HTMLTemplateResult
-}
-
-export type MultiSelectField<T extends NonNullable<unknown>> = Field<
-  T[],
-  MultiSelectFieldValueState<T>,
-  IreMultiSelectElement,
-  MultiSelectFieldUIState<T>
->
-
-export class MultiSelectFieldController<
-  T extends NonNullable<unknown>,
-> extends FieldController<
-  T[],
-  MultiSelectFieldValueState<T>,
-  IreMultiSelectElement,
-  MultiSelectFieldUIState<T>
-> {}
-
-export type MultiSelectFieldDefinition<T extends NonNullable<unknown>> =
-  FieldDefinition<
-    T[],
-    'multi-select',
-    MultiSelectFieldValueState<T>,
-    IreMultiSelectElement,
-    MultiSelectFieldUIState<T>
-  >
-
-export type MultiSelectFieldMultiPatch<T extends NonNullable<unknown>> =
-  FieldMultiPatch<
-    T[],
-    MultiSelectFieldValueState<T>,
-    IreMultiSelectElement,
-    MultiSelectFieldUIState<T>
-  >

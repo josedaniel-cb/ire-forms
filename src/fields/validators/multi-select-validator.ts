@@ -1,4 +1,4 @@
-import { MultiSelectFieldValueState } from '../controllers/multi-select-controller'
+import { MultiSelectFieldValueState } from '../controllers/multi-select/multi-select-value-state'
 import { NonValidatedFieldValueState } from '../states/field-value-state'
 import { FieldValidationResult, FieldValidator } from './field-validator'
 

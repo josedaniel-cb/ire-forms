@@ -2,8 +2,8 @@ import './components/stateful/form-element'
 import { IreInputElement } from './components/stateful/input-element'
 import { IreMultiSelectElement } from './components/stateful/multi-select-element'
 import { IreSelectElement } from './components/stateful/select-element'
-import { MultiSelectField } from './fields/controllers/multi-select-controller'
-import { SelectField } from './fields/controllers/select-controller'
+import { ChipsField } from './fields/controllers/chips-controller'
+import { SelectField } from './fields/controllers/native-select-controller'
 import { TextField } from './fields/controllers/text-controller'
 import { FormBuilder } from './form/builder/form-builder'
 import { Form } from './form/controller/form-controller'
@@ -33,8 +33,8 @@ export type {
   //   TextArea,
   TextField,
   IreInputElement,
-  SelectField,
+  SelectField as SelectField,
   IreSelectElement,
-  MultiSelectField,
+  ChipsField as MultiSelectField,
   IreMultiSelectElement,
 }

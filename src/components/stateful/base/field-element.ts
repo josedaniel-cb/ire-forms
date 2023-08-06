@@ -1,4 +1,4 @@
-import { FieldController } from '../../../fields/controllers/field-controller'
+import { FieldController } from '../../../fields/controllers/base/field-controller'
 // import { FormBuilder } from '../../../form/builder/form-builder'
 import { baseCss } from '../../css/base-css'
 import { layoutsCss } from '../../css/layout-css'

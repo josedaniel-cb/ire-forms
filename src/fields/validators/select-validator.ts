@@ -1,4 +1,4 @@
-import { SelectFieldValueState } from '../controllers/select-controller'
+import { SelectFieldValueState } from '../controllers/select/select-value-state'
 import { NonValidatedFieldValueState } from '../states/field-value-state'
 import { FieldValidationResult, FieldValidator } from './field-validator'
 
