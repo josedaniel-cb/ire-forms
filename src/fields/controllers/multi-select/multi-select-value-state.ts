@@ -1,6 +1,6 @@
 import { FieldDefinition } from '../../definition/field-definition'
 import { FieldValueState } from '../../states/field-value-state'
-import { FieldValidationResult } from '../../validators/field-validator'
+import { FieldValidationResult } from '../../validators/base/field-validator'
 import { MultiSelectFieldValidator } from '../../validators/multi-select-validator'
 
 export type SelectOption<T> = { label: string; value: T }

@@ -1,6 +1,6 @@
 import { SelectFieldValueState } from '../controllers/select/select-value-state'
 import { NonValidatedFieldValueState } from '../states/field-value-state'
-import { FieldValidationResult, FieldValidator } from './field-validator'
+import { FieldValidationResult, FieldValidator } from './base/field-validator'
 
 export class SelectFieldValidator<
   T extends NonNullable<unknown>,

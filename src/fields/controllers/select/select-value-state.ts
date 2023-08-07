@@ -1,5 +1,5 @@
 import { FieldValueState } from '../../states/field-value-state'
-import { FieldValidationResult } from '../../validators/field-validator'
+import { FieldValidationResult } from '../../validators/base/field-validator'
 import { SelectFieldValidator } from '../../validators/select-validator'
 
 export class SelectFieldValueState<T extends NonNullable<unknown>>

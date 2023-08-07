@@ -8,7 +8,7 @@ import {
 import {
   FieldValidationFn,
   FieldValidationResult,
-} from '../validators/field-validator'
+} from '../validators/base/field-validator'
 import { FieldType } from './field-type'
 
 type NullableKeys<T> = {
