@@ -97,7 +97,7 @@ export class IreCheckboxesElement extends FieldElement {
                 for="${i}"
                 class="form-check-label"
               >
-                ${option.label}
+                ${this.#renderLabel(option, i)}
               </label>
             </div>
           `
@@ -162,6 +162,13 @@ export class IreCheckboxesElement extends FieldElement {
     //       : undefined
     //   }
     // `
+  }
+
+  #renderLabel(option: Option, index: number) {
+    if (this.#uiState?.optionHtmlTemplateBuilder) {
+      return this.#uiState.optionHtmlTemplateBuilder(option, index)
+    }
+    return option.label
   }
 
   #handleInput(_: number): void {
