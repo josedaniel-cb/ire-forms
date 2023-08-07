@@ -114,7 +114,7 @@ export class FieldBuilder {
 
     if (params.type === 'checkboxes') {
       const validator = new MultiSelectFieldValidator({
-        required: params.required,
+        required: params.required ?? false,
         validators: params.validators,
       })
       const nonValidatedValueState = {
@@ -132,6 +132,7 @@ export class FieldBuilder {
           touched: false,
           htmlElement: null,
           label: params.label,
+          layout: params.layout ?? null,
           optionHtmlTemplateBuilder: params.optionHtmlTemplateBuilder,
         },
         validator,

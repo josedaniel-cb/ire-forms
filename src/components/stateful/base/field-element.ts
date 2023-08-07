@@ -13,7 +13,6 @@ export abstract class FieldElement extends LitElement {
   controller!: FieldController<any, any, any, any>
 
   override render() {
-    // ${renderStyleSheetLinks(FormBuilder.uiConfig.stylesheets)}
     return html`
       ${this._renderLabel()}
       ${this._renderField()}

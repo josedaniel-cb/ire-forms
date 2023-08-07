@@ -2,16 +2,21 @@ import {
   CheckboxesFieldController,
   CheckboxesFieldUIState,
 } from '../../fields/controllers/checkboxes-controller'
-import { multiSelectElementCss } from '../css/multi-select-element-css'
 import { FieldElement } from './base/field-element'
 import { HTMLTemplateResult, css, html } from 'lit'
-import { customElement, property, query, state } from 'lit/decorators.js'
-import { classMap } from 'lit/directives/class-map.js'
+import {
+  customElement,
+  property,
+  query,
+  queryAll,
+  state,
+} from 'lit/decorators.js'
 
 import {
   MultiSelectFieldValueState,
   SelectOption,
 } from '../../fields/controllers/multi-select/multi-select-value-state'
+import { FormUILayouts } from '../../form-ui/form-ui-layout'
 // import { Icon } from '../icons/icon'
 import 'last-icon'
 import { ifDefined } from 'lit/directives/if-defined.js'
@@ -23,8 +28,8 @@ type Option = SelectOption<any>
 export class IreCheckboxesElement extends FieldElement {
   static override styles = [...FieldElement.styles, css``]
 
-  // @query('input')
-  // inputEl!: HTMLInputElement
+  @queryAll('input')
+  inputEls!: NodeListOf<HTMLInputElement>
 
   @property({ attribute: false })
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
@@ -72,8 +77,12 @@ export class IreCheckboxesElement extends FieldElement {
     const touched = this.#uiState?.touched ?? false
     const errorMessage =
       this.#valueState?.validationResult.errorMessage ?? undefined
+    const layout = this.#uiState?.layout ?? FormUILayouts.singleColumn
     return html`
-      <div>
+      <div
+        class=${layout.classes}
+        style="${layout.styles}"
+      >
         ${this.#valueState?.options.map((option, i) => {
           return html`
             <div class="form-check">
@@ -81,6 +90,8 @@ export class IreCheckboxesElement extends FieldElement {
                 id="${i}"
                 class="form-check-input"
                 type="checkbox"
+                @input=${() => this.#handleInput(i)}
+                @blur=${() => this.#handleBlur()}
               />
               <label
                 for="${i}"
@@ -151,6 +162,16 @@ export class IreCheckboxesElement extends FieldElement {
     //       : undefined
     //   }
     // `
+  }
+
+  #handleInput(_: number): void {
+    this.controller.valueState.indexes = [...this.inputEls]
+      .filter((el) => el.checked)
+      .map((el) => Number(el.id))
+  }
+
+  #handleBlur(): void {
+    this.controller.markAsTouched()
   }
 }
 

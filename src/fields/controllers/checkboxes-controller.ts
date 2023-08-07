@@ -1,4 +1,5 @@
 import { IreCheckboxesElement } from '../../components/stateful/checkboxes-element'
+import { FormUILayout } from '../../form-ui/form-ui-layout'
 import { FieldDefinition } from '../definition/field-definition'
 import { FieldMultiPatch } from '../states/field-multi-patch'
 import { FieldUIState } from '../states/field-ui-state'
@@ -11,6 +12,7 @@ import { HTMLTemplateResult } from 'lit'
 
 export interface CheckboxesFieldUIState<T>
   extends FieldUIState<IreCheckboxesElement> {
+  layout: FormUILayout | null
   optionHtmlTemplateBuilder?: (
     option: SelectOption<T>,
     index: number,
