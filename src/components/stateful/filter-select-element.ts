@@ -1,11 +1,4 @@
-import {
-  ChipsFieldController,
-  ChipsFieldUIState,
-} from '../../fields/controllers/chips-controller'
-import {
-  MultiSelectFieldValueState,
-  SelectOption,
-} from '../../fields/controllers/multi-select/multi-select-value-state'
+import { SelectOption } from '../../fields/controllers/multi-select/multi-select-value-state'
 import { multiSelectElementCss } from '../css/multi-select-element-css'
 import { Icon } from '../icons/icon'
 import { FieldElement } from './base/field-element'
@@ -13,13 +6,12 @@ import 'last-icon'
 import { HTMLTemplateResult, LitElement, css, html } from 'lit'
 import { customElement, property, query, state } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'
-import { ifDefined } from 'lit/directives/if-defined.js'
 
 // rome-ignore lint/suspicious/noExplicitAny: any is required here
 type Option = SelectOption<any>
 
-@customElement('ire-base-select')
-export class IreBaseSelectElement extends LitElement {
+@customElement('ire-filter-select')
+export class IreFilterSelectElement extends LitElement {
   static override styles = [...FieldElement.styles, multiSelectElementCss]
 
   // @property()
@@ -232,7 +224,7 @@ export class IreBaseSelectElement extends LitElement {
     // Get the number of options
     const numOptions = this.optionEntries.length ?? 0
     console.log(
-      '🚀 ~ file: base-select-element.ts:234 ~ IreBaseSelectElement ~ #highlightPreviousOption ~ numOptions:',
+      '🚀 ~ file: base-select-element.ts:234 ~ IreFilterSelectElement ~ #highlightPreviousOption ~ numOptions:',
       {
         numOptions,
         'this._highlightedOptionIndex': this._highlightedOptionIndex,
@@ -300,6 +292,6 @@ export class IreBaseSelectElement extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'ire-base-select': IreBaseSelectElement
+    'ire-filter-select': IreFilterSelectElement
   }
 }

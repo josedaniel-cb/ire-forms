@@ -8,9 +8,9 @@ import {
 } from '../../fields/controllers/multi-select/multi-select-value-state'
 import { multiSelectElementCss } from '../css/multi-select-element-css'
 import { Icon } from '../icons/icon'
-import './base-select-element'
-import { IreBaseSelectElement } from './base-select-element'
 import { FieldElement } from './base/field-element'
+import './filter-select-element'
+import { IreFilterSelectElement } from './filter-select-element'
 import 'last-icon'
 import { HTMLTemplateResult, css, html } from 'lit'
 import { customElement, property, query, state } from 'lit/decorators.js'
@@ -24,8 +24,8 @@ type Option = SelectOption<any>
 export class IreChipsElement extends FieldElement {
   static override styles = [...FieldElement.styles, multiSelectElementCss]
 
-  // @query('ire-base-select')
-  // inputEl!: IreBaseSelectElement
+  // @query('ire-filter-select')
+  // inputEl!: IreFilterSelectElement
   @state()
   inputValue = ''
 
@@ -77,7 +77,7 @@ export class IreChipsElement extends FieldElement {
         .filter(([i, _]) => !this.#valueState?.indexes?.includes(i)) ?? []
 
     return html`
-      <ire-base-select
+      <ire-filter-select
         .enabled=${this.#valueState?.enabled ?? true}
         .removeIcon=${icon}
         .optionHtmlTemplateBuilder=${this.#uiState?.optionHtmlTemplateBuilder}
@@ -121,7 +121,7 @@ export class IreChipsElement extends FieldElement {
             </div>
           `
         })}
-      </ire-base-select>
+      </ire-filter-select>
       ${
         touched && errorMessage !== undefined
           ? this._renderValidationMessage(errorMessage)
