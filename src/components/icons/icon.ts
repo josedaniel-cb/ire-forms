@@ -12,46 +12,46 @@ export class Icon {
   }
 
   static bootstrap(name: string): Icon {
-    return new Icon(IconSets.bootstrap, name)
+    return new Icon(IconSets.Bootstrap, name)
   }
 
   static boxicons(name: string, type?: 'solid' | 'regular' | 'logos'): Icon {
-    return new Icon(IconSets.boxicons, name, type)
+    return new Icon(IconSets.Boxicons, name, type)
   }
 
   static bytesize(name: string): Icon {
-    return new Icon(IconSets.bytesize, name)
+    return new Icon(IconSets.Bytesize, name)
   }
 
   static cssgg(name: string): Icon {
-    return new Icon(IconSets.cssgg, name)
+    return new Icon(IconSets.Cssgg, name)
   }
 
   static emojicc(name: string): Icon {
-    return new Icon(IconSets.emojicc, name)
+    return new Icon(IconSets.Emojicc, name)
   }
 
   static eos(name: string, type?: 'solid' | 'outlined' | 'animated'): Icon {
-    return new Icon(IconSets.eos, name, type)
+    return new Icon(IconSets.Eos, name, type)
   }
 
   static feather(name: string): Icon {
-    return new Icon(IconSets.feather, name)
+    return new Icon(IconSets.Feather, name)
   }
 
   static flags(name: string, type?: '4x3' | '1x1'): Icon {
-    return new Icon(IconSets.flags, name, type)
+    return new Icon(IconSets.Flags, name, type)
   }
 
   static fontawesome(
     name: string,
     type?: 'solid' | 'regular' | 'brands' | 'light' | 'duotone',
   ): Icon {
-    return new Icon(IconSets.fontawesome, name, type)
+    return new Icon(IconSets.Fontawesome, name, type)
   }
 
   static iconoir(name: string): Icon {
-    return new Icon(IconSets.iconoir, name)
+    return new Icon(IconSets.Iconoir, name)
   }
 
   static iconpark(
@@ -97,37 +97,37 @@ export class Icon {
       | 'Travel'
       | 'Weather',
   ): Icon {
-    return new Icon(IconSets.iconpark, name, type)
+    return new Icon(IconSets.Iconpark, name, type)
   }
 
   static lucide(name: string): Icon {
-    return new Icon(IconSets.lucide, name)
+    return new Icon(IconSets.Lucide, name)
   }
 
   static material(
     name: string,
     type?: 'filled' | 'outlined' | 'round' | 'sharp' | 'two-tone',
   ): Icon {
-    return new Icon(IconSets.material, name, type)
+    return new Icon(IconSets.Material, name, type)
   }
 
   static phosphor(
     name: string,
     type?: 'regular' | 'bold' | 'duotone' | 'fill' | 'light' | 'thin',
   ): Icon {
-    return new Icon(IconSets.phosphor, name, type)
+    return new Icon(IconSets.Phosphor, name, type)
   }
 
   static supertiny(name: string): Icon {
-    return new Icon(IconSets.supertiny, name)
+    return new Icon(IconSets.Supertiny, name)
   }
 
   static symbols(name: string, type?: 'outlined' | 'rounded' | 'sharp'): Icon {
-    return new Icon(IconSets.symbols, name, type)
+    return new Icon(IconSets.Symbols, name, type)
   }
 
   static tabler(name: string): Icon {
-    return new Icon(IconSets.tabler, name)
+    return new Icon(IconSets.Tabler, name)
   }
 }
 
