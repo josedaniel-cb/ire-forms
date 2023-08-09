@@ -1,7 +1,7 @@
-import { SelectOption } from '../../fields/controllers/multi-select/multi-select-value-state'
-import { multiSelectElementCss } from '../css/multi-select-element-css'
-import { Icon } from '../icons/icon'
-import { FieldElement } from './base/field-element'
+import { SelectOption } from '../../../fields/controllers/multi-select/multi-select-value-state'
+import { filterSelectElementCss } from '../../css/filter-select-element-css'
+import { Icon } from '../../icons/icon'
+import { FieldElement } from '../base/field-element'
 import 'last-icon'
 import { HTMLTemplateResult, LitElement, css, html } from 'lit'
 import { customElement, property, query, state } from 'lit/decorators.js'
@@ -12,10 +12,7 @@ type Option = SelectOption<any>
 
 @customElement('ire-filter-select')
 export class IreFilterSelectElement extends LitElement {
-  static override styles = [...FieldElement.styles, multiSelectElementCss]
-
-  // @property()
-  // touched = false
+  static override styles = [...FieldElement.styles, filterSelectElementCss]
 
   @property()
   enabled!: boolean
@@ -35,16 +32,6 @@ export class IreFilterSelectElement extends LitElement {
   @query('input')
   inputEl!: HTMLInputElement
 
-  // @property({ attribute: false })
-  // // rome-ignore lint/suspicious/noExplicitAny: any is required here
-  // override controller!: ChipsFieldController<any>
-
-  // // rome-ignore lint/suspicious/noExplicitAny: any is required here
-  // #valueState?: MultiSelectFieldValueState<any>
-
-  // // rome-ignore lint/suspicious/noExplicitAny: any is required here
-  // #uiState?: ChipsFieldUIState<any>
-
   @state()
   private _isInputFocused = false
 
@@ -53,22 +40,6 @@ export class IreFilterSelectElement extends LitElement {
 
   @state()
   private _highlightedOptionIndex = -1
-
-  // override firstUpdated(): void {
-  //   this.controller.connect(this)
-
-  //   // Subscribe to value and validation changes
-  //   this.controller.valueStateChanges.subscribe((state) => {
-  //     this.#valueState = state
-  //     this.requestUpdate()
-  //   })
-
-  //   // Subscribe to UI changes
-  //   this.controller.uiStateChanges.subscribe((state) => {
-  //     this.#uiState = state
-  //     this.requestUpdate()
-  //   })
-  // }
 
   override render(): HTMLTemplateResult {
     return html`
@@ -88,7 +59,6 @@ export class IreFilterSelectElement extends LitElement {
           }}
           @blur=${() => {
             this._isInputFocused = false
-            // this.controller.markAsTouched()
             this.dispatchEvent(new CustomEvent('inputblur'))
           }}
         />
@@ -109,11 +79,8 @@ export class IreFilterSelectElement extends LitElement {
       return html``
     }
 
-    // const selectedIndexes = this.#valueState?.indexes ?? []
-    // const allOptions = this.#valueState?.options ?? []
     const searchQuery = this.inputEl?.value ?? ''
     const availableOptionEntries = this.optionEntries.filter(([_, option]) => {
-      // const isSelected = selectedIndexes.includes(i)
       const matchWithFilter = option.label.toUpperCase().includes(searchQuery)
       return matchWithFilter
     })
@@ -175,17 +142,7 @@ export class IreFilterSelectElement extends LitElement {
     this._areFilteredOptionsFocused = false
   }
 
-  // #removeValueByOption(option: Option): void {
-  //   const newIndexes = this.#valueState?.indexes?.filter(
-  //     (index) => option !== this.#valueState?.options[index],
-  //   )
-  //   if (newIndexes) {
-  //     this.controller.valueState.indexes = newIndexes
-  //   }
-  // }
-
   #handleSearchInput(): void {
-    // this.requestUpdate()
     this.dispatchEvent(
       new CustomEvent('inputchange', {
         detail: {
@@ -223,25 +180,10 @@ export class IreFilterSelectElement extends LitElement {
   #highlightPreviousOption(): void {
     // Get the number of options
     const numOptions = this.optionEntries.length ?? 0
-    console.log(
-      '🚀 ~ file: base-select-element.ts:234 ~ IreFilterSelectElement ~ #highlightPreviousOption ~ numOptions:',
-      {
-        numOptions,
-        'this._highlightedOptionIndex': this._highlightedOptionIndex,
-      },
-    )
 
     // Decrement the index and wrap around if needed
     this._highlightedOptionIndex =
       (this._highlightedOptionIndex - 1 + numOptions) % numOptions
-
-    // // If the index points to an option that is disabled, decrement again
-    // while (this.#valueState?.indexes?.includes(this._highlightedOptionIndex)) {
-    // this._highlightedOptionIndex--
-    // if (this._highlightedOptionIndex < 0) {
-    //   this._highlightedOptionIndex = numOptions - 1
-    // }
-    // }
 
     // Scroll the option into view
     this.#scrollOptionIntoView()
@@ -254,14 +196,6 @@ export class IreFilterSelectElement extends LitElement {
     // Increment the index, and wrap around if necessary.
     this._highlightedOptionIndex =
       (this._highlightedOptionIndex + 1) % numOptions
-
-    // // If the option is hidden, skip it.
-    // while (
-    //   this.#valueState?.indexes?.includes(this._highlightedOptionIndex) &&
-    //   this._highlightedOptionIndex < numOptions - 1
-    // ) {
-    //   this._highlightedOptionIndex++
-    // }
 
     // Scroll the option into view.
     this.#scrollOptionIntoView()

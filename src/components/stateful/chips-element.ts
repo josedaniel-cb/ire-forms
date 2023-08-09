@@ -6,15 +6,13 @@ import {
   MultiSelectFieldValueState,
   SelectOption,
 } from '../../fields/controllers/multi-select/multi-select-value-state'
-import { multiSelectElementCss } from '../css/multi-select-element-css'
+import { filterSelectElementCss } from '../css/filter-select-element-css'
 import { Icon } from '../icons/icon'
 import { FieldElement } from './base/field-element'
-import './filter-select-element'
-import { IreFilterSelectElement } from './filter-select-element'
+import './components/filter-select-element'
 import 'last-icon'
 import { HTMLTemplateResult, css, html } from 'lit'
-import { customElement, property, query, state } from 'lit/decorators.js'
-import { classMap } from 'lit/directives/class-map.js'
+import { customElement, property, state } from 'lit/decorators.js'
 import { ifDefined } from 'lit/directives/if-defined.js'
 
 // rome-ignore lint/suspicious/noExplicitAny: any is required here
@@ -22,10 +20,52 @@ type Option = SelectOption<any>
 
 @customElement('ire-chips')
 export class IreChipsElement extends FieldElement {
-  static override styles = [...FieldElement.styles, multiSelectElementCss]
+  static override styles = [
+    ...FieldElement.styles,
+    css`
+      /* Styles for the chips of selected elements */
+      .chip {
+        display: flex;
+        align-items: center;
+        padding: 2px 8px;
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 16px;
+      }
 
-  // @query('ire-filter-select')
-  // inputEl!: IreFilterSelectElement
+      /* Styles for the "x" icon inside the chips */
+      .chip .remove-icon {
+        margin-left: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* https://www.npmjs.com/package/last-icon */
+      l-i {
+        --size: 1em;
+        display: inline-flex;
+        width: var(--size);
+        height: var(--size);
+        vertical-align: middle;
+      }
+
+      l-i svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      p l-i,
+      button l-i,
+      a l-i,
+      span l-i {
+        vertical-align: -0.125em;
+      }
+    `,
+  ]
+
   @state()
   inputValue = ''
 
@@ -38,15 +78,6 @@ export class IreChipsElement extends FieldElement {
 
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
   #uiState?: ChipsFieldUIState<any>
-
-  @state()
-  private _isInputFocused = false
-
-  @state()
-  private _areFilteredOptionsFocused = false
-
-  @state()
-  private _highlightedOptionIndex = -1
 
   override firstUpdated(): void {
     this.controller.connect(this)
@@ -71,7 +102,7 @@ export class IreChipsElement extends FieldElement {
 
     const icon = this.#uiState?.removeIcon ?? Icon.bootstrap('x-circle-fill')
 
-    const selectableOptionsAsEntries =
+    const availableOptionsAsEntries =
       this.#valueState?.options
         .map((option, i) => [i, option] as [number, Option])
         .filter(([i, _]) => !this.#valueState?.indexes?.includes(i)) ?? []
@@ -81,7 +112,7 @@ export class IreChipsElement extends FieldElement {
         .enabled=${this.#valueState?.enabled ?? true}
         .removeIcon=${icon}
         .optionHtmlTemplateBuilder=${this.#uiState?.optionHtmlTemplateBuilder}
-        .optionEntries=${selectableOptionsAsEntries}
+        .optionEntries=${availableOptionsAsEntries}
         @inputblur=${() => {
           this.controller.markAsTouched()
         }}
@@ -89,10 +120,6 @@ export class IreChipsElement extends FieldElement {
           this.inputValue = e.detail.value
         }}
         @optionselect=${(e: CustomEvent<{ option: Option; index: number }>) => {
-          // this.controller.valueState.value = [
-          //   ...(this.controller.valueState.value ?? []),
-          //   e.detail.option.value,
-          // ]
           this.controller.valueState.indexes = [
             ...(this.controller.valueState.indexes ?? []),
             e.detail.index,
@@ -128,56 +155,6 @@ export class IreChipsElement extends FieldElement {
           : undefined
       }
     `
-
-    // return html`
-    //   <div class="container">
-    //     ${this.#valueState?.indexes?.map((i) => {
-    //       const option = this.#valueState?.options[i]
-    //       if (!option) {
-    //         return
-    //       }
-    //       // Add classMap to conditionally apply 'highlighted' class to the selected option
-    //       return html`
-    //         <div class="chip">
-    //           ${this.#renderLabel(option, i)}
-    //           <div
-    //             class="remove-icon"
-    //             @click=${() => this.#removeValueByOption(option)}
-    //           >
-    //             <l-i
-    //               set="${icon.set}"
-    //               name="${icon.name}"
-    //               type="${ifDefined(icon.type)}"
-    //             ></l-i>
-    //           </div>
-    //         </div>
-    //       `
-    //     })}
-    //     <input
-    //       type="text"
-    //       placeholder="${'Search...'}"
-    //       ?disabled="${!this.#valueState?.enabled}"
-    //       @input=${this.#handleSearchInput}
-    //       @click=${() => {
-    //         this._isInputFocused = true
-    //       }}
-    //       @keydown=${this.#handleSearchKeydown}
-    //       @focus=${() => {
-    //         this._isInputFocused = true
-    //       }}
-    //       @blur=${() => {
-    //         this._isInputFocused = false
-    //         this.controller.markAsTouched()
-    //       }}
-    //     />
-    //     ${this.#renderFilteredOptions()}
-    //   </div>
-    //   ${
-    //     touched && errorMessage !== undefined
-    //       ? this._renderValidationMessage(errorMessage)
-    //       : undefined
-    //   }
-    // `
   }
 
   #renderLabel(option: Option, index: number) {
@@ -186,85 +163,6 @@ export class IreChipsElement extends FieldElement {
     }
     return option.label
   }
-
-  // #renderFilteredOptions(): HTMLTemplateResult {
-  //   if (!this._isInputFocused && !this._areFilteredOptionsFocused) {
-  //     return html``
-  //   }
-
-  //   const selectedIndexes = this.#valueState?.indexes ?? []
-  //   const allOptions = this.#valueState?.options ?? []
-  //   const searchQuery = this.inputEl?.value ?? ''
-  //   const availableOptionEntries = allOptions
-  //     .map<[number, Option]>((option, i) => [i, option])
-  //     .filter(([i, option]) => {
-  //       const isSelected = selectedIndexes.includes(i)
-  //       const matchWithFilter = option.label.toUpperCase().includes(searchQuery)
-  //       return !isSelected && matchWithFilter
-  //     })
-
-  //   return html`
-  //     <div
-  //       class="filtered-options"
-  //       @mousedown=${() => {
-  //         this._areFilteredOptionsFocused = true
-  //       }}
-  //       @focusout=${() => {
-  //         this._areFilteredOptionsFocused = false
-  //       }}
-  //     >
-  //       ${availableOptionEntries.map(([i, option]) => {
-  //         return html`
-  //         <div
-  //           class="option ${classMap({
-  //             highlighted: this._highlightedOptionIndex === i,
-  //           })}"
-  //           @mousedown=${(event: MouseEvent) => {
-  //             event.preventDefault()
-  //             event.stopPropagation()
-  //             this.#selectOptionByIndex(i)
-  //           }}
-  //           @mouseenter=${() => {
-  //             this._highlightedOptionIndex = i
-  //           }}
-  //         >
-  //           ${this.#renderLabel(option, i)}
-  //         </div>
-  //       `
-  //       })}
-  //       ${
-  //         availableOptionEntries.length === 0
-  //           ? html`
-  //             <div class="no-match">
-  //               ${
-  //                 selectedIndexes.length < allOptions.length
-  //                   ? 'No matches'
-  //                   : 'No options'
-  //               }
-  //             </div>
-  //           `
-  //           : undefined
-  //       }
-  //     </div>
-  //   `
-  // }
-
-  // #selectOptionByIndex(index: number): void {
-  //   const option = this.#valueState?.options[index]
-  //   if (option) {
-  //     this.controller.valueState.indexes = [
-  //       // Remove any indexes that are already in the array
-  //       ...(this.#valueState?.indexes?.filter((i) => index !== i) ?? []),
-  //       // Add the new index to the end of the array
-  //       index,
-  //     ]
-  //     this.inputEl.value = ''
-  //   }
-
-  //   this._isInputFocused = false
-  //   this._areFilteredOptionsFocused = false
-  // }
-
   #removeValueByOption(option: Option): void {
     const newIndexes = this.#valueState?.indexes?.filter(
       (index) => option !== this.#valueState?.options[index],
@@ -273,95 +171,6 @@ export class IreChipsElement extends FieldElement {
       this.controller.valueState.indexes = newIndexes
     }
   }
-
-  // #handleSearchInput(): void {
-  //   this.requestUpdate()
-  // }
-
-  // #handleSearchKeydown(event: KeyboardEvent) {
-  //   switch (event.key) {
-  //     case 'ArrowUp':
-  //       event.preventDefault()
-  //       this._isInputFocused = true
-  //       this.#highlightPreviousOption()
-  //       break
-  //     case 'ArrowDown':
-  //       event.preventDefault()
-  //       this._isInputFocused = true
-  //       this.#highlightNextOption()
-  //       break
-  //     case 'Enter':
-  //       event.preventDefault()
-  //       this.#selectOptionByIndex(this._highlightedOptionIndex)
-  //       break
-  //     case 'Escape':
-  //       event.preventDefault()
-  //       this._isInputFocused = false
-  //       break
-  //   }
-  // }
-
-  // #highlightPreviousOption(): void {
-  //   // Get the number of options
-  //   const numOptions = this.#valueState?.options.length ?? 0
-
-  //   // Decrement the index and wrap around if needed
-  //   this._highlightedOptionIndex =
-  //     (this._highlightedOptionIndex + numOptions - 1) % numOptions
-
-  //   // If the index points to an option that is disabled, decrement again
-  //   while (this.#valueState?.indexes?.includes(this._highlightedOptionIndex)) {
-  //     this._highlightedOptionIndex--
-  //     if (this._highlightedOptionIndex < 0) {
-  //       this._highlightedOptionIndex = numOptions - 1
-  //     }
-  //   }
-
-  //   // Scroll the option into view
-  //   this.#scrollOptionIntoView()
-  // }
-
-  // #highlightNextOption(): void {
-  //   // Get the number of options.
-  //   const numOptions = this.#valueState?.options.length ?? 0
-
-  //   // Increment the index, and wrap around if necessary.
-  //   this._highlightedOptionIndex =
-  //     (this._highlightedOptionIndex + 1) % numOptions
-
-  //   // If the option is hidden, skip it.
-  //   while (
-  //     this.#valueState?.indexes?.includes(this._highlightedOptionIndex) &&
-  //     this._highlightedOptionIndex < numOptions - 1
-  //   ) {
-  //     this._highlightedOptionIndex++
-  //   }
-
-  //   // Scroll the option into view.
-  //   this.#scrollOptionIntoView()
-  // }
-
-  // #scrollOptionIntoView(): void {
-  //   const optionEl = this.#getHighlightedOptionElement()
-  //   if (optionEl) {
-  //     optionEl.scrollIntoView({
-  //       block: 'nearest',
-  //       inline: 'nearest',
-  //     })
-  //   }
-  // }
-
-  // #getHighlightedOptionElement(): HTMLElement | null {
-  //   const options = this.shadowRoot?.querySelectorAll('.option')
-  //   if (
-  //     options &&
-  //     this._highlightedOptionIndex >= 0 &&
-  //     this._highlightedOptionIndex < options.length
-  //   ) {
-  //     return options[this._highlightedOptionIndex] as HTMLElement
-  //   }
-  //   return null
-  // }
 }
 
 declare global {

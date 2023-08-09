@@ -1,7 +1,7 @@
 import { css } from 'lit'
 
-export const multiSelectElementCss = css`
-/* Styles for the ire-chips */
+export const filterSelectElementCss = css`
+/* Styles for the ire-filter-select */
 .container {
   position: relative;
   display: flex;
@@ -12,47 +12,6 @@ export const multiSelectElementCss = css`
   border-radius: 4px;
   padding: 4px;
   background-color: #f7f7f7;
-}
-
-/* Styles for the chips of selected elements */
-.chip {
-  display: flex;
-  align-items: center;
-  padding: 2px 8px;
-  background-color: #007bff;
-  color: #fff;
-  border-radius: 16px;
-}
-
-/* Styles for the "x" icon inside the chips */
-.chip .remove-icon {
-  margin-left: 4px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* https://www.npmjs.com/package/last-icon */
-l-i {
-  --size: 1em;
-  display: inline-flex;
-  width: var(--size);
-  height: var(--size);
-  vertical-align: middle;
-}
-
-l-i svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-p l-i,
-button l-i,
-a l-i,
-span l-i {
-  vertical-align: -0.125em;
 }
 
 /* Styles for the input search */
