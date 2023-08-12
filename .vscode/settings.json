@@ -9,5 +9,6 @@
   "conventionalCommits.scopes": [],
   "editor.codeActionsOnSave": {
     "source.organizeImports.rome": true
-  }
+  },
+  "lit-plugin.rules.no-invalid-css": "off"
 }

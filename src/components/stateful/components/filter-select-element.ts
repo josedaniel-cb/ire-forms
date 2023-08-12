@@ -1,7 +1,6 @@
 import { SelectOption } from '../../../fields/controllers/multi-select/multi-select-value-state'
-import { filterSelectElementCss } from '../../css/filter-select-element-css'
+import { formControlsCss } from '../../css/form-controls-css'
 import { Icon } from '../../icons/icon'
-import { FieldElement } from '../base/field-element'
 import 'last-icon'
 import { HTMLTemplateResult, LitElement, css, html } from 'lit'
 import { customElement, property, query, state } from 'lit/decorators.js'
@@ -12,10 +11,78 @@ type Option = SelectOption<any>
 
 @customElement('ire-filter-select')
 export class IreFilterSelectElement extends LitElement {
-  static override styles = [...FieldElement.styles, filterSelectElementCss]
+  static override styles = [
+    formControlsCss,
+    css`
+      /* Styles for the ire-filter-select */
+      .form-input {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        align-items: center;
+      }
+
+      /* Styles for the input search */
+      input[type='text'] {
+        flex: 1;
+        border: none;
+        outline: none;
+        background-color: transparent;
+        line-height: 1.25rem /* 20px */;
+        font-size: 0.875rem /* 14px */;
+        color: rgb(30, 41, 59);
+        min-width: 25px;
+      }
+
+      input[type='text']::placeholder {
+        color: rgb(148, 163, 184);
+      }
+
+      /* Styles for the filtered options */
+      .filtered-options {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        max-height: 200px;
+        overflow-y: auto;
+        background-color: #fff;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+      }
+
+      /* Styles for each option in the filtered options */
+      .option {
+        padding: 8px;
+        cursor: pointer;
+      }
+
+      .option:hover {
+        background-color: #f1f1f1;
+      }
+
+      .no-match {
+        padding: 8px;
+        text-align: center;
+        color: #888;
+      }
+
+      /* New styles for the highlighted option */
+      .option.highlighted {
+        background-color: #007bff;
+        color: #fff;
+      }
+    `,
+  ]
 
   @property()
   enabled!: boolean
+
+  @property()
+  isInvalid!: boolean
 
   @property()
   removeIcon!: Icon
@@ -43,11 +110,15 @@ export class IreFilterSelectElement extends LitElement {
 
   override render(): HTMLTemplateResult {
     return html`
-      <div class="container">
+      <div
+        class="form-input ${classMap({
+          'is-invalid': this.isInvalid,
+        })}"
+      >
         <slot></slot>
         <input
           type="text"
-          placeholder="${'Search...'}"
+          placeholder="${'placeholder'}"
           ?disabled="${!this.enabled}"
           @input=${this.#handleSearchInput}
           @click=${() => {

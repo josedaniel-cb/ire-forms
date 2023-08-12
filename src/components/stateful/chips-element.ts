@@ -6,7 +6,9 @@ import {
   MultiSelectFieldValueState,
   SelectOption,
 } from '../../fields/controllers/multi-select/multi-select-value-state'
-import { filterSelectElementCss } from '../css/filter-select-element-css'
+import { formControlsCss } from '../css/form-controls-css'
+import { formFieldCss } from '../css/form-field-css'
+import { layoutsCss } from '../css/layout-css'
 import { Icon } from '../icons/icon'
 import { FieldElement } from './base/field-element'
 import './components/filter-select-element'
@@ -21,7 +23,9 @@ type Option = SelectOption<any>
 @customElement('ire-chips')
 export class IreChipsElement extends FieldElement {
   static override styles = [
-    ...FieldElement.styles,
+    layoutsCss,
+    formFieldCss,
+    formControlsCss,
     css`
       /* Styles for the chips of selected elements */
       .chip {
@@ -110,6 +114,7 @@ export class IreChipsElement extends FieldElement {
     return html`
       <ire-filter-select
         .enabled=${this.#valueState?.enabled ?? true}
+        .isInvalid=${touched && errorMessage !== undefined}
         .removeIcon=${icon}
         .optionHtmlTemplateBuilder=${this.#uiState?.optionHtmlTemplateBuilder}
         .optionEntries=${availableOptionsAsEntries}

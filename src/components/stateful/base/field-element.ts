@@ -7,7 +7,7 @@ import { mosaicCss } from '../../css/mosaic-css'
 import { HTMLTemplateResult, LitElement, html } from 'lit'
 
 export abstract class FieldElement extends LitElement {
-  static override styles = [mosaicCss, layoutsCss, baseCss]
+  static override styles = [baseCss, layoutsCss, mosaicCss]
 
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
   controller!: FieldController<any, any, any, any>

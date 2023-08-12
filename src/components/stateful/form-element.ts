@@ -6,6 +6,7 @@ import { TextFieldController } from '../../fields/controllers/text-controller'
 import { FormUILayouts } from '../../form-ui/form-ui-layout'
 import { FormController } from '../../form/controller/form-controller'
 import { baseCss } from '../css/base-css'
+import { buildFontURL } from '../css/build-font-url'
 import { layoutsCss } from '../css/layout-css'
 import { mosaicCss } from '../css/mosaic-css'
 import './checkboxes-element'
@@ -27,7 +28,22 @@ export class IreFormElement extends LitElement {
 
   override render() {
     // ${renderStyleSheetLinks(FormBuilder.uiConfig.stylesheets)}
+    const fontUrl = buildFontURL({
+      families: [
+        {
+          familyName: 'Open Sans',
+          wght: [400, 500, 700],
+        },
+      ],
+    })
     return html`
+      <style>
+        @import url('${fontUrl}');
+
+        * {
+          font-family: 'Open Sans', sans-serif;
+        }
+      </style>
       <form>
         ${
           this.controller !== undefined
