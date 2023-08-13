@@ -60,15 +60,37 @@ export class IreInputElement extends LitElement {
   @property()
   enabled!: boolean
 
+  @property()
+  type?: string
+
+  @property()
+  max?: string
+
+  @property()
+  maxLength?: number
+
+  @property()
+  min?: string
+
+  @property()
+  minLength?: number
+
+  @property()
+  step?: string
+
   protected render(): HTMLTemplateResult {
     return html`
       <div class="wrapper">
         <input
-          type="text"
+          .type=${this.type ?? 'text'}
           class="form-input ${classMap({
             'is-invalid': this.isInvalid,
           })}"
           placeholder="${ifDefined(this.placeholder)}"
+          min="${ifDefined(this.min)}"
+          max="${ifDefined(this.max)}"
+          minlength="${ifDefined(this.minLength)}"
+          maxlength="${ifDefined(this.maxLength)}"
           ?disabled="${!(this.enabled ?? true)}"
           @input=${() => {
             this.dispatchEvent(

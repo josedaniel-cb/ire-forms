@@ -5,9 +5,29 @@ import { FieldUIState } from '../states/field-ui-state'
 import { FieldValueState } from '../states/field-value-state'
 import { Field, FieldController } from './base/field-controller'
 
+export type TextFieldType =
+  | 'date'
+  | 'datetime-local'
+  | 'email'
+  | 'month'
+  | 'number'
+  | 'password'
+  | 'search'
+  | 'tel'
+  | 'text'
+  | 'time'
+  | 'url'
+  | 'week'
+
 export type TextFieldValueState = FieldValueState<string>
 
 export interface TextFieldUIState extends FieldUIState<IreTextElement> {
+  inputType: TextFieldType | null
+  max: string | null
+  maxLength: number | null
+  min: string | null
+  minLength: number | null
+  step: string
   placeholder: string | null
 }
 

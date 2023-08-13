@@ -34,9 +34,15 @@ export class IreTextElement extends FieldElement {
     const isInvalid = touched && errorMessage !== undefined
     return html`
       <ire-input
+        .type=${this.#uiState?.inputType ?? undefined}
         .placeholder=${this.#uiState?.placeholder ?? undefined}
         .isInvalid=${isInvalid}
         .enabled=${this.#valueState?.enabled ?? true}
+        .max=${this.#uiState?.max ?? undefined}
+        .maxLength=${this.#uiState?.maxLength ?? undefined}
+        .min=${this.#uiState?.min ?? undefined}
+        .minLength=${this.#uiState?.minLength ?? undefined}
+        .step=${this.#uiState?.step ?? undefined}
         @inputchange=${(
           e: CustomEvent<{
             value: string
@@ -48,11 +54,7 @@ export class IreTextElement extends FieldElement {
           this.controller.markAsTouched()
         }}
       ></ire-input>
-      ${
-        touched && errorMessage !== undefined
-          ? this._renderValidationMessage(errorMessage)
-          : undefined
-      }
+      ${isInvalid ? this._renderValidationMessage(errorMessage) : undefined}
     `
   }
 
