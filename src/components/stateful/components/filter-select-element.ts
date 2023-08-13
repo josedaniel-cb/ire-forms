@@ -1,7 +1,6 @@
 import { SelectOption } from '../../../fields/controllers/multi-select/multi-select-value-state'
 import { formControlsCss } from '../../css/form-controls-css'
 import { Icon } from '../../icons/icon'
-import 'last-icon'
 import { HTMLTemplateResult, LitElement, css, html } from 'lit'
 import { customElement, property, query, state } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'

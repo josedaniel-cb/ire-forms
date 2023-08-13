@@ -12,10 +12,10 @@ import { layoutsCss } from '../css/layout-css'
 import { Icon } from '../icons/icon'
 import { FieldElement } from './base/field-element'
 import './components/filter-select-element'
+import './components/last-icon-wrapper-element'
 import 'last-icon'
 import { HTMLTemplateResult, css, html } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
-import { ifDefined } from 'lit/directives/if-defined.js'
 
 // rome-ignore lint/suspicious/noExplicitAny: any is required here
 type Option = SelectOption<any>
@@ -41,31 +41,9 @@ export class IreChipsElement extends FieldElement {
       .chip .remove-icon {
         margin-left: 4px;
         cursor: pointer;
-        display: flex;
+        /* display: flex;
         align-items: center;
-        justify-content: center;
-      }
-
-      /* https://www.npmjs.com/package/last-icon */
-      l-i {
-        --size: 1em;
-        display: inline-flex;
-        width: var(--size);
-        height: var(--size);
-        vertical-align: middle;
-      }
-
-      l-i svg {
-        display: block;
-        width: 100%;
-        height: 100%;
-      }
-
-      p l-i,
-      button l-i,
-      a l-i,
-      span l-i {
-        vertical-align: -0.125em;
+        justify-content: center; */
       }
     `,
   ]
@@ -144,11 +122,7 @@ export class IreChipsElement extends FieldElement {
                 class="remove-icon"
                 @click=${() => this.#removeValueByOption(option)}
               >
-                <l-i
-                  set="${icon.set}"
-                  name="${icon.name}"
-                  type="${ifDefined(icon.type)}"
-                ></l-i>
+                <ire-last-icon-wrapper .params=${icon}></ire-last-icon-wrapper>
               </div>
             </div>
           `
