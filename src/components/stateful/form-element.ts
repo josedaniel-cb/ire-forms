@@ -2,6 +2,7 @@ import { FieldController } from '../../fields/controllers/base/field-controller'
 import { CheckboxesFieldController } from '../../fields/controllers/checkboxes-controller'
 import { ChipsFieldController } from '../../fields/controllers/chips-controller'
 import { NativeSelectFieldController } from '../../fields/controllers/native-select-controller'
+import { RadiosFieldController } from '../../fields/controllers/radios-controller'
 import { TextFieldController } from '../../fields/controllers/text-controller'
 import { FormUILayouts } from '../../form-ui/form-ui-layout'
 import { FormController } from '../../form/controller/form-controller'
@@ -13,6 +14,7 @@ import './checkboxes-element'
 import './chips-element'
 import './input-element'
 import './native-select-element'
+import './radios-element'
 import { HTMLTemplateResult, LitElement, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'
@@ -105,6 +107,10 @@ export class IreFormElement extends LitElement {
     } else if (fieldController instanceof CheckboxesFieldController) {
       template = html`
         <ire-checkboxes .controller=${fieldController}></ire-checkboxes>
+      `
+    } else if (fieldController instanceof RadiosFieldController) {
+      template = html`
+        <ire-radios .controller=${fieldController}></ire-radios>
       `
     } else if (fieldController instanceof TextFieldController) {
       template = html`

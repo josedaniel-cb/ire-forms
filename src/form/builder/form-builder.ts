@@ -2,6 +2,7 @@ import { FieldBuilder } from '../../fields/builder/field-builder'
 import { CheckboxesFieldDefinition } from '../../fields/controllers/checkboxes-controller'
 import { ChipsFieldDefinition } from '../../fields/controllers/chips-controller'
 import { NativeSelectFieldDefinition } from '../../fields/controllers/native-select-controller'
+import { RadiosFieldDefinition } from '../../fields/controllers/radios-controller'
 import { TextFieldDefinition } from '../../fields/controllers/text-controller'
 import {
   Form,
@@ -57,7 +58,7 @@ export class FormBuilder {
     }
   }
 
-  static select<T extends NonNullable<unknown>>(
+  static nativeSelect<T extends NonNullable<unknown>>(
     builderParams: Omit<NativeSelectFieldDefinition<T>, 'type'>,
   ): NativeSelectFieldDefinition<T> {
     return {
@@ -81,6 +82,15 @@ export class FormBuilder {
     return {
       ...builderParams,
       type: 'checkboxes',
+    }
+  }
+
+  static radios<T extends NonNullable<unknown>>(
+    builderParams: Omit<RadiosFieldDefinition<T>, 'type'>,
+  ): RadiosFieldDefinition<T> {
+    return {
+      ...builderParams,
+      type: 'radios',
     }
   }
 }

@@ -4,6 +4,7 @@ import { CheckboxesFieldController } from '../controllers/checkboxes-controller'
 import { ChipsFieldController } from '../controllers/chips-controller'
 import { MultiSelectFieldValueState } from '../controllers/multi-select/multi-select-value-state'
 import { NativeSelectFieldController } from '../controllers/native-select-controller'
+import { RadiosFieldController } from '../controllers/radios-controller'
 import { SelectFieldValueState } from '../controllers/select/select-value-state'
 import { TextFieldController } from '../controllers/text-controller'
 import { FieldUIState } from '../states/field-ui-state'
@@ -125,6 +126,34 @@ export class FieldBuilder {
       }
       controller = new CheckboxesFieldController({
         valueState: new MultiSelectFieldValueState(
+          nonValidatedValueState,
+          validator,
+        ),
+        uiState: {
+          touched: false,
+          htmlElement: null,
+          label: params.label,
+          layout: params.layout ?? null,
+          optionHtmlTemplateBuilder: params.optionHtmlTemplateBuilder,
+        },
+        validator,
+        unsubscribeSubject,
+      })
+    }
+
+    if (params.type === 'radios') {
+      const validator = new SelectFieldValidator({
+        required: params.required ?? false,
+        validators: params.validators,
+      })
+      const nonValidatedValueState = {
+        value: params.value ?? [],
+        enabled: params.enabled ?? true,
+        options: params.options,
+        index: params.index ?? null,
+      }
+      controller = new RadiosFieldController({
+        valueState: new SelectFieldValueState(
           nonValidatedValueState,
           validator,
         ),

@@ -1,1 +1,1 @@
-export type FieldType = 'text' | 'select' | 'chips' | 'checkboxes'
+export type FieldType = 'text' | 'select' | 'chips' | 'checkboxes' | 'radios'
