@@ -1,7 +1,7 @@
 import { CheckboxesFieldDefinition } from '../../fields/controllers/checkboxes-controller'
 import { ChipsFieldDefinition } from '../../fields/controllers/chips-controller'
 import { MultiSelectFieldValueState } from '../../fields/controllers/multi-select/multi-select-value-state'
-import { SelectFieldDefinition } from '../../fields/controllers/native-select-controller'
+import { NativeSelectFieldDefinition } from '../../fields/controllers/native-select-controller'
 import { SelectFieldValueState } from '../../fields/controllers/select/select-value-state'
 import {
   TextFieldDefinition,
@@ -12,7 +12,7 @@ import { FormDefinition } from '../definition/form-definition'
 export type FormValueState<T extends FormDefinition> = {
   readonly [K in keyof T['fields']]: T['fields'][K] extends TextFieldDefinition
     ? TextFieldValueState
-    : T['fields'][K] extends SelectFieldDefinition<infer R>
+    : T['fields'][K] extends NativeSelectFieldDefinition<infer R>
     ? SelectFieldValueState<R>
     : T['fields'][K] extends ChipsFieldDefinition<infer R>
     ? MultiSelectFieldValueState<R>

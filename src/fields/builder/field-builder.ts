@@ -3,7 +3,7 @@ import { FieldController } from '../controllers/base/field-controller'
 import { CheckboxesFieldController } from '../controllers/checkboxes-controller'
 import { ChipsFieldController } from '../controllers/chips-controller'
 import { MultiSelectFieldValueState } from '../controllers/multi-select/multi-select-value-state'
-import { SelectFieldController } from '../controllers/native-select-controller'
+import { NativeSelectFieldController } from '../controllers/native-select-controller'
 import { SelectFieldValueState } from '../controllers/select/select-value-state'
 import { TextFieldController } from '../controllers/text-controller'
 import { FieldUIState } from '../states/field-ui-state'
@@ -68,7 +68,7 @@ export class FieldBuilder {
         enabled: params.enabled ?? true,
         options: params.options,
       }
-      controller = new SelectFieldController({
+      controller = new NativeSelectFieldController({
         valueState: new SelectFieldValueState(
           nonValidatedValueState,
           validator,

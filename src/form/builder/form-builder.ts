@@ -1,7 +1,7 @@
 import { FieldBuilder } from '../../fields/builder/field-builder'
 import { CheckboxesFieldDefinition } from '../../fields/controllers/checkboxes-controller'
 import { ChipsFieldDefinition } from '../../fields/controllers/chips-controller'
-import { SelectFieldDefinition } from '../../fields/controllers/native-select-controller'
+import { NativeSelectFieldDefinition } from '../../fields/controllers/native-select-controller'
 import { TextFieldDefinition } from '../../fields/controllers/text-controller'
 import {
   Form,
@@ -58,8 +58,8 @@ export class FormBuilder {
   }
 
   static select<T extends NonNullable<unknown>>(
-    builderParams: Omit<SelectFieldDefinition<T>, 'type'>,
-  ): SelectFieldDefinition<T> {
+    builderParams: Omit<NativeSelectFieldDefinition<T>, 'type'>,
+  ): NativeSelectFieldDefinition<T> {
     return {
       ...builderParams,
       type: 'select',

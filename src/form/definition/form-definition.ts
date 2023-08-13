@@ -1,6 +1,6 @@
 import { CheckboxesFieldDefinition } from '../../fields/controllers/checkboxes-controller'
 import { ChipsFieldDefinition } from '../../fields/controllers/chips-controller'
-import { SelectFieldDefinition } from '../../fields/controllers/native-select-controller'
+import { NativeSelectFieldDefinition } from '../../fields/controllers/native-select-controller'
 import { TextFieldDefinition } from '../../fields/controllers/text-controller'
 
 export type FormDefinition = {
@@ -12,7 +12,7 @@ export type FormDefinitionNode = FormDefinitionLeaf | FormDefinition
 export type FormDefinitionLeaf =
   | TextFieldDefinition
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
-  | SelectFieldDefinition<any>
+  | NativeSelectFieldDefinition<any>
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
   | ChipsFieldDefinition<any>
   // rome-ignore lint/suspicious/noExplicitAny: any is required here

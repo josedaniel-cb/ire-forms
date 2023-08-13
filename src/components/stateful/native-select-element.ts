@@ -1,6 +1,6 @@
 import {
-  SelectFieldController,
-  SelectFieldUIState,
+  NativeSelectFieldController,
+  NativeSelectFieldUIState,
 } from '../../fields/controllers/native-select-controller'
 import { SelectFieldValueState } from '../../fields/controllers/select/select-value-state'
 import { formControlsCss } from '../css/form-controls-css'
@@ -12,8 +12,8 @@ import { customElement, property } from 'lit/decorators.js'
 import { query } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'
 
-@customElement('ire-select')
-export class IreSelectElement extends FieldElement {
+@customElement('ire-native-select')
+export class IreNativeSelectElement extends FieldElement {
   static override styles = [layoutsCss, formFieldCss, formControlsCss]
 
   @query('select')
@@ -21,12 +21,12 @@ export class IreSelectElement extends FieldElement {
 
   @property({ attribute: false })
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
-  override controller!: SelectFieldController<any>
+  override controller!: NativeSelectFieldController<any>
 
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
   #valueState?: SelectFieldValueState<any>
 
-  #uiState?: SelectFieldUIState
+  #uiState?: NativeSelectFieldUIState
 
   protected _renderField(): HTMLTemplateResult {
     const touched = this.#uiState?.touched ?? false
@@ -97,6 +97,6 @@ export class IreSelectElement extends FieldElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'ire-select': IreSelectElement
+    'ire-native-select': IreNativeSelectElement
   }
 }

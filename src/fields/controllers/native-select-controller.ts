@@ -1,43 +1,44 @@
-import { IreSelectElement } from '../../components/stateful/select-element'
+import { IreNativeSelectElement } from '../../components/stateful/native-select-element'
 import { FieldDefinition } from '../definition/field-definition'
 import { FieldMultiPatch } from '../states/field-multi-patch'
 import { FieldUIState } from '../states/field-ui-state'
 import { Field, FieldController } from './base/field-controller'
 import { SelectFieldValueState } from './select/select-value-state'
 
-export interface SelectFieldUIState extends FieldUIState<IreSelectElement> {
+export interface NativeSelectFieldUIState
+  extends FieldUIState<IreNativeSelectElement> {
   placeholder: string | null
 }
 
-export type SelectField<T extends NonNullable<unknown>> = Field<
+export type NativeSelectField<T extends NonNullable<unknown>> = Field<
   T | null,
   SelectFieldValueState<T>,
-  IreSelectElement,
-  SelectFieldUIState
+  IreNativeSelectElement,
+  NativeSelectFieldUIState
 >
 
-export class SelectFieldController<
+export class NativeSelectFieldController<
   T extends NonNullable<unknown>,
 > extends FieldController<
   T | null,
   SelectFieldValueState<T>,
-  IreSelectElement,
-  SelectFieldUIState
+  IreNativeSelectElement,
+  NativeSelectFieldUIState
 > {}
 
-export type SelectFieldDefinition<T extends NonNullable<unknown>> =
+export type NativeSelectFieldDefinition<T extends NonNullable<unknown>> =
   FieldDefinition<
     T | null,
     'select',
     SelectFieldValueState<T>,
-    IreSelectElement,
-    SelectFieldUIState
+    IreNativeSelectElement,
+    NativeSelectFieldUIState
   >
 
-export type SelectFieldMultiPatch<T extends NonNullable<unknown>> =
+export type NativeSelectFieldMultiPatch<T extends NonNullable<unknown>> =
   FieldMultiPatch<
     T | null,
     SelectFieldValueState<T>,
-    IreSelectElement,
-    SelectFieldUIState
+    IreNativeSelectElement,
+    NativeSelectFieldUIState
   >

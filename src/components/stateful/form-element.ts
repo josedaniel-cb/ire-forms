@@ -1,7 +1,7 @@
 import { FieldController } from '../../fields/controllers/base/field-controller'
 import { CheckboxesFieldController } from '../../fields/controllers/checkboxes-controller'
 import { ChipsFieldController } from '../../fields/controllers/chips-controller'
-import { SelectFieldController } from '../../fields/controllers/native-select-controller'
+import { NativeSelectFieldController } from '../../fields/controllers/native-select-controller'
 import { TextFieldController } from '../../fields/controllers/text-controller'
 import { FormUILayouts } from '../../form-ui/form-ui-layout'
 import { FormController } from '../../form/controller/form-controller'
@@ -12,7 +12,7 @@ import { mosaicCss } from '../css/mosaic-css'
 import './checkboxes-element'
 import './chips-element'
 import './input-element'
-import './select-element'
+import './native-select-element'
 import { HTMLTemplateResult, LitElement, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'
@@ -94,9 +94,9 @@ export class IreFormElement extends LitElement {
   ): HTMLTemplateResult | undefined {
     let template: HTMLTemplateResult | undefined = undefined
 
-    if (fieldController instanceof SelectFieldController) {
+    if (fieldController instanceof NativeSelectFieldController) {
       template = html`
-        <ire-select .controller=${fieldController}></ire-select>
+        <ire-native-select .controller=${fieldController}></ire-native-select>
       `
     } else if (fieldController instanceof ChipsFieldController) {
       template = html`
