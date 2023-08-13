@@ -92,6 +92,7 @@ export class IreCheckboxesElement extends FieldElement {
               <input
                 type="checkbox"
                 class="form-checkbox"
+                .disabled=${!(this.#valueState?.enabled ?? true)}
                 @input=${() => this.#handleInput(i)}
                 @blur=${() => this.#handleBlur()}
               >

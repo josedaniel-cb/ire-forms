@@ -93,6 +93,14 @@ export const formControlsCss = css`
     cursor: not-allowed;
 }
 
+
+.form-checkbox:disabled,
+.form-radio:disabled,
+.form-checkbox[readonly],
+.form-radio[readonly] {
+    background-color: rgb(248 250 252);
+}
+
 .form-input.is-invalid,
 .form-textarea.is-invalid,
 .form-multiselect.is-invalid,

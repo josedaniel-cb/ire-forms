@@ -91,6 +91,7 @@ export class IreRadiosElement extends FieldElement {
                 type="radio"
                 class="form-radio"
                 name="_"
+                .disabled=${!(this.#valueState?.enabled ?? true)}
                 @input=${() => this.#handleInput(i)}
                 @blur=${() => this.#handleBlur()}
               >

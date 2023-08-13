@@ -30,10 +30,11 @@ export class IreFormElement extends LitElement {
 
   override render() {
     // ${renderStyleSheetLinks(FormBuilder.uiConfig.stylesheets)}
+    const fontFamilyName = 'Open Sans'
     const fontUrl = buildFontURL({
       families: [
         {
-          familyName: 'Open Sans',
+          familyName: fontFamilyName,
           wght: [400, 500, 700],
         },
       ],
@@ -43,7 +44,7 @@ export class IreFormElement extends LitElement {
         @import url('${fontUrl}');
 
         * {
-          font-family: 'Open Sans', sans-serif;
+          font-family: ${fontFamilyName}, sans-serif;
         }
       </style>
       <form>

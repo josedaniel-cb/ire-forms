@@ -143,7 +143,7 @@ export class FieldBuilder {
 
     if (params.type === 'radios') {
       const validator = new SelectFieldValidator({
-        required: params.required ?? false,
+        required: params.required ?? true,
         validators: params.validators,
       })
       const nonValidatedValueState = {
