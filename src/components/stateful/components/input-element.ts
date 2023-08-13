@@ -1,16 +1,10 @@
-import {
-  TextFieldController,
-  TextFieldUIState,
-  TextFieldValueState,
-} from '../../../fields/controllers/text-controller'
 import { formControlsCss } from '../../css/form-controls-css'
 import { formFieldCss } from '../../css/form-field-css'
 import { layoutsCss } from '../../css/layout-css'
 import { Icon } from '../../icons/icon'
-import { FieldElement } from '../base/field-element'
 import { HTMLTemplateResult, LitElement, css, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
-import { query, state } from 'lit/decorators.js'
+import { query } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'
 import { ifDefined } from 'lit/directives/if-defined.js'
 
@@ -27,7 +21,6 @@ export class IreInputElement extends LitElement {
       }
 
       .wrapper:has(ire-last-icon-wrapper) input {
-        /* width: 100%; */
         padding-right: 2.5rem/* 40px */;
       }
 
@@ -44,6 +37,11 @@ export class IreInputElement extends LitElement {
 
       .is-invalid + ire-last-icon-wrapper {
         color: red;
+      }
+
+      ire-last-icon-wrapper.clickable {
+        pointer-events: auto;
+        cursor: pointer;
       }
     `,
   ]
@@ -74,6 +72,12 @@ export class IreInputElement extends LitElement {
 
   @property()
   minLength?: number
+
+  @property()
+  leadingIcon?: {
+    icon: Icon
+    onClick?: () => void
+  }
 
   @property()
   step?: string
@@ -108,7 +112,17 @@ export class IreInputElement extends LitElement {
           }}
         />
         ${
-          this.isInvalid
+          this.leadingIcon
+            ? html`
+            <ire-last-icon-wrapper
+              class="${classMap({
+                clickable: this.leadingIcon.onClick !== undefined,
+              })}"
+              .params=${this.leadingIcon.icon}
+              @click=${this.leadingIcon?.onClick}
+            ></ire-last-icon-wrapper>
+          `
+            : this.isInvalid
             ? html`
               <ire-last-icon-wrapper
                 .params=${Icon.bootstrap('exclamation-triangle-fill')}

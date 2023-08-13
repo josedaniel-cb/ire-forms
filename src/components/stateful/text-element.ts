@@ -6,11 +6,12 @@ import {
 import { formControlsCss } from '../css/form-controls-css'
 import { formFieldCss } from '../css/form-field-css'
 import { layoutsCss } from '../css/layout-css'
+import { Icon } from '../icons/icon'
 import { FieldElement } from './base/field-element'
 import './components/input-element'
 import { IreInputElement } from './components/input-element'
 import { HTMLTemplateResult, css, html } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import { customElement, property, state } from 'lit/decorators.js'
 import { query } from 'lit/decorators.js'
 
 @customElement('ire-text')
@@ -23,6 +24,9 @@ export class IreTextElement extends FieldElement {
   @property({ attribute: false })
   override controller!: TextFieldController
 
+  @state()
+  protected _showPassword = false
+
   #valueState?: TextFieldValueState
 
   #uiState?: TextFieldUIState
@@ -32,9 +36,10 @@ export class IreTextElement extends FieldElement {
     const errorMessage =
       this.#valueState?.validationResult.errorMessage ?? undefined
     const isInvalid = touched && errorMessage !== undefined
+    const inputType = this.#uiState?.inputType ?? undefined
     return html`
       <ire-input
-        .type=${this.#uiState?.inputType ?? undefined}
+        .type=${this._showPassword ? 'text' : inputType}
         .placeholder=${this.#uiState?.placeholder ?? undefined}
         .isInvalid=${isInvalid}
         .enabled=${this.#valueState?.enabled ?? true}
@@ -43,6 +48,18 @@ export class IreTextElement extends FieldElement {
         .min=${this.#uiState?.min ?? undefined}
         .minLength=${this.#uiState?.minLength ?? undefined}
         .step=${this.#uiState?.step ?? undefined}
+        .leadingIcon=${
+          inputType === 'password'
+            ? {
+                icon: this._showPassword
+                  ? Icon.bootstrap('eye-slash')
+                  : Icon.bootstrap('eye'),
+                onClick: () => {
+                  this._showPassword = !this._showPassword
+                },
+              }
+            : undefined
+        }
         @inputchange=${(
           e: CustomEvent<{
             value: string
