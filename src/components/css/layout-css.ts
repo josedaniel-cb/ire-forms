@@ -16,7 +16,7 @@ export const layoutsCss = css`
 
   .single-column {
     display: grid;
-    gap: 0.75rem;
+    gap: 1rem;
     grid-template-columns: 1fr;
   }
 

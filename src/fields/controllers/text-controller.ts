@@ -1,4 +1,4 @@
-import { IreInputElement } from '../../components/stateful/input-element'
+import { IreTextElement } from '../../components/stateful/text-element'
 import { FieldDefinition } from '../definition/field-definition'
 import { FieldMultiPatch } from '../states/field-multi-patch'
 import { FieldUIState } from '../states/field-ui-state'
@@ -7,21 +7,21 @@ import { Field, FieldController } from './base/field-controller'
 
 export type TextFieldValueState = FieldValueState<string>
 
-export interface TextFieldUIState extends FieldUIState<IreInputElement> {
+export interface TextFieldUIState extends FieldUIState<IreTextElement> {
   placeholder: string | null
 }
 
 export type TextField = Field<
   string,
   TextFieldValueState,
-  IreInputElement,
+  IreTextElement,
   TextFieldUIState
 >
 
 export class TextFieldController extends FieldController<
   string,
   TextFieldValueState,
-  IreInputElement,
+  IreTextElement,
   TextFieldUIState
 > {}
 
@@ -29,13 +29,13 @@ export type TextFieldDefinition = FieldDefinition<
   string,
   'text',
   TextFieldValueState,
-  IreInputElement,
+  IreTextElement,
   TextFieldUIState
 >
 
 export type TextFieldMultiPatch = FieldMultiPatch<
   string,
   TextFieldValueState,
-  IreInputElement,
+  IreTextElement,
   TextFieldUIState
 >

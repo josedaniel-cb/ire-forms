@@ -13,8 +13,8 @@ import { query, state } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'
 import { ifDefined } from 'lit/directives/if-defined.js'
 
-@customElement('ire-input')
-export class IreInputElement extends FieldElement {
+@customElement('ire-text')
+export class IreTextElement extends FieldElement {
   static override styles = [layoutsCss, formFieldCss, formControlsCss]
 
   @query('input')
@@ -79,6 +79,6 @@ export class IreInputElement extends FieldElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'ire-input': IreInputElement
+    'ire-text': IreTextElement
   }
 }

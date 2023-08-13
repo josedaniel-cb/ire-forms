@@ -32,7 +32,7 @@ export class IreCheckboxesElement extends FieldElement {
         align-items: center;
       }
 
-      span {
+      label > span {
         font-size: 0.875rem/* 14px */;
         line-height: 1.5715;
         margin-left: 0.5rem/* 8px */;

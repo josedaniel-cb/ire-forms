@@ -12,17 +12,43 @@ import { layoutsCss } from '../css/layout-css'
 import { mosaicCss } from '../css/mosaic-css'
 import './checkboxes-element'
 import './chips-element'
-import './input-element'
 import './native-select-element'
 import './radios-element'
-import { HTMLTemplateResult, LitElement, html } from 'lit'
+import './text-element'
+import { HTMLTemplateResult, LitElement, css, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'
 import { ifDefined } from 'lit/directives/if-defined.js'
 
 @customElement('ire-form')
 export class IreFormElement extends LitElement {
-  static override styles = [mosaicCss, layoutsCss, baseCss]
+  // static override styles = [mosaicCss, layoutsCss, baseCss]
+  static override styles = [
+    layoutsCss,
+    css`
+      * {
+        transition-property: background-color, border-color;
+        transition-duration: 150ms;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      fieldset {
+        border: 1px solid rgb(206, 212, 218);
+        border-radius: 0.25rem;
+        padding: 0.75rem;
+      }
+
+      fieldset.no-border {
+        border-width: 0;
+        padding: 0;
+      }
+
+      /* legend {
+        color: rgb(148, 163, 184);
+        font-size: 0.75rem;
+      } */
+    `,
+  ]
 
   @property()
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
@@ -32,12 +58,7 @@ export class IreFormElement extends LitElement {
     // ${renderStyleSheetLinks(FormBuilder.uiConfig.stylesheets)}
     const fontFamilyName = 'Open Sans'
     const fontUrl = buildFontURL({
-      families: [
-        {
-          familyName: fontFamilyName,
-          wght: [400, 500, 700],
-        },
-      ],
+      families: [{ familyName: fontFamilyName }],
     })
     return html`
       <style>
@@ -51,7 +72,7 @@ export class IreFormElement extends LitElement {
         ${
           this.controller !== undefined
             ? this._renderFieldSet(this.controller)
-            : 'Controller is missing'
+            : html`<span class="text-danger">Controller is missing</span>`
         }
       </form>
     `
@@ -115,7 +136,7 @@ export class IreFormElement extends LitElement {
       `
     } else if (fieldController instanceof TextFieldController) {
       template = html`
-        <ire-input .controller=${fieldController}></ire-input>
+        <ire-text .controller=${fieldController}></ire-text>
       `
     }
 

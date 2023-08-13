@@ -1,9 +1,9 @@
 import { IreCheckboxesElement } from './components/stateful/checkboxes-element'
 import { IreChipsElement } from './components/stateful/chips-element'
 import './components/stateful/form-element'
-import { IreInputElement } from './components/stateful/input-element'
 import { IreNativeSelectElement } from './components/stateful/native-select-element'
 import { IreRadiosElement } from './components/stateful/radios-element'
+import { IreTextElement } from './components/stateful/text-element'
 import { CheckboxesField } from './fields/controllers/checkboxes-controller'
 import { ChipsField } from './fields/controllers/chips-controller'
 import { NativeSelectField } from './fields/controllers/native-select-controller'
@@ -18,7 +18,7 @@ export {
   FormBuilder,
   // Validators,
   // Layouts
-  IreInputElement,
+  IreTextElement,
   IreNativeSelectElement as IreSelectElement,
   IreChipsElement,
   IreCheckboxesElement,
