@@ -3,6 +3,9 @@ import {
   SelectFieldUIState,
 } from '../../fields/controllers/native-select-controller'
 import { SelectFieldValueState } from '../../fields/controllers/select/select-value-state'
+import { formControlsCss } from '../css/form-controls-css'
+import { formFieldCss } from '../css/form-field-css'
+import { layoutsCss } from '../css/layout-css'
 import { FieldElement } from './base/field-element'
 import { HTMLTemplateResult, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
@@ -11,7 +14,7 @@ import { classMap } from 'lit/directives/class-map.js'
 
 @customElement('ire-select')
 export class IreSelectElement extends FieldElement {
-  static override styles = FieldElement.styles
+  static override styles = [layoutsCss, formFieldCss, formControlsCss]
 
   @query('select')
   selectEl!: HTMLSelectElement
@@ -31,10 +34,10 @@ export class IreSelectElement extends FieldElement {
       this.#valueState?.validationResult.errorMessage ?? undefined
     return html`
         <select
-          class=${classMap({
-            'form-select': true,
+          class="form-select ${classMap({
             'is-invalid': touched && errorMessage !== undefined,
-          })}
+            'form-select--placeholder': this.#valueState?.index === null,
+          })}"
           ?disabled="${!(this.#valueState?.enabled ?? true)}"
           @input="${this.#handleInput}"
           @blur="${this.#handleBlur}"

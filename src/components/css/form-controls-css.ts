@@ -100,4 +100,14 @@ export const formControlsCss = css`
 .form-select.is-invalid {
     border-color: rgb(253 164 175);
 }
+
+
+/* So... custom styles time */
+.form-select--placeholder {
+    color: rgb(148, 163, 184); /* soft */
+}
+
+.form-select--placeholder:focus {
+    color: rgb(30, 41, 59);  /* normal again */
+}
 `
