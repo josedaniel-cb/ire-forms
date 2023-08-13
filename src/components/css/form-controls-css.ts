@@ -101,7 +101,7 @@ export const formControlsCss = css`
 }
 
 .form-select {
-    padding-right: 2.5rem/* 40px */;
+    appearance: none;
 }
 
 .form-checkbox, .form-radio {

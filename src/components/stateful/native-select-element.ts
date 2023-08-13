@@ -6,15 +6,42 @@ import { SelectFieldValueState } from '../../fields/controllers/select/select-va
 import { formControlsCss } from '../css/form-controls-css'
 import { formFieldCss } from '../css/form-field-css'
 import { layoutsCss } from '../css/layout-css'
+import { Icon } from '../icons/icon'
 import { FieldElement } from './base/field-element'
-import { HTMLTemplateResult, html } from 'lit'
+import './components/last-icon-wrapper-element'
+import { HTMLTemplateResult, css, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import { query } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'
 
 @customElement('ire-native-select')
 export class IreNativeSelectElement extends FieldElement {
-  static override styles = [layoutsCss, formFieldCss, formControlsCss]
+  static override styles = [
+    layoutsCss,
+    formFieldCss,
+    formControlsCss,
+    css`
+      .form-select-wrapper {
+        position: relative;
+      }
+
+      .form-select {
+        width: 100%;
+        padding-right: 2.5rem/* 40px */;
+      }
+
+      ire-last-icon-wrapper {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 2.5rem;
+        margin: auto;
+        pointer-events: none;
+        color: rgb(148, 163, 184);
+      }
+    `,
+  ]
 
   @query('select')
   selectEl!: HTMLSelectElement
@@ -33,6 +60,7 @@ export class IreNativeSelectElement extends FieldElement {
     const errorMessage =
       this.#valueState?.validationResult.errorMessage ?? undefined
     return html`
+      <div class="form-select-wrapper">
         <select
           class="form-select ${classMap({
             'is-invalid': touched && errorMessage !== undefined,
@@ -55,6 +83,8 @@ export class IreNativeSelectElement extends FieldElement {
             `,
           )}
         </select>
+        <ire-last-icon-wrapper .params=${Icon.bootstrap('caret-down-fill')}></ire-last-icon-wrapper>
+      </div>
       ${
         touched && errorMessage !== undefined
           ? this._renderValidationMessage(errorMessage)
