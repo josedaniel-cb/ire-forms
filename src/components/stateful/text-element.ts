@@ -7,18 +7,18 @@ import { formControlsCss } from '../css/form-controls-css'
 import { formFieldCss } from '../css/form-field-css'
 import { layoutsCss } from '../css/layout-css'
 import { FieldElement } from './base/field-element'
-import { HTMLTemplateResult, html } from 'lit'
+import './components/input-element'
+import { IreInputElement } from './components/input-element'
+import { HTMLTemplateResult, css, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
-import { query, state } from 'lit/decorators.js'
-import { classMap } from 'lit/directives/class-map.js'
-import { ifDefined } from 'lit/directives/if-defined.js'
+import { query } from 'lit/decorators.js'
 
 @customElement('ire-text')
 export class IreTextElement extends FieldElement {
   static override styles = [layoutsCss, formFieldCss, formControlsCss]
 
-  @query('input')
-  inputEl!: HTMLInputElement
+  @query('ire-input')
+  ireInputEl!: IreInputElement
 
   @property({ attribute: false })
   override controller!: TextFieldController
@@ -31,17 +31,23 @@ export class IreTextElement extends FieldElement {
     const touched = this.#uiState?.touched ?? false
     const errorMessage =
       this.#valueState?.validationResult.errorMessage ?? undefined
+    const isInvalid = touched && errorMessage !== undefined
     return html`
-      <input
-        type="text"
-        class="form-input ${classMap({
-          'is-invalid': touched && errorMessage !== undefined,
-        })}"
-        placeholder="${ifDefined(this.#uiState?.placeholder ?? undefined)}"
-        ?disabled="${!(this.#valueState?.enabled ?? true)}"
-        @input="${this.#handleInput}"
-        @blur="${this.#handleBlur}"
-      />
+      <ire-input
+        .placeholder=${this.#uiState?.placeholder ?? undefined}
+        .isInvalid=${isInvalid}
+        .enabled=${this.#valueState?.enabled ?? true}
+        @inputchange=${(
+          e: CustomEvent<{
+            value: string
+          }>,
+        ) => {
+          this.controller.value = e.detail.value
+        }}
+        @inputblur=${() => {
+          this.controller.markAsTouched()
+        }}
+      ></ire-input>
       ${
         touched && errorMessage !== undefined
           ? this._renderValidationMessage(errorMessage)
@@ -58,7 +64,7 @@ export class IreTextElement extends FieldElement {
       this.#valueState = state
       this.requestUpdate()
 
-      this.inputEl.value = state.value
+      this.ireInputEl.inputEl.value = state.value
     })
 
     // Subscribe to UI changes
@@ -66,14 +72,6 @@ export class IreTextElement extends FieldElement {
       this.#uiState = state
       this.requestUpdate()
     })
-  }
-
-  #handleInput(_: Event): void {
-    this.controller.value = this.inputEl.value
-  }
-
-  #handleBlur(_: Event): void {
-    this.controller.markAsTouched()
   }
 }
 
