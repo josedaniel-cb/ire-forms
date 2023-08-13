@@ -33,7 +33,7 @@ export abstract class FieldElement extends LitElement {
 
     return html`
       <label
-        class="form-label flex"
+        class="form-label"
         for="element"
       >
         ${label}

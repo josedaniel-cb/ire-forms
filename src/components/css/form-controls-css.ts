@@ -1,8 +1,5 @@
 import { css } from 'lit'
 
-// TODO: font family?
-// TODO: styles when :disabled or [readonly]
-
 export const formControlsCss = css`
 * {
     --tw-ring-color: rgb(59 130 246 / 0.5);
@@ -30,6 +27,7 @@ export const formControlsCss = css`
 .form-select,
 .form-checkbox {
     border-radius: 0.25rem /* 4px */;
+    /* width: 100%; */
 }
 
 .form-input,
@@ -58,6 +56,7 @@ export const formControlsCss = css`
 .form-textarea:focus,
 .form-multiselect:focus,
 .form-select:focus {
+    outline: none;
     border-color: rgb(165, 180, 252);
 }
 

@@ -3,6 +3,9 @@ import {
   TextFieldUIState,
   TextFieldValueState,
 } from '../../fields/controllers/text-controller'
+import { formControlsCss } from '../css/form-controls-css'
+import { formFieldCss } from '../css/form-field-css'
+import { layoutsCss } from '../css/layout-css'
 import { FieldElement } from './base/field-element'
 import { HTMLTemplateResult, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
@@ -12,7 +15,7 @@ import { ifDefined } from 'lit/directives/if-defined.js'
 
 @customElement('ire-input')
 export class IreInputElement extends FieldElement {
-  static override styles = FieldElement.styles
+  static override styles = [layoutsCss, formFieldCss, formControlsCss]
 
   @query('input')
   inputEl!: HTMLInputElement
@@ -31,10 +34,9 @@ export class IreInputElement extends FieldElement {
     return html`
       <input
         type="text"
-        class=${classMap({
-          'form-control': true,
+        class="form-input ${classMap({
           'is-invalid': touched && errorMessage !== undefined,
-        })}
+        })}"
         placeholder="${ifDefined(this.#uiState?.placeholder ?? undefined)}"
         ?disabled="${!(this.#valueState?.enabled ?? true)}"
         @input="${this.#handleInput}"
