@@ -40,6 +40,10 @@ export class IreNativeSelectElement extends FieldElement {
         pointer-events: none;
         color: rgb(148, 163, 184);
       }
+
+      .form-select.is-invalid + ire-last-icon-wrapper {
+        color: red;
+      }
     `,
   ]
 
@@ -59,11 +63,12 @@ export class IreNativeSelectElement extends FieldElement {
     const touched = this.#uiState?.touched ?? false
     const errorMessage =
       this.#valueState?.validationResult.errorMessage ?? undefined
+    const isInvalid = touched && errorMessage !== undefined
     return html`
       <div class="form-select-wrapper">
         <select
           class="form-select ${classMap({
-            'is-invalid': touched && errorMessage !== undefined,
+            'is-invalid': isInvalid,
             'form-select--placeholder': this.#valueState?.index === null,
           })}"
           ?disabled="${!(this.#valueState?.enabled ?? true)}"
@@ -83,13 +88,15 @@ export class IreNativeSelectElement extends FieldElement {
             `,
           )}
         </select>
-        <ire-last-icon-wrapper .params=${Icon.bootstrap('caret-down-fill')}></ire-last-icon-wrapper>
+        <ire-last-icon-wrapper
+          .params=${
+            isInvalid
+              ? Icon.bootstrap('exclamation-triangle-fill')
+              : Icon.bootstrap('caret-down-fill')
+          }
+        ></ire-last-icon-wrapper>
       </div>
-      ${
-        touched && errorMessage !== undefined
-          ? this._renderValidationMessage(errorMessage)
-          : undefined
-      }
+      ${isInvalid ? this._renderValidationMessage(errorMessage) : undefined}
       `
   }
 
