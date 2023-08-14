@@ -157,14 +157,20 @@ export abstract class FieldController<
   }
 
   patch(multiPatch: FieldMultiPatch<T, V, E, U>): void {
-    for (const entry in Object.entries(multiPatch)) {
-      const [key, value] = entry
+    const entries = Object.entries(multiPatch)
+
+    for (let i = 0; i < entries.length; i++) {
+      const [key, value] = entries[i]
       if (key in this.valueState) {
         this.valueState[key as keyof V] = value as V[keyof V]
       } else if (key in this.uiState) {
         this.uiState[key as keyof U] = value as U[keyof U]
       } else {
-        console.warn(`Unknown property ${key}`)
+        console.warn(
+          `Trying to set ${JSON.stringify(
+            value,
+          )} to unknown property ${JSON.stringify(key)}`,
+        )
       }
     }
   }

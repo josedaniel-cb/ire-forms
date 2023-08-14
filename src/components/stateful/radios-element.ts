@@ -55,15 +55,17 @@ export class IreRadiosElement extends FieldElement {
     this.controller.connect(this)
 
     // Subscribe to value and validation changes
-    this.controller.valueStateChanges.subscribe((state) => {
+    this.controller.valueStateChanges.subscribe(async (state) => {
       this.#valueState = state
       this.requestUpdate()
+      await this.updateComplete
     })
 
     // Subscribe to UI changes
-    this.controller.uiStateChanges.subscribe((state) => {
+    this.controller.uiStateChanges.subscribe(async (state) => {
       this.#uiState = state
       this.requestUpdate()
+      await this.updateComplete
     })
   }
 

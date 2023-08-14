@@ -60,11 +60,7 @@ export class IreTextElement extends FieldElement {
               }
             : undefined
         }
-        @inputchange=${(
-          e: CustomEvent<{
-            value: string
-          }>,
-        ) => {
+        @inputchange=${(e: CustomEvent<{ value: string }>) => {
           this.controller.value = e.detail.value
         }}
         @inputblur=${() => {
@@ -75,21 +71,32 @@ export class IreTextElement extends FieldElement {
     `
   }
 
+  // override connectedCallback(): void {
+  //   super.connectedCallback()
+  //   // this.controller.connect(this)
+  //   this.ireInputEl.inputEl
+  //   console.log(
+  //     '🚀 ~ file: text-element.ts:78 ~ IreTextElement ~ overrideconnectedCallback ~ this.ireInputEl.inputEl:',
+  //     this.ireInputEl.inputEl,
+  //   )
+  // }
+
   override firstUpdated(): void {
     this.controller.connect(this)
 
     // Subscribe to value and validation changes
-    this.controller.valueStateChanges.subscribe((state) => {
+    this.controller.valueStateChanges.subscribe(async (state) => {
       this.#valueState = state
       this.requestUpdate()
-
+      await this.updateComplete
       this.ireInputEl.inputEl.value = state.value
     })
 
     // Subscribe to UI changes
-    this.controller.uiStateChanges.subscribe((state) => {
+    this.controller.uiStateChanges.subscribe(async (state) => {
       this.#uiState = state
       this.requestUpdate()
+      await this.updateComplete
     })
   }
 }
