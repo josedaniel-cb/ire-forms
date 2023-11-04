@@ -12,10 +12,7 @@
     "linting-check": "npx rome check ./src",
     "format": "npx rome format ./src --write"
   },
-  "keywords": [
-    "form",
-    "lit"
-  ],
+  "keywords": ["form", "lit"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/josedaniel-cb/ire-forms.git"
@@ -37,7 +34,5 @@
     "lit": "^3.0.0-pre.0",
     "rxjs": "^7.8.1"
   },
-  "files": [
-    "lib/**/*"
-  ]
+  "files": ["lib/**/*"]
 }

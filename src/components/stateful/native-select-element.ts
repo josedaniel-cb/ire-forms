@@ -5,6 +5,7 @@ import {
 import { SelectFieldValueState } from '../../fields/controllers/select/select-value-state'
 import { formControlsCss } from '../css/form-controls-css'
 import { formFieldCss } from '../css/form-field-css'
+import { iconizedControlCss } from '../css/iconized-control-css'
 import { layoutsCss } from '../css/layout-css'
 import { Icon } from '../icons/icon'
 import { FieldElement } from './base/field-element'
@@ -20,31 +21,7 @@ export class IreNativeSelectElement extends FieldElement {
     layoutsCss,
     formFieldCss,
     formControlsCss,
-    css`
-      .form-select-wrapper {
-        position: relative;
-      }
-
-      .form-select {
-        width: 100%;
-        padding-right: 2.5rem/* 40px */;
-      }
-
-      ire-last-icon-wrapper {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        width: 2.5rem;
-        margin: auto;
-        pointer-events: none;
-        color: rgb(148, 163, 184);
-      }
-
-      .form-select.is-invalid + ire-last-icon-wrapper {
-        color: red;
-      }
-    `,
+    iconizedControlCss,
   ]
 
   @query('select')
@@ -65,9 +42,9 @@ export class IreNativeSelectElement extends FieldElement {
       this.#valueState?.validationResult.errorMessage ?? undefined
     const isInvalid = touched && errorMessage !== undefined
     return html`
-      <div class="form-select-wrapper">
+      <div class="iconized-control">
         <select
-          class="form-select ${classMap({
+          class="form-select iconized-control__input ${classMap({
             'is-invalid': isInvalid,
             'form-select--placeholder': this.#valueState?.index === null,
           })}"
@@ -89,6 +66,7 @@ export class IreNativeSelectElement extends FieldElement {
           )}
         </select>
         <ire-last-icon-wrapper
+          class="iconized-control__icon"
           .params=${
             isInvalid
               ? Icon.bootstrap('exclamation-triangle-fill')

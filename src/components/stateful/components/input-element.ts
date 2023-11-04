@@ -1,5 +1,6 @@
 import { formControlsCss } from '../../css/form-controls-css'
 import { formFieldCss } from '../../css/form-field-css'
+import { iconizedControlCss } from '../../css/iconized-control-css'
 import { layoutsCss } from '../../css/layout-css'
 import { Icon } from '../../icons/icon'
 import { HTMLTemplateResult, LitElement, css, html } from 'lit'
@@ -14,36 +15,7 @@ export class IreInputElement extends LitElement {
     layoutsCss,
     formFieldCss,
     formControlsCss,
-    css`
-      .wrapper {
-        position: relative;
-        display: grid;
-      }
-
-      .wrapper:has(ire-last-icon-wrapper) input {
-        padding-right: 2.5rem/* 40px */;
-      }
-
-      .wrapper ire-last-icon-wrapper {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        width: 2.5rem;
-        margin: auto;
-        pointer-events: none;
-        color: rgb(148, 163, 184);
-      }
-
-      .is-invalid + ire-last-icon-wrapper {
-        color: red;
-      }
-
-      ire-last-icon-wrapper.clickable {
-        pointer-events: auto;
-        cursor: pointer;
-      }
-    `,
+    iconizedControlCss,
   ]
 
   @query('input')
@@ -84,10 +56,10 @@ export class IreInputElement extends LitElement {
 
   protected render(): HTMLTemplateResult {
     return html`
-      <div class="wrapper">
+      <div class="iconized-control">
         <input
           .type=${this.type ?? 'text'}
-          class="form-input ${classMap({
+          class="form-input iconized-control__input ${classMap({
             'is-invalid': this.isInvalid,
           })}"
           placeholder="${ifDefined(this.placeholder)}"
@@ -115,7 +87,7 @@ export class IreInputElement extends LitElement {
           this.leadingIcon
             ? html`
             <ire-last-icon-wrapper
-              class="${classMap({
+              class="iconized-control__icon ${classMap({
                 clickable: this.leadingIcon.onClick !== undefined,
               })}"
               .params=${this.leadingIcon.icon}
@@ -125,6 +97,7 @@ export class IreInputElement extends LitElement {
             : this.isInvalid
             ? html`
               <ire-last-icon-wrapper
+                class="iconized-control__icon"
                 .params=${Icon.bootstrap('exclamation-triangle-fill')}
               ></ire-last-icon-wrapper>
             `
