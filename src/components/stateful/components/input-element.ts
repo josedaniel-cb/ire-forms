@@ -3,6 +3,7 @@ import { formFieldCss } from '../../css/form-field-css'
 import { iconizedControlCss } from '../../css/iconized-control-css'
 import { layoutsCss } from '../../css/layout-css'
 import { Icon } from '../../icons/icon'
+import { bootstrapCss2 } from '../bootstrap2'
 import { HTMLTemplateResult, LitElement, css, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import { query } from 'lit/decorators.js'
@@ -13,8 +14,9 @@ import { ifDefined } from 'lit/directives/if-defined.js'
 export class IreInputElement extends LitElement {
   static override styles = [
     layoutsCss,
-    formFieldCss,
-    formControlsCss,
+    // formFieldCss,
+    // formControlsCss,
+    bootstrapCss2,
     iconizedControlCss,
   ]
 
@@ -56,10 +58,14 @@ export class IreInputElement extends LitElement {
 
   protected render(): HTMLTemplateResult {
     return html`
+      <!-- <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+      </div> -->
       <div class="iconized-control">
         <input
           .type=${this.type ?? 'text'}
-          class="form-input iconized-control__input ${classMap({
+          class="form-control iconized-control__input ${classMap({
             'is-invalid': this.isInvalid,
           })}"
           placeholder="${ifDefined(this.placeholder)}"

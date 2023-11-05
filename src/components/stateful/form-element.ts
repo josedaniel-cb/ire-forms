@@ -52,33 +52,7 @@ export class IreFormElement extends LitElement {
   //   `,
   // ]
   static get styles() {
-    return [
-      layoutsCss,
-      // css`
-      //     * {
-      //       transition-property: background-color, border-color;
-      //       transition-duration: 150ms;
-      //       transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-      //     }
-
-      //     fieldset {
-      //       border: 1px solid rgb(206, 212, 218);
-      //       border-radius: 0.25rem;
-      //       padding: 0.75rem;
-      //     }
-
-      //     fieldset.no-border {
-      //       border-width: 0;
-      //       padding: 0;
-      //     }
-
-      //     /* legend {
-      //       color: rgb(148, 163, 184);
-      //       font-size: 0.75rem;
-      //     } */
-      //   `,
-      bootstrapCss2,
-    ]
+    return [layoutsCss, bootstrapCss2]
   }
 
   @property()
@@ -86,25 +60,20 @@ export class IreFormElement extends LitElement {
   controller?: FormController<any>
 
   override render() {
-    // ${renderStyleSheetLinks(FormBuilder.uiConfig.stylesheets)}
-    const fontFamilyName = 'Open Sans'
-    const fontUrl = buildFontURL({
-      families: [{ familyName: fontFamilyName }],
-    })
+    // const fontFamilyName = 'Open Sans'
+    // const fontFamilyName = 'Montserrat'
+    // const fontUrl = buildFontURL({
+    //   families: [{ familyName: fontFamilyName }],
+    // })
+    // <!-- <style>
+    //   @import url('${unsafeHTML(fontUrl)}');
+
+    //   * {
+    //     font-family: '${fontFamilyName}' !important;
+    //   }
+    // </style> -->
     return html`
-      <!-- <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-      /> -->
-      <style>
-        @import url('${fontUrl}');
-
-        * {
-          font-family: ${fontFamilyName}, sans-serif;
-        }
-      </style>
-
-      <div class="input-group mb-3">
+      <!-- <div class="input-group mb-3">
         <span class="input-group-text" id="basic-addon1">@</span>
         <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
       </div>
@@ -138,7 +107,7 @@ export class IreFormElement extends LitElement {
       <div class="input-group">
         <span class="input-group-text">With textarea</span>
         <textarea class="form-control" aria-label="With textarea"></textarea>
-      </div>
+      </div> -->
 
       <form>
         ${
@@ -147,12 +116,6 @@ export class IreFormElement extends LitElement {
             : html`<span class="text-danger">Controller is missing</span>`
         }
       </form>
-
-      <!-- <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"
-      ></script> -->
     `
   }
 

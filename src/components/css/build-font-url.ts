@@ -13,13 +13,15 @@ type FontOptions = {
   display?: 'auto' | 'block' | 'swap' | 'fallback' | 'optional'
 }
 
+// TODO: NO LONGER USED
+
 /**
  * Builds a font URL based on the provided options.
  * @param options The options for building the font URL.
  * @returns The generated font URL.
  */
 export function buildFontURL(options: FontOptions): string {
-  let url = '/css2?family='
+  let url = 'https://fonts.googleapis.com/css2?family='
 
   // Iterate through font families
   options.families.forEach((family, index) => {

@@ -3,11 +3,13 @@ import { FieldController } from '../../../fields/controllers/base/field-controll
 import { baseCss } from '../../css/base-css'
 import { layoutsCss } from '../../css/layout-css'
 import { mosaicCss } from '../../css/mosaic-css'
+import { bootstrapCss2 } from '../bootstrap2'
 // import { renderStyleSheetLinks } from '../../stateless/external-style-sheets'
 import { HTMLTemplateResult, LitElement, html } from 'lit'
 
 export abstract class FieldElement extends LitElement {
-  static override styles = [baseCss, layoutsCss, mosaicCss]
+  // static override styles = [baseCss, layoutsCss, mosaicCss]
+  static override styles = [layoutsCss, bootstrapCss2]
 
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
   controller!: FieldController<any, any, any, any>
@@ -44,9 +46,10 @@ export abstract class FieldElement extends LitElement {
   protected abstract _renderField(): HTMLTemplateResult
 
   protected _renderValidationMessage(errorMessage: string) {
+    // class="invalid-input-message"
     return html`
       <div
-        class="invalid-input-message"
+        class="invalid-feedback"
       >
         ${errorMessage}
       </div>

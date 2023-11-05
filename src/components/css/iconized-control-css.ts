@@ -8,6 +8,7 @@ export const iconizedControlCss = css`
 
 .iconized-control:has(.iconized-control__icon) .iconized-control__input {
     padding-right: 2.5rem/* 40px */;
+    background: none;
 }
 
 .iconized-control .iconized-control__icon {
