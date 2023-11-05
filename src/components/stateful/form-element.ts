@@ -10,12 +10,14 @@ import { baseCss } from '../css/base-css'
 import { buildFontURL } from '../css/build-font-url'
 import { layoutsCss } from '../css/layout-css'
 import { mosaicCss } from '../css/mosaic-css'
+import { bootstrapCss2 } from './bootstrap2'
 import './checkboxes-element'
 import './chips-element'
 import './native-select-element'
 import './radios-element'
 import './text-element'
-import { HTMLTemplateResult, LitElement, css, html } from 'lit'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+import { HTMLTemplateResult, LitElement, css, html, unsafeCSS } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'
 import { ifDefined } from 'lit/directives/if-defined.js'
@@ -23,32 +25,61 @@ import { ifDefined } from 'lit/directives/if-defined.js'
 @customElement('ire-form')
 export class IreFormElement extends LitElement {
   // static override styles = [mosaicCss, layoutsCss, baseCss]
-  static override styles = [
-    layoutsCss,
-    css`
-      * {
-        transition-property: background-color, border-color;
-        transition-duration: 150ms;
-        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-      }
+  // static override styles = [
+  //   layoutsCss,
+  //   css`
+  //     * {
+  //       transition-property: background-color, border-color;
+  //       transition-duration: 150ms;
+  //       transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  //     }
 
-      fieldset {
-        border: 1px solid rgb(206, 212, 218);
-        border-radius: 0.25rem;
-        padding: 0.75rem;
-      }
+  //     fieldset {
+  //       border: 1px solid rgb(206, 212, 218);
+  //       border-radius: 0.25rem;
+  //       padding: 0.75rem;
+  //     }
 
-      fieldset.no-border {
-        border-width: 0;
-        padding: 0;
-      }
+  //     fieldset.no-border {
+  //       border-width: 0;
+  //       padding: 0;
+  //     }
 
-      /* legend {
-        color: rgb(148, 163, 184);
-        font-size: 0.75rem;
-      } */
-    `,
-  ]
+  //     /* legend {
+  //       color: rgb(148, 163, 184);
+  //       font-size: 0.75rem;
+  //     } */
+  //   `,
+  // ]
+  static get styles() {
+    return [
+      layoutsCss,
+      // css`
+      //     * {
+      //       transition-property: background-color, border-color;
+      //       transition-duration: 150ms;
+      //       transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      //     }
+
+      //     fieldset {
+      //       border: 1px solid rgb(206, 212, 218);
+      //       border-radius: 0.25rem;
+      //       padding: 0.75rem;
+      //     }
+
+      //     fieldset.no-border {
+      //       border-width: 0;
+      //       padding: 0;
+      //     }
+
+      //     /* legend {
+      //       color: rgb(148, 163, 184);
+      //       font-size: 0.75rem;
+      //     } */
+      //   `,
+      bootstrapCss2,
+    ]
+  }
 
   @property()
   // rome-ignore lint/suspicious/noExplicitAny: any is required here
@@ -61,6 +92,10 @@ export class IreFormElement extends LitElement {
       families: [{ familyName: fontFamilyName }],
     })
     return html`
+      <!-- <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+      /> -->
       <style>
         @import url('${fontUrl}');
 
@@ -68,6 +103,43 @@ export class IreFormElement extends LitElement {
           font-family: ${fontFamilyName}, sans-serif;
         }
       </style>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">@</span>
+        <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+      </div>
+
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+        <span class="input-group-text" id="basic-addon2">@example.com</span>
+      </div>
+
+      <div class="mb-3">
+        <label for="basic-url" class="form-label">Your vanity URL</label>
+        <div class="input-group">
+          <span class="input-group-text" id="basic-addon3">https://example.com/users/</span>
+          <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3 basic-addon4">
+        </div>
+        <div class="form-text" id="basic-addon4">Example help text goes outside the input group.</div>
+      </div>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text">$</span>
+        <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+        <span class="input-group-text">.00</span>
+      </div>
+
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Username" aria-label="Username">
+        <span class="input-group-text">@</span>
+        <input type="text" class="form-control" placeholder="Server" aria-label="Server">
+      </div>
+
+      <div class="input-group">
+        <span class="input-group-text">With textarea</span>
+        <textarea class="form-control" aria-label="With textarea"></textarea>
+      </div>
+
       <form>
         ${
           this.controller !== undefined
@@ -75,6 +147,12 @@ export class IreFormElement extends LitElement {
             : html`<span class="text-danger">Controller is missing</span>`
         }
       </form>
+
+      <!-- <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"
+      ></script> -->
     `
   }
 

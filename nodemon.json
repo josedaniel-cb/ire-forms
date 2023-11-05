@@ -1,0 +1,7 @@
+{
+  "ignore": [
+    "lib/*",
+    "src/components/stateful/bootstrap2.ts",
+    "src/components/stateful/bootstrap2.ts.backup"
+  ]
+}
