@@ -7,6 +7,10 @@ import { formControlsCss } from '../css/form-controls-css'
 import { formFieldCss } from '../css/form-field-css'
 import { layoutsCss } from '../css/layout-css'
 import { Icon } from '../icons/icon'
+import {
+  ControlValidationUiState,
+  ControlValidationUiStateClassName,
+} from '../validation/control-validation-ui-state'
 import { FieldElement } from './base/field-element'
 import { bootstrapCss2 } from './bootstrap2'
 import './components/input-element'
@@ -39,13 +43,18 @@ export class IreTextElement extends FieldElement {
       this.#valueState?.validationResult.errorMessage ?? undefined
     const isInvalid = errorMessage !== undefined
     const inputType = this.#uiState?.inputType ?? undefined
+
+    const validationState = ControlValidationUiState.className({
+      touched,
+      isInvalid,
+    })
+
     return html`
       <ire-input
-        class="${isInvalid ? 'is-invalid' : 'is-valid'}"
+        class="${validationState}"
         .type=${this._showPassword ? 'text' : inputType}
         .placeholder=${this.#uiState?.placeholder ?? undefined}
-        .isInvalid=${isInvalid}
-        .touched=${touched}
+        .validationState=${validationState}
         .enabled=${this.#valueState?.enabled ?? true}
         .max=${this.#uiState?.max ?? undefined}
         .maxLength=${this.#uiState?.maxLength ?? undefined}
@@ -72,22 +81,13 @@ export class IreTextElement extends FieldElement {
         }}
       ></ire-input>
       ${
-        isInvalid && touched
-          ? this._renderValidationMessage(errorMessage)
+        validationState === ControlValidationUiStateClassName.IsInvalid
+          ? // rome-ignore lint/style/noNonNullAssertion: any is required here
+            this._renderValidationMessage(errorMessage!)
           : undefined
       }
     `
   }
-
-  // override connectedCallback(): void {
-  //   super.connectedCallback()
-  //   // this.controller.connect(this)
-  //   this.ireInputEl.inputEl
-  //   console.log(
-  //     '🚀 ~ file: text-element.ts:78 ~ IreTextElement ~ overrideconnectedCallback ~ this.ireInputEl.inputEl:',
-  //     this.ireInputEl.inputEl,
-  //   )
-  // }
 
   override firstUpdated(): void {
     this.controller.connect(this)

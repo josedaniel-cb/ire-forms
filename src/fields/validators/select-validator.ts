@@ -33,6 +33,10 @@ export class SelectFieldValidator<
         }
       }
     })()
-    return { isValid: !!errorMessage, errorMessage: errorMessage ?? null }
+
+    return {
+      isValid: errorMessage === undefined,
+      errorMessage: errorMessage ?? null,
+    }
   }
 }

@@ -11,6 +11,7 @@ import { formFieldCss } from '../css/form-field-css'
 import { layoutsCss } from '../css/layout-css'
 import { Icon } from '../icons/icon'
 import { FieldElement } from './base/field-element'
+import { bootstrapCss2 } from './bootstrap2'
 import './components/filter-select-element'
 import './components/last-icon-wrapper-element'
 import 'last-icon'
@@ -24,17 +25,19 @@ type Option = SelectOption<any>
 export class IreChipsElement extends FieldElement {
   static override styles = [
     layoutsCss,
-    formFieldCss,
-    formControlsCss,
+    // formFieldCss,
+    // formControlsCss,
+    bootstrapCss2,
     css`
       /* Styles for the chips of selected elements */
       .chip {
         display: flex;
         align-items: center;
-        padding: 2px 8px;
-        background-color: #007bff;
+        /* padding: 2px 8px; */
+        padding: 0px 0.5em;
+        /* background-color: #007bff;
         color: #fff;
-        border-radius: 16px;
+        border-radius: 16px; */
       }
 
       /* Styles for the "x" icon inside the chips */
@@ -84,7 +87,7 @@ export class IreChipsElement extends FieldElement {
     const errorMessage =
       this.#valueState?.validationResult.errorMessage ?? undefined
 
-    const icon = this.#uiState?.removeIcon ?? Icon.bootstrap('x-circle-fill')
+    const icon = this.#uiState?.removeIcon ?? Icon.bootstrap('x-circle')
 
     const availableOptionsAsEntries =
       this.#valueState?.options
@@ -118,7 +121,7 @@ export class IreChipsElement extends FieldElement {
           }
           // Add classMap to conditionally apply 'highlighted' class to the selected option
           return html`
-            <div class="chip">
+            <!-- <div class="chip">
               ${this.#renderLabel(option, i)}
               <div
                 class="remove-icon"
@@ -126,7 +129,19 @@ export class IreChipsElement extends FieldElement {
               >
                 <ire-last-icon-wrapper .params=${icon}></ire-last-icon-wrapper>
               </div>
-            </div>
+            </div> -->
+            <span class="rounded-pill text-bg-primary chip">
+              ${this.#renderLabel(option, i)}
+              <!-- <button type="button" class="btn btn-outline-danger">
+                <ire-last-icon-wrapper .params=${icon}></ire-last-icon-wrapper>
+              </button> -->
+              <div
+                class="remove-icon"
+                @click=${() => this.#removeValueByOption(option)}
+              >
+                <ire-last-icon-wrapper .params=${icon}></ire-last-icon-wrapper>
+              </div>
+            </span>
           `
         })}
       </ire-filter-select>
