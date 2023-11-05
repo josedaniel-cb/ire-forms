@@ -8,15 +8,17 @@ import { formFieldCss } from '../css/form-field-css'
 import { layoutsCss } from '../css/layout-css'
 import { Icon } from '../icons/icon'
 import { FieldElement } from './base/field-element'
+import { bootstrapCss2 } from './bootstrap2'
 import './components/input-element'
 import { IreInputElement } from './components/input-element'
 import { HTMLTemplateResult, css, html } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { query } from 'lit/decorators.js'
+import { classMap } from 'lit/directives/class-map.js'
 
 @customElement('ire-text')
 export class IreTextElement extends FieldElement {
-  static override styles = [layoutsCss, formFieldCss, formControlsCss]
+  static override styles = [layoutsCss, bootstrapCss2]
 
   @query('ire-input')
   ireInputEl!: IreInputElement
@@ -39,6 +41,7 @@ export class IreTextElement extends FieldElement {
     const inputType = this.#uiState?.inputType ?? undefined
     return html`
       <ire-input
+        class="${classMap({ 'is-invalid': isInvalid })}"
         .type=${this._showPassword ? 'text' : inputType}
         .placeholder=${this.#uiState?.placeholder ?? undefined}
         .isInvalid=${isInvalid}

@@ -62,7 +62,9 @@ export class IreInputElement extends LitElement {
         <label for="exampleFormControlInput1" class="form-label">Email address</label>
         <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
       </div> -->
-      <div class="iconized-control">
+      <div
+        class="iconized-control"
+      >
         <input
           .type=${this.type ?? 'text'}
           class="form-control iconized-control__input ${classMap({
