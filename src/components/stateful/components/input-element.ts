@@ -10,6 +10,12 @@ import { query } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'
 import { ifDefined } from 'lit/directives/if-defined.js'
 
+enum InputValidationClass {
+  IsValid = 'is-valid',
+  IsInvalid = 'is-invalid',
+  None = '',
+}
+
 @customElement('ire-input')
 export class IreInputElement extends LitElement {
   static override styles = [
@@ -28,6 +34,9 @@ export class IreInputElement extends LitElement {
 
   @property()
   isInvalid!: boolean
+
+  @property()
+  touched!: boolean
 
   @property()
   enabled!: boolean
@@ -57,19 +66,19 @@ export class IreInputElement extends LitElement {
   step?: string
 
   protected render(): HTMLTemplateResult {
+    let validationClass = InputValidationClass.None
+    if (this.touched && this.isInvalid) {
+      validationClass = InputValidationClass.IsInvalid
+    } else if (!this.isInvalid) {
+      validationClass = InputValidationClass.IsValid
+    }
     return html`
-      <!-- <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
-      </div> -->
       <div
         class="iconized-control"
       >
         <input
           .type=${this.type ?? 'text'}
-          class="form-control iconized-control__input ${classMap({
-            'is-invalid': this.isInvalid,
-          })}"
+          class="form-control iconized-control__input ${validationClass}"
           placeholder="${ifDefined(this.placeholder)}"
           min="${ifDefined(this.min)}"
           max="${ifDefined(this.max)}"
@@ -102,11 +111,18 @@ export class IreInputElement extends LitElement {
               @click=${this.leadingIcon?.onClick}
             ></ire-last-icon-wrapper>
           `
-            : this.isInvalid
+            : validationClass === InputValidationClass.IsInvalid
             ? html`
               <ire-last-icon-wrapper
                 class="iconized-control__icon"
-                .params=${Icon.bootstrap('exclamation-triangle-fill')}
+                .params=${Icon.bootstrap('exclamation-circle')}
+              ></ire-last-icon-wrapper>
+            `
+            : validationClass === InputValidationClass.IsValid
+            ? html`
+              <ire-last-icon-wrapper
+                class="iconized-control__icon"
+                .params=${Icon.bootstrap('check-circle')}
               ></ire-last-icon-wrapper>
             `
             : undefined

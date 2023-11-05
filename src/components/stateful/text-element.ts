@@ -37,14 +37,15 @@ export class IreTextElement extends FieldElement {
     const touched = this.#uiState?.touched ?? false
     const errorMessage =
       this.#valueState?.validationResult.errorMessage ?? undefined
-    const isInvalid = touched && errorMessage !== undefined
+    const isInvalid = errorMessage !== undefined
     const inputType = this.#uiState?.inputType ?? undefined
     return html`
       <ire-input
-        class="${classMap({ 'is-invalid': isInvalid })}"
+        class="${isInvalid ? 'is-invalid' : 'is-valid'}"
         .type=${this._showPassword ? 'text' : inputType}
         .placeholder=${this.#uiState?.placeholder ?? undefined}
         .isInvalid=${isInvalid}
+        .touched=${touched}
         .enabled=${this.#valueState?.enabled ?? true}
         .max=${this.#uiState?.max ?? undefined}
         .maxLength=${this.#uiState?.maxLength ?? undefined}
@@ -70,7 +71,11 @@ export class IreTextElement extends FieldElement {
           this.controller.markAsTouched()
         }}
       ></ire-input>
-      ${isInvalid ? this._renderValidationMessage(errorMessage) : undefined}
+      ${
+        isInvalid && touched
+          ? this._renderValidationMessage(errorMessage)
+          : undefined
+      }
     `
   }
 

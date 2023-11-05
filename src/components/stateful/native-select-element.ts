@@ -70,7 +70,7 @@ export class IreNativeSelectElement extends FieldElement {
           .params=${
             isInvalid
               ? Icon.bootstrap('exclamation-triangle-fill')
-              : Icon.bootstrap('caret-down-fill')
+              : Icon.bootstrap('chevron-down')
           }
         ></ire-last-icon-wrapper>
       </div>
