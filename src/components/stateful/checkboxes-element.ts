@@ -1,44 +1,26 @@
+import { HTMLTemplateResult, html } from 'lit'
+import { customElement, property, queryAll } from 'lit/decorators.js'
 import {
   CheckboxesFieldController,
   CheckboxesFieldUIState,
 } from '../../fields/controllers/checkboxes-controller'
 import { FieldElement } from './base/field-element'
-import { HTMLTemplateResult, css, html } from 'lit'
-import { customElement, property, queryAll } from 'lit/decorators.js'
 
+import 'last-icon'
 import {
   MultiSelectFieldValueState,
   SelectOption,
 } from '../../fields/controllers/multi-select/multi-select-value-state'
 import { FormUILayouts } from '../../form-ui/form-ui-layout'
-import { formControlsCss } from '../css/form-controls-css'
-import { formFieldCss } from '../css/form-field-css'
 import { layoutsCss } from '../css/layout-css'
-import 'last-icon'
+import { bootstrapCss2 } from './bootstrap2'
 
 // rome-ignore lint/suspicious/noExplicitAny: any is required here
 type Option = SelectOption<any>
 
 @customElement('ire-checkboxes')
 export class IreCheckboxesElement extends FieldElement {
-  // static override styles = [...FieldElement.styles, css``]
-  static override styles = [
-    layoutsCss,
-    formFieldCss,
-    formControlsCss,
-    css`
-      label {
-        display: flex;
-        align-items: center;
-      }
-
-      label > span {
-        font-size: 0.875rem/* 14px */;
-        line-height: 1.5715;
-        margin-left: 0.5rem/* 8px */;
-      }
-    `,
-  ]
+  static override styles = [layoutsCss, bootstrapCss2]
 
   @queryAll('input')
   inputEls!: NodeListOf<HTMLInputElement>
@@ -90,15 +72,15 @@ export class IreCheckboxesElement extends FieldElement {
       >
         ${this.#valueState?.options.map((option, i) => {
           return html`
-            <label>
+            <label class="form-check">
               <input
+                class="form-check-input"
                 type="checkbox"
-                class="form-checkbox"
                 .disabled=${!(this.#valueState?.enabled ?? true)}
                 @input=${() => this.#handleInput(i)}
                 @blur=${() => this.#handleBlur()}
               >
-              <span>
+              <span class="form-check-label">
                 ${this.#renderLabel(option, i)}
               </span>
             </label>

@@ -1,14 +1,11 @@
 import { HTMLTemplateResult, css, html } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { query } from 'lit/decorators.js'
-import { classMap } from 'lit/directives/class-map.js'
 import {
   TextFieldController,
   TextFieldUIState,
   TextFieldValueState,
 } from '../../fields/controllers/text-controller'
-import { formControlsCss } from '../css/form-controls-css'
-import { formFieldCss } from '../css/form-field-css'
 import { layoutsCss } from '../css/layout-css'
 import { Icon } from '../icons/icon'
 import {
@@ -22,7 +19,8 @@ import { IreInputElement } from './components/input-element'
 
 @customElement('ire-text')
 export class IreTextElement extends FieldElement {
-  static override styles = [layoutsCss, bootstrapCss2]
+  // static override styles = [layoutsCss, bootstrapCss2]
+  static override styles = [bootstrapCss2]
 
   @query('ire-input')
   ireInputEl!: IreInputElement
@@ -49,18 +47,6 @@ export class IreTextElement extends FieldElement {
       isInvalid,
     })
 
-    // .leadingIcon=${
-    //   inputType === 'password'
-    //     ? {
-    //         icon: this._showPassword
-    //           ? Icon.bootstrap('eye-slash')
-    //           : Icon.bootstrap('eye'),
-    //         onClick: () => {
-    //           this._showPassword = !this._showPassword
-    //         },
-    //       }
-    //     : undefined
-    // }
     return html`
       <ire-input
         class="${validationState}"
