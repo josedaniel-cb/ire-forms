@@ -1,3 +1,7 @@
+import { HTMLTemplateResult, css, html } from 'lit'
+import { customElement, property, state } from 'lit/decorators.js'
+import { query } from 'lit/decorators.js'
+import { classMap } from 'lit/directives/class-map.js'
 import {
   TextFieldController,
   TextFieldUIState,
@@ -15,10 +19,6 @@ import { FieldElement } from './base/field-element'
 import { bootstrapCss2 } from './bootstrap2'
 import './components/input-element'
 import { IreInputElement } from './components/input-element'
-import { HTMLTemplateResult, css, html } from 'lit'
-import { customElement, property, state } from 'lit/decorators.js'
-import { query } from 'lit/decorators.js'
-import { classMap } from 'lit/directives/class-map.js'
 
 @customElement('ire-text')
 export class IreTextElement extends FieldElement {
@@ -49,6 +49,18 @@ export class IreTextElement extends FieldElement {
       isInvalid,
     })
 
+    // .leadingIcon=${
+    //   inputType === 'password'
+    //     ? {
+    //         icon: this._showPassword
+    //           ? Icon.bootstrap('eye-slash')
+    //           : Icon.bootstrap('eye'),
+    //         onClick: () => {
+    //           this._showPassword = !this._showPassword
+    //         },
+    //       }
+    //     : undefined
+    // }
     return html`
       <ire-input
         class="${validationState}"
@@ -61,17 +73,26 @@ export class IreTextElement extends FieldElement {
         .min=${this.#uiState?.min ?? undefined}
         .minLength=${this.#uiState?.minLength ?? undefined}
         .step=${this.#uiState?.step ?? undefined}
-        .leadingIcon=${
+        .leadingIcons=${
           inputType === 'password'
-            ? {
-                icon: this._showPassword
-                  ? Icon.bootstrap('eye-slash')
-                  : Icon.bootstrap('eye'),
-                onClick: () => {
-                  this._showPassword = !this._showPassword
+            ? [
+                {
+                  icon: Icon.bootstrap('eye-slash'),
+                  onClick: () => {
+                    this._showPassword = !this._showPassword
+                  },
                 },
-              }
+                {
+                  icon: Icon.bootstrap('eye'),
+                  onClick: () => {
+                    this._showPassword = !this._showPassword
+                  },
+                },
+              ]
             : undefined
+        }
+        .selectedIconIndex=${
+          inputType === 'password' ? (this._showPassword ? 0 : 1) : undefined
         }
         @inputchange=${(e: CustomEvent<{ value: string }>) => {
           this.controller.value = e.detail.value

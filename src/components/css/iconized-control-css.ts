@@ -22,11 +22,11 @@ export const iconizedControlCss = css`
     color: var(--bs-body-color);
 }
 
-.is-invalid + .iconized-control__icon {
+.is-invalid ~ .iconized-control__icon {
     color: var(--bs-form-invalid-border-color);
 }
 
-.is-valid + .iconized-control__icon {
+.is-valid ~ .iconized-control__icon {
     color: var(--bs-form-valid-border-color);
 }
 

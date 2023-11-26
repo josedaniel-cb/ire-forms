@@ -1,3 +1,8 @@
+import { HTMLTemplateResult, LitElement, css, html } from 'lit'
+import { customElement, property } from 'lit/decorators.js'
+import { query } from 'lit/decorators.js'
+import { classMap } from 'lit/directives/class-map.js'
+import { ifDefined } from 'lit/directives/if-defined.js'
 import { formControlsCss } from '../../css/form-controls-css'
 import { formFieldCss } from '../../css/form-field-css'
 import { iconizedControlCss } from '../../css/iconized-control-css'
@@ -5,11 +10,6 @@ import { layoutsCss } from '../../css/layout-css'
 import { Icon } from '../../icons/icon'
 import { ControlValidationUiStateClassName } from '../../validation/control-validation-ui-state'
 import { bootstrapCss2 } from '../bootstrap2'
-import { HTMLTemplateResult, LitElement, css, html } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
-import { query } from 'lit/decorators.js'
-import { classMap } from 'lit/directives/class-map.js'
-import { ifDefined } from 'lit/directives/if-defined.js'
 
 @customElement('ire-input')
 export class IreInputElement extends LitElement {
@@ -19,6 +19,11 @@ export class IreInputElement extends LitElement {
     // formControlsCss,
     bootstrapCss2,
     iconizedControlCss,
+    css`
+      .hidden {
+        display: none;
+      }
+    `,
   ]
 
   @query('input')
@@ -54,11 +59,20 @@ export class IreInputElement extends LitElement {
   @property()
   minLength?: number
 
+  // @property()
+  // leadingIcon?: {
+  //   icon: Icon
+  //   onClick?: () => void
+  // }
+
   @property()
-  leadingIcon?: {
+  leadingIcons?: {
     icon: Icon
     onClick?: () => void
-  }
+  }[]
+
+  @property()
+  selectedIconIndex?: number
 
   @property()
   step?: string
@@ -92,36 +106,57 @@ export class IreInputElement extends LitElement {
             this.dispatchEvent(new CustomEvent('inputblur'))
           }}
         />
-        ${
-          this.leadingIcon
-            ? html`
-            <ire-last-icon-wrapper
-              class="iconized-control__icon ${classMap({
-                clickable: this.leadingIcon.onClick !== undefined,
-              })}"
-              .params=${this.leadingIcon.icon}
-              @click=${this.leadingIcon?.onClick}
-            ></ire-last-icon-wrapper>
-          `
-            : this.validationState ===
-              ControlValidationUiStateClassName.IsInvalid
-            ? html`
-              <ire-last-icon-wrapper
-                class="iconized-control__icon"
-                .params=${Icon.bootstrap('exclamation-circle')}
-              ></ire-last-icon-wrapper>
-            `
-            : this.validationState === ControlValidationUiStateClassName.IsValid
-            ? html`
-              <ire-last-icon-wrapper
-                class="iconized-control__icon"
-                .params=${Icon.bootstrap('check-circle')}
-              ></ire-last-icon-wrapper>
-            `
-            : undefined
-        }
+        ${this.#renderIcons()}
       </div>
     `
+  }
+
+  #renderIcons() {
+    // Ensure that either both leadingIcons and selectedIconIndex are set or none of them
+    if (
+      (this.leadingIcons !== undefined &&
+        this.selectedIconIndex === undefined) ||
+      (this.leadingIcons === undefined && this.selectedIconIndex !== undefined)
+    ) {
+      throw new Error('leadingIcons and selectedIconIndex must be both set')
+    }
+
+    // Define the icons to show
+    const icons = [
+      ...(this.leadingIcons ?? []),
+      { icon: Icon.bootstrap('exclamation-circle') },
+      { icon: Icon.bootstrap('check-circle') },
+    ]
+
+    // Determine which icon to show
+    let selectedIndex: number | null = null
+    if (this.selectedIconIndex !== undefined) {
+      selectedIndex = this.selectedIconIndex
+    } else if (
+      this.validationState === ControlValidationUiStateClassName.IsInvalid
+    ) {
+      selectedIndex = icons.length - 2
+    } else if (
+      this.validationState === ControlValidationUiStateClassName.IsValid
+    ) {
+      selectedIndex = icons.length - 1
+    }
+
+    // Render all icons, but show only the selected one
+    const htmlIcons = icons.map((icon, i) => {
+      return html`
+        <ire-last-icon-wrapper
+          class="iconized-control__icon ${classMap({
+            clickable: icon.onClick !== undefined,
+            hidden: selectedIndex !== i,
+          })}"
+          .params=${icon.icon}
+          @click=${icon.onClick}
+        ></ire-last-icon-wrapper>
+      `
+    })
+
+    return htmlIcons
   }
 }
 
