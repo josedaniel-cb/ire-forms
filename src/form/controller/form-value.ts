@@ -40,17 +40,22 @@ export class FormValueBuilder {
     return Object.keys(valueState).reduce(
       (value, key) => {
         const valueStateAttr = valueState[key]
+        let state: unknown
         if ('value' in valueStateAttr) {
           const fieldValueState = valueStateAttr
+          state = fieldValueState.value
           // It's a leaf (field)
-          value[key] = fieldValueState.value
+          // value[key] = fieldValueState.value
         } else {
           // It's a branch (form or fieldset)
           // rome-ignore lint/suspicious/noExplicitAny: any is required here
           const formValueState = valueStateAttr as FormValueState<any>
-          value[key] = FormValueBuilder.fromValueState(formValueState)
+          state = FormValueBuilder.fromValueState(formValueState)
+          // value[key] = FormValueBuilder.fromValueState(formValueState)
         }
-        return value
+        // value[key] = state
+        // return value
+        return { ...value, [key]: state }
       },
       // rome-ignore lint/suspicious/noExplicitAny: any is required here
       {} as Partial<FormValue<any>>,

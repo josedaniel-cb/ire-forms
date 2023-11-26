@@ -1,3 +1,4 @@
+import { BehaviorSubject, Observable, Subject, map, takeUntil } from 'rxjs'
 import {
   Field,
   FieldController,
@@ -7,7 +8,6 @@ import { FormDefinition } from '../definition/form-definition'
 import { FormFields, FormFieldsPatch } from './form-fields'
 import { FormValue, FormValueBuilder, FormValuePatch } from './form-value'
 import { FormValueState } from './form-value-state'
-import { BehaviorSubject, Observable, Subject, map, takeUntil } from 'rxjs'
 
 export interface Form<T extends FormDefinition> {
   /**
@@ -73,8 +73,19 @@ export class FormController<T extends FormDefinition> implements Form<T> {
 
     this.fields = Object.entries(this.children).reduce(
       (fields, [key, child]) => {
-        fields[key] = 'fields' in child ? child.fields : child
-        return fields
+        // fields[key] = 'fields' in child ? child.fields : child
+
+        // fields = {
+        //   ...fields,
+        //   [key]: 'fields' in child ? child.fields : child,
+        // }
+        // Reassigning a function parameter is confusing
+
+        // return fields
+        return {
+          ...fields,
+          [key]: 'fields' in child ? child.fields : child,
+        }
       },
       // rome-ignore lint/suspicious/noExplicitAny: any is required here
       {} as Partial<FormFields<any>>,
@@ -84,8 +95,12 @@ export class FormController<T extends FormDefinition> implements Form<T> {
 
     this.#valueStateSubject = new BehaviorSubject(
       Object.entries(this.children).reduce((fields, [key, child]) => {
-        fields[key] = 'fields' in child ? child.valueState : child.valueState
-        return fields
+        // fields[key] = 'fields' in child ? child.valueState : child.valueState
+        // return fields
+        return {
+          ...fields,
+          [key]: 'fields' in child ? child.valueState : child.valueState,
+        }
 
         // rome-ignore lint/suspicious/noExplicitAny: any is required here
       }, {} as Partial<FormValueState<any>>) as FormValueState<any>,
