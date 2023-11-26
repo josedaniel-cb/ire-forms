@@ -3,8 +3,6 @@ import { customElement, property } from 'lit/decorators.js'
 import { query } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'
 import { ifDefined } from 'lit/directives/if-defined.js'
-import { formControlsCss } from '../../css/form-controls-css'
-import { formFieldCss } from '../../css/form-field-css'
 import { iconizedControlCss } from '../../css/iconized-control-css'
 import { layoutsCss } from '../../css/layout-css'
 import { Icon } from '../../icons/icon'
@@ -15,8 +13,6 @@ import { bootstrapCss2 } from '../bootstrap2'
 export class IreInputElement extends LitElement {
   static override styles = [
     layoutsCss,
-    // formFieldCss,
-    // formControlsCss,
     bootstrapCss2,
     iconizedControlCss,
     css`
@@ -31,12 +27,6 @@ export class IreInputElement extends LitElement {
 
   @property()
   placeholder?: string
-
-  // @property()
-  // isInvalid!: boolean
-
-  // @property()
-  // touched!: boolean
 
   @property()
   validationState!: ControlValidationUiStateClassName
@@ -58,12 +48,6 @@ export class IreInputElement extends LitElement {
 
   @property()
   minLength?: number
-
-  // @property()
-  // leadingIcon?: {
-  //   icon: Icon
-  //   onClick?: () => void
-  // }
 
   @property()
   leadingIcons?: {
