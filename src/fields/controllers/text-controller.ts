@@ -27,7 +27,7 @@ export interface TextFieldUIState extends FieldUIState<IreTextElement> {
   maxLength: number | null
   min: string | null
   minLength: number | null
-  step: string
+  step: string | null
   placeholder: string | null
 }
 
