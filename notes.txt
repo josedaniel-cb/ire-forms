@@ -1,0 +1,5 @@
+Nov 26
+- the icons shoud not be removed from de DOM
+
+Progress:
+- 

@@ -10,5 +10,6 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports.rome": true
   },
-  "lit-plugin.rules.no-invalid-css": "off"
+  "lit-plugin.rules.no-invalid-css": "off",
+  "cSpell.words": ["datetime", "iconized", "rome"]
 }
