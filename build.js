@@ -1,23 +1,27 @@
 const { execSync } = require("child_process")
 
-// '/const cssTemplate = css\`/r node_modules/bootstrap/dist/css/bootstrap.css' \
+const srcFilePath = "src/components/stateful/bootstrap2.ts"
+const backupSrcFilePath = `${srcFilePath}.backup`
+const cssFilePath = "node_modules/bootstrap/dist/css/bootstrap.min.css"
+
 const sedCommand = `
 # Copy Bootstrap CSS
-cp src/components/stateful/bootstrap2.ts src/components/stateful/bootstrap2.ts.backup;
+cp ${srcFilePath} ${backupSrcFilePath};
 sed -i \
-  '/const text = \`/r node_modules/bootstrap/dist/css/bootstrap.min.css' \
-  src/components/stateful/bootstrap2.ts;
+  '/const text = \`/r ${cssFilePath}' \
+  ${srcFilePath};
 
 # Replace some CSS selectors
-sed -i 's/:root/:host/g' src/components/stateful/bootstrap2.ts
+sed -i 's/:root/:host/g' ${srcFilePath}
 
 # Compile
 rm -R lib;
 tsc;
 
 # Restore
-cp src/components/stateful/bootstrap2.ts.backup src/components/stateful/bootstrap2.ts;
-rm src/components/stateful/bootstrap2.ts.backup;
+rm ${srcFilePath};
+cp ${backupSrcFilePath} ${srcFilePath};
+rm ${backupSrcFilePath};
 `
 
 try {

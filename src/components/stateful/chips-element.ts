@@ -10,6 +10,10 @@ import { formControlsCss } from '../css/form-controls-css'
 import { formFieldCss } from '../css/form-field-css'
 import { layoutsCss } from '../css/layout-css'
 import { Icon } from '../icons/icon'
+import {
+  ControlValidationUiState,
+  ControlValidationUiStateClassName,
+} from '../validation/control-validation-ui-state'
 import { FieldElement } from './base/field-element'
 import { bootstrapCss2 } from './bootstrap2'
 import './components/filter-select-element'
@@ -34,7 +38,7 @@ export class IreChipsElement extends FieldElement {
         display: flex;
         align-items: center;
         /* padding: 2px 8px; */
-        padding: 0px 0.5em;
+        padding: 0 0.5em;
         /* background-color: #007bff;
         color: #fff;
         border-radius: 16px; */
@@ -83,9 +87,14 @@ export class IreChipsElement extends FieldElement {
   }
 
   protected _renderField(): HTMLTemplateResult {
-    const touched = this.#uiState?.touched ?? false
     const errorMessage =
       this.#valueState?.validationResult.errorMessage ?? undefined
+    const isInvalid = errorMessage !== undefined
+    const touched = this.#uiState?.touched ?? false
+    const validationState = ControlValidationUiState.className({
+      isInvalid,
+      touched,
+    })
 
     const icon = this.#uiState?.removeIcon ?? Icon.bootstrap('x-circle')
 
@@ -96,8 +105,9 @@ export class IreChipsElement extends FieldElement {
 
     return html`
       <ire-filter-select
+        class="${validationState}"
         .enabled=${this.#valueState?.enabled ?? true}
-        .isInvalid=${touched && errorMessage !== undefined}
+        .validationState=${validationState}
         .removeIcon=${icon}
         .optionHtmlTemplateBuilder=${this.#uiState?.optionHtmlTemplateBuilder}
         .optionEntries=${availableOptionsAsEntries}
@@ -131,7 +141,7 @@ export class IreChipsElement extends FieldElement {
               </div>
             </div> -->
             <span class="rounded-pill text-bg-primary chip">
-              ${this.#renderLabel(option, i)}
+              <strong><small>${this.#renderLabel(option, i)}</small></strong>
               <!-- <button type="button" class="btn btn-outline-danger">
                 <ire-last-icon-wrapper .params=${icon}></ire-last-icon-wrapper>
               </button> -->
@@ -146,8 +156,9 @@ export class IreChipsElement extends FieldElement {
         })}
       </ire-filter-select>
       ${
-        touched && errorMessage !== undefined
-          ? this._renderValidationMessage(errorMessage)
+        validationState === ControlValidationUiStateClassName.IsInvalid
+          ? // rome-ignore lint/style/noNonNullAssertion: any is required here
+            this._renderValidationMessage(errorMessage!)
           : undefined
       }
     `
