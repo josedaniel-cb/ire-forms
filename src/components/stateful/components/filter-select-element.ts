@@ -1,5 +1,6 @@
 import { SelectOption } from '../../../fields/controllers/multi-select/multi-select-value-state'
 import { baseCss } from '../../css/base-css'
+import { iconizedControlCss } from '../../css/iconized-control-css'
 import { Icon } from '../../icons/icon'
 import { ControlValidationUiStateClassName } from '../../validation/control-validation-ui-state'
 import { bootstrapCss2 } from '../bootstrap2'
@@ -13,8 +14,8 @@ type Option = SelectOption<any>
 @customElement('ire-filter-select')
 export class IreFilterSelectElement extends LitElement {
   static override styles = [
-    bootstrapCss2,
     baseCss, // required because of .hidden
+    bootstrapCss2,
     css`
       .form-control {
         position: relative;
@@ -76,6 +77,7 @@ export class IreFilterSelectElement extends LitElement {
         color: white;
       }
     `,
+    iconizedControlCss,
   ]
 
   @property()
@@ -110,30 +112,32 @@ export class IreFilterSelectElement extends LitElement {
 
   override render(): HTMLTemplateResult {
     return html`
-      <div
-        class="form-control iconized-control ${this.validationState}"
-      >
-        <slot></slot>
-        <input
-          class="iconized-control__input"
-          type="text"
-          placeholder="${'placeholder'}"
-          ?disabled="${!this.enabled}"
-          @input=${this.#handleSearchInput}
-          @click=${() => {
-            this._isInputFocused = true
-          }}
-          @keydown=${this.#handleSearchKeydown}
-          @focus=${() => {
-            this._isInputFocused = true
-          }}
-          @blur=${() => {
-            this._isInputFocused = false
-            this.dispatchEvent(new CustomEvent('inputblur'))
-          }}
-        />
+      <div class="iconized-control">
+        <div
+          class="form-control iconized-control__input ${this.validationState}"
+        >
+          <slot></slot>
+          <input
+            class=""
+            type="text"
+            placeholder="${'placeholder'}"
+            ?disabled="${!this.enabled}"
+            @input=${this.#handleSearchInput}
+            @click=${() => {
+              this._isInputFocused = true
+            }}
+            @keydown=${this.#handleSearchKeydown}
+            @focus=${() => {
+              this._isInputFocused = true
+            }}
+            @blur=${() => {
+              this._isInputFocused = false
+              this.dispatchEvent(new CustomEvent('inputblur'))
+            }}
+          />
+          ${this.#renderFilteredOptions()}
+        </div>
         ${this.#renderIcons()}
-        ${this.#renderFilteredOptions()}
       </div>
     `
   }

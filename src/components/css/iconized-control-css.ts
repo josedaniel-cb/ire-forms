@@ -3,12 +3,13 @@ import { css } from 'lit'
 export const iconizedControlCss = css`
 .iconized-control {
     position: relative;
-    display: grid;
+    /* display: grid; */
 }
 
 .iconized-control:has(.iconized-control__icon:not(.hidden)) .iconized-control__input {
     padding-right: 2.5rem/* 40px */;
-    background: none;
+    /* background: none; */
+    background-image: none;
 }
 
 .iconized-control .iconized-control__icon {
