@@ -1,8 +1,8 @@
-import { Icon } from '../../icons/icon'
 import 'last-icon'
 import { HTMLTemplateResult, LitElement, css, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import { ifDefined } from 'lit/directives/if-defined.js'
+import { Icon } from '../../icons/icon'
 
 @customElement('ire-last-icon-wrapper')
 export class LastIconWrapperElement extends LitElement {
@@ -17,7 +17,7 @@ export class LastIconWrapperElement extends LitElement {
       /* Recommended styles: https://www.npmjs.com/package/last-icon */
 
       l-i {
-        --size: 1em;
+        --size: 1.25em;
         display: inline-flex;
         width: var(--size);
         height: var(--size);

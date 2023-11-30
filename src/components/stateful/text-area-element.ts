@@ -3,8 +3,8 @@ import {
   TextAreaFieldUIState,
   TextAreaFieldValueState,
 } from '../../fields/controllers/text-area-controller'
-import { formControlsCss } from '../css/form-controls-css'
-import { formFieldCss } from '../css/form-field-css'
+// import { formControlsCss } from '../css/form-controls-css'
+// import { formFieldCss } from '../css/form-field-css'
 import { iconizedControlCss } from '../css/iconized-control-css'
 import { layoutsCss } from '../css/layout-css'
 import { Icon } from '../icons/icon'
@@ -20,8 +20,8 @@ import { ifDefined } from 'lit/directives/if-defined.js'
 export class IreTextAreaElement extends FieldElement {
   static override styles = [
     layoutsCss,
-    formFieldCss,
-    formControlsCss,
+    // formFieldCss,
+    // formControlsCss,
     iconizedControlCss,
   ]
 

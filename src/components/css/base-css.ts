@@ -1,7 +1,7 @@
 import { css } from 'lit'
 
 export const baseCss = css`
-  .flex {
+  /* .flex {
     display: flex;
   }
 
@@ -31,13 +31,13 @@ export const baseCss = css`
 
   .justify-end {
     justify-content: flex-end;
-  }
+  } */
 
   .hidden {
     display: none;
   }
 
-  .space-x-2 > :not([hidden]) ~ :not([hidden]) {
+  /* .space-x-2 > :not([hidden]) ~ :not([hidden]) {
     --tw-space-x-reverse: 0;
     margin-right: calc(0.5rem * var(--tw-space-x-reverse));
     margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
@@ -49,5 +49,5 @@ export const baseCss = css`
 
   .w-full {
     width: 100%;
-  }
+  } */
 `

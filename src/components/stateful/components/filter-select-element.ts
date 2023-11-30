@@ -1,4 +1,5 @@
 import { SelectOption } from '../../../fields/controllers/multi-select/multi-select-value-state'
+import { baseCss } from '../../css/base-css'
 import { Icon } from '../../icons/icon'
 import { ControlValidationUiStateClassName } from '../../validation/control-validation-ui-state'
 import { bootstrapCss2 } from '../bootstrap2'
@@ -13,69 +14,7 @@ type Option = SelectOption<any>
 export class IreFilterSelectElement extends LitElement {
   static override styles = [
     bootstrapCss2,
-    // css`
-    //   /* Styles for the ire-filter-select */
-    //   .form-input {
-    //     position: relative;
-    //     display: flex;
-    //     flex-wrap: wrap;
-    //     gap: 4px;
-    //     align-items: center;
-    //   }
-
-    //   /* Styles for the input search */
-    //   input[type='text'] {
-    //     flex: 1;
-    //     border: none;
-    //     outline: none;
-    //     background-color: transparent;
-    //     line-height: 1.25rem /* 20px */;
-    //     font-size: 0.875rem /* 14px */;
-    //     color: rgb(30, 41, 59);
-    //     min-width: 25px;
-    //   }
-
-    //   input[type='text']::placeholder {
-    //     color: rgb(148, 163, 184);
-    //   }
-
-    //   /* Styles for the filtered options */
-    //   .filtered-options {
-    //     position: absolute;
-    //     top: 100%;
-    //     left: 0;
-    //     width: 100%;
-    //     max-height: 200px;
-    //     overflow-y: auto;
-    //     background-color: #fff;
-    //     border: 1px solid #ced4da;
-    //     border-radius: 4px;
-    //     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    //     z-index: 1;
-    //   }
-
-    //   /* Styles for each option in the filtered options */
-    //   .option {
-    //     padding: 8px;
-    //     cursor: pointer;
-    //   }
-
-    //   .option:hover {
-    //     background-color: #f1f1f1;
-    //   }
-
-    //   .no-match {
-    //     padding: 8px;
-    //     text-align: center;
-    //     color: #888;
-    //   }
-
-    //   /* New styles for the highlighted option */
-    //   .option.highlighted {
-    //     background-color: #007bff;
-    //     color: #fff;
-    //   }
-    // `,
+    baseCss, // required because of .hidden
     css`
       .form-control {
         position: relative;
@@ -172,10 +111,11 @@ export class IreFilterSelectElement extends LitElement {
   override render(): HTMLTemplateResult {
     return html`
       <div
-        class="form-control ${this.validationState}"
+        class="form-control iconized-control ${this.validationState}"
       >
         <slot></slot>
         <input
+          class="iconized-control__input"
           type="text"
           placeholder="${'placeholder'}"
           ?disabled="${!this.enabled}"
@@ -192,6 +132,7 @@ export class IreFilterSelectElement extends LitElement {
             this.dispatchEvent(new CustomEvent('inputblur'))
           }}
         />
+        ${this.#renderIcons()}
         ${this.#renderFilteredOptions()}
       </div>
     `
@@ -255,6 +196,38 @@ export class IreFilterSelectElement extends LitElement {
         }
       </div>
     `
+  }
+
+  #renderIcons() {
+    // Define the icons to show
+    const icons = [
+      { icon: Icon.bootstrap('exclamation-circle') },
+      { icon: Icon.bootstrap('check-circle') },
+    ]
+
+    // Determine which icon to show
+    let selectedIndex: number | null = null
+    if (this.validationState === ControlValidationUiStateClassName.IsInvalid) {
+      selectedIndex = icons.length - 2
+    } else if (
+      this.validationState === ControlValidationUiStateClassName.IsValid
+    ) {
+      selectedIndex = icons.length - 1
+    }
+
+    // Render all icons, but show only the selected one
+    const htmlIcons = icons.map((icon, i) => {
+      return html`
+        <ire-last-icon-wrapper
+          class="iconized-control__icon ${classMap({
+            hidden: selectedIndex !== i,
+          })}"
+          .params=${icon.icon}
+        ></ire-last-icon-wrapper>
+      `
+    })
+
+    return htmlIcons
   }
 
   #selectOptionByIndex(index: number): void {

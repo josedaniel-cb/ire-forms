@@ -1,25 +1,22 @@
+import { baseCss } from '../../css/base-css'
+import { iconizedControlCss } from '../../css/iconized-control-css'
+// import { layoutsCss } from '../../css/layout-css'
+import { Icon } from '../../icons/icon'
+import { ControlValidationUiStateClassName } from '../../validation/control-validation-ui-state'
+import { bootstrapCss2 } from '../bootstrap2'
 import { HTMLTemplateResult, LitElement, css, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import { query } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'
 import { ifDefined } from 'lit/directives/if-defined.js'
-import { iconizedControlCss } from '../../css/iconized-control-css'
-import { layoutsCss } from '../../css/layout-css'
-import { Icon } from '../../icons/icon'
-import { ControlValidationUiStateClassName } from '../../validation/control-validation-ui-state'
-import { bootstrapCss2 } from '../bootstrap2'
 
 @customElement('ire-input')
 export class IreInputElement extends LitElement {
   static override styles = [
-    layoutsCss,
+    // layoutsCss,
     bootstrapCss2,
     iconizedControlCss,
-    css`
-      .hidden {
-        display: none;
-      }
-    `,
+    baseCss, // required because of .hidden
   ]
 
   @query('input')
