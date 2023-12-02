@@ -1,5 +1,9 @@
 import { CheckboxesFieldDefinition } from '../../fields/controllers/checkboxes-controller'
 import { ChipsFieldDefinition } from '../../fields/controllers/chips-controller'
+import {
+  FileFieldDefinition,
+  FileFieldValueState,
+} from '../../fields/controllers/file-controller'
 import { MultiSelectFieldValueState } from '../../fields/controllers/multi-select/multi-select-value-state'
 import { NativeSelectFieldDefinition } from '../../fields/controllers/native-select-controller'
 import { SelectFieldValueState } from '../../fields/controllers/select/select-value-state'
@@ -18,6 +22,8 @@ export type FormValueState<T extends FormDefinition> = {
     ? MultiSelectFieldValueState<R>
     : T['fields'][K] extends CheckboxesFieldDefinition<infer R>
     ? MultiSelectFieldValueState<R>
+    : T['fields'][K] extends FileFieldDefinition
+    ? FileFieldValueState
     : T['fields'][K] extends FormDefinition
     ? FormValueState<T['fields'][K]>
     : never

@@ -1,22 +1,24 @@
 import { FieldController } from '../../fields/controllers/base/field-controller'
 import { CheckboxesFieldController } from '../../fields/controllers/checkboxes-controller'
 import { ChipsFieldController } from '../../fields/controllers/chips-controller'
+import { FileFieldController } from '../../fields/controllers/file-controller'
 import { NativeSelectFieldController } from '../../fields/controllers/native-select-controller'
 import { RadiosFieldController } from '../../fields/controllers/radios-controller'
 import { TextFieldController } from '../../fields/controllers/text-controller'
 import { FormUILayouts } from '../../form-ui/form-ui-layout'
 import { FormController } from '../../form/controller/form-controller'
-import { baseCss } from '../css/base-css'
-import { buildFontURL } from '../css/build-font-url'
+// import { baseCss } from '../css/base-css'
+// import { buildFontURL } from '../css/build-font-url'
 import { layoutsCss } from '../css/layout-css'
 // import { mosaicCss } from '../css/mosaic-css'
 import { bootstrapCss2 } from './bootstrap2'
 import './checkboxes-element'
 import './chips-element'
+import './file-element'
 import './native-select-element'
 import './radios-element'
 import './text-element'
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+// import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import { HTMLTemplateResult, LitElement, css, html, unsafeCSS } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import { classMap } from 'lit/directives/class-map.js'
@@ -178,6 +180,10 @@ export class IreFormElement extends LitElement {
     } else if (fieldController instanceof TextFieldController) {
       template = html`
         <ire-text .controller=${fieldController}></ire-text>
+      `
+    } else if (fieldController instanceof FileFieldController) {
+      template = html`
+        <ire-file .controller=${fieldController}></ire-file>
       `
     }
 

@@ -2,6 +2,10 @@ import { FormDefinitionLeaf } from '../../form/definition/form-definition'
 import { FieldController } from '../controllers/base/field-controller'
 import { CheckboxesFieldController } from '../controllers/checkboxes-controller'
 import { ChipsFieldController } from '../controllers/chips-controller'
+import {
+  FileFieldController,
+  FileFieldValueState,
+} from '../controllers/file-controller'
 import { MultiSelectFieldValueState } from '../controllers/multi-select/multi-select-value-state'
 import { NativeSelectFieldController } from '../controllers/native-select-controller'
 import { RadiosFieldController } from '../controllers/radios-controller'
@@ -9,6 +13,7 @@ import { SelectFieldValueState } from '../controllers/select/select-value-state'
 import { TextFieldController } from '../controllers/text-controller'
 import { FieldUIState } from '../states/field-ui-state'
 import { FieldValueState } from '../states/field-value-state'
+import { FileFieldValidator } from '../validators/file-validator'
 import { MultiSelectFieldValidator } from '../validators/multi-select-validator'
 import { SelectFieldValidator } from '../validators/select-validator'
 import { TextFieldValidator } from '../validators/text-validator'
@@ -169,6 +174,37 @@ export class FieldBuilder {
           label: params.label,
           layout: params.layout ?? null,
           optionHtmlTemplateBuilder: params.optionHtmlTemplateBuilder,
+        },
+        validator,
+        unsubscribeSubject,
+      })
+    }
+
+    if (params.type === 'file') {
+      const validator = new FileFieldValidator({
+        required: params.required ?? true,
+        validators: params.validators,
+      })
+      const nonValidatedValueState: Omit<
+        FileFieldValueState,
+        'validationResult'
+      > = {
+        value: params.value ?? [],
+        enabled: params.enabled ?? true,
+      }
+      controller = new FileFieldController({
+        valueState: {
+          ...nonValidatedValueState,
+          validationResult: validator.validate(nonValidatedValueState),
+        },
+        uiState: {
+          touched: false,
+          htmlElement: null,
+          label: params.label,
+          accept: params.accept ?? null,
+          multiple: params.multiple ?? false,
+          capture: params.capture ?? null,
+          placeholder: params.placeholder ?? null,
         },
         validator,
         unsubscribeSubject,

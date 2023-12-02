@@ -1,6 +1,7 @@
 import { FieldBuilder } from '../../fields/builder/field-builder'
 import { CheckboxesFieldDefinition } from '../../fields/controllers/checkboxes-controller'
 import { ChipsFieldDefinition } from '../../fields/controllers/chips-controller'
+import { FileFieldDefinition } from '../../fields/controllers/file-controller'
 import { NativeSelectFieldDefinition } from '../../fields/controllers/native-select-controller'
 import { RadiosFieldDefinition } from '../../fields/controllers/radios-controller'
 import { TextFieldDefinition } from '../../fields/controllers/text-controller'
@@ -91,6 +92,15 @@ export class FormBuilder {
     return {
       ...builderParams,
       type: 'radios',
+    }
+  }
+
+  static file(
+    builderParams: Omit<FileFieldDefinition, 'type'>,
+  ): FileFieldDefinition {
+    return {
+      ...builderParams,
+      type: 'file',
     }
   }
 }

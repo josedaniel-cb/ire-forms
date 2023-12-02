@@ -9,6 +9,11 @@ import {
   ChipsFieldMultiPatch,
 } from '../../fields/controllers/chips-controller'
 import {
+  FileField,
+  FileFieldDefinition,
+  FileFieldMultiPatch,
+} from '../../fields/controllers/file-controller'
+import {
   NativeSelectField,
   NativeSelectFieldDefinition,
   NativeSelectFieldMultiPatch,
@@ -29,6 +34,8 @@ export type FormFields<T extends FormDefinition> = {
     ? ChipsField<R>
     : T['fields'][K] extends CheckboxesFieldDefinition<infer R>
     ? CheckboxesField<R>
+    : T['fields'][K] extends FileFieldDefinition
+    ? FileField
     : T['fields'][K] extends FormDefinition
     ? FormFields<T['fields'][K]> //  ?  FormProps<T['fields'][K]>
     : never
@@ -43,6 +50,8 @@ export type FormFieldsPatch<T extends FormDefinition> = {
     ? ChipsFieldMultiPatch<R>
     : T['fields'][K] extends CheckboxesFieldDefinition<infer R>
     ? CheckboxesFieldMultiPatch<R>
+    : T['fields'][K] extends FileFieldDefinition
+    ? FileFieldMultiPatch
     : T['fields'][K] extends FormDefinition
     ? FormFieldsPatch<T['fields'][K]>
     : never
