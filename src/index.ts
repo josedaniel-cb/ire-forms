@@ -1,3 +1,4 @@
+import { Icon } from './components/icons/icon'
 import { IreCheckboxesElement } from './components/stateful/checkboxes-element'
 import { IreChipsElement } from './components/stateful/chips-element'
 import './components/stateful/form-element'
@@ -9,8 +10,10 @@ import { ChipsField } from './fields/controllers/chips-controller'
 import { NativeSelectField } from './fields/controllers/native-select-controller'
 import { RadiosField } from './fields/controllers/radios-controller'
 import { TextField } from './fields/controllers/text-controller'
+import { FormUILayouts } from './form-ui/form-ui-layout'
 import { FormBuilder } from './form/builder/form-builder'
 import { Form } from './form/controller/form-controller'
+import { html } from 'lit'
 
 export {
   Form,
@@ -23,6 +26,10 @@ export {
   IreChipsElement,
   IreCheckboxesElement,
   IreRadiosElement,
+  // new
+  html,
+  Icon,
+  FormUILayouts,
 }
 export type {
   //   AbstractField,
