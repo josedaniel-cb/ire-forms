@@ -205,6 +205,7 @@ export class FieldBuilder {
           multiple: params.multiple ?? false,
           capture: params.capture ?? null,
           placeholder: params.placeholder ?? null,
+          buttonText: params.buttonText ?? null,
         },
         validator,
         unsubscribeSubject,

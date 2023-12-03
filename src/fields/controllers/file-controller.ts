@@ -12,6 +12,7 @@ export interface FileFieldUIState extends FieldUIState<IreFileElement> {
   capture: 'user' | 'environment' | null // mobile onl
   multiple: boolean | null
   placeholder: string | null
+  buttonText: string | null
 }
 
 export type FileField = Field<
