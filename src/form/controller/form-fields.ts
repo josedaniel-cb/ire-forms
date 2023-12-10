@@ -19,6 +19,11 @@ import {
   NativeSelectFieldMultiPatch,
 } from '../../fields/controllers/native-select-controller'
 import {
+  RadiosField,
+  RadiosFieldDefinition,
+  RadiosFieldMultiPatch,
+} from '../../fields/controllers/radios-controller'
+import {
   TextField,
   TextFieldDefinition,
   TextFieldMultiPatch,
@@ -34,6 +39,8 @@ export type FormFields<T extends FormDefinition> = {
     ? ChipsField<R>
     : T['fields'][K] extends CheckboxesFieldDefinition<infer R>
     ? CheckboxesField<R>
+    : T['fields'][K] extends RadiosFieldDefinition<infer R>
+    ? RadiosField<R>
     : T['fields'][K] extends FileFieldDefinition
     ? FileField
     : T['fields'][K] extends FormDefinition
@@ -50,6 +57,8 @@ export type FormFieldsPatch<T extends FormDefinition> = {
     ? ChipsFieldMultiPatch<R>
     : T['fields'][K] extends CheckboxesFieldDefinition<infer R>
     ? CheckboxesFieldMultiPatch<R>
+    : T['fields'][K] extends RadiosFieldDefinition<infer R>
+    ? RadiosFieldMultiPatch<R>
     : T['fields'][K] extends FileFieldDefinition
     ? FileFieldMultiPatch
     : T['fields'][K] extends FormDefinition

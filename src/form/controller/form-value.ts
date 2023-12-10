@@ -2,6 +2,7 @@ import { CheckboxesFieldDefinition } from '../../fields/controllers/checkboxes-c
 import { ChipsFieldDefinition } from '../../fields/controllers/chips-controller'
 import { FileFieldDefinition } from '../../fields/controllers/file-controller'
 import { NativeSelectFieldDefinition } from '../../fields/controllers/native-select-controller'
+import { RadiosFieldDefinition } from '../../fields/controllers/radios-controller'
 import { TextFieldDefinition } from '../../fields/controllers/text-controller'
 import { FormDefinition } from '../definition/form-definition'
 import { FormValueState } from './form-value-state'
@@ -10,6 +11,8 @@ export type FormValue<T extends FormDefinition> = {
   readonly [K in keyof T['fields']]: T['fields'][K] extends TextFieldDefinition
     ? string
     : T['fields'][K] extends NativeSelectFieldDefinition<infer R>
+    ? R | null
+    : T['fields'][K] extends RadiosFieldDefinition<infer R>
     ? R | null
     : T['fields'][K] extends ChipsFieldDefinition<infer R>
     ? R[]
@@ -26,6 +29,8 @@ export type FormValuePatch<T extends FormDefinition> = {
   [K in keyof T['fields']]?: T['fields'][K] extends TextFieldDefinition
     ? string
     : T['fields'][K] extends NativeSelectFieldDefinition<infer R>
+    ? R | null
+    : T['fields'][K] extends RadiosFieldDefinition<infer R>
     ? R | null
     : T['fields'][K] extends ChipsFieldDefinition<infer R>
     ? R[]

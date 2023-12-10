@@ -6,6 +6,7 @@ import {
 } from '../../fields/controllers/file-controller'
 import { MultiSelectFieldValueState } from '../../fields/controllers/multi-select/multi-select-value-state'
 import { NativeSelectFieldDefinition } from '../../fields/controllers/native-select-controller'
+import { RadiosFieldDefinition } from '../../fields/controllers/radios-controller'
 import { SelectFieldValueState } from '../../fields/controllers/select/select-value-state'
 import {
   TextFieldDefinition,
@@ -17,6 +18,8 @@ export type FormValueState<T extends FormDefinition> = {
   readonly [K in keyof T['fields']]: T['fields'][K] extends TextFieldDefinition
     ? TextFieldValueState
     : T['fields'][K] extends NativeSelectFieldDefinition<infer R>
+    ? SelectFieldValueState<R>
+    : T['fields'][K] extends RadiosFieldDefinition<infer R>
     ? SelectFieldValueState<R>
     : T['fields'][K] extends ChipsFieldDefinition<infer R>
     ? MultiSelectFieldValueState<R>
