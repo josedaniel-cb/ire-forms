@@ -2,6 +2,8 @@
 
 Lit Element forms with Bootstrap CSS styles. Let the editor guide you. As a Web Component, its compatible with React, Angular, Vue, and more.
 
+Do you need super fast forms and deligful typing? You are in the right place.
+
 ## Usage
 
 Use `FormBuilder` for creating a form controller.
@@ -87,7 +89,7 @@ const form = FormBuilder.build({
 })
 ```
 
-Its possible to subscribe externally
+Its possible to subscribe in a (?) way
 
 ```ts
 form.fields.firstName.valueStateChanges.subscribe(
@@ -138,9 +140,9 @@ const submit = () => {
 
 ## Fields
 
-### Text field
+### Text
 
-`TextField` is the controls `<input>` field.
+`TextField` is the controls `<input>` element.
 
 ```ts
 import { FormBuilder } from "ire-forms"
@@ -166,9 +168,9 @@ form.fields.age.patch({
 })
 ```
 
-## Select field
+## Select and Radios
 
-`NativeSelectField` controls `<select>` element
+`NativeSelectField` controls `<select>` element and `RadiosField` controls `<input type="radio">` elements. They are single select fields.
 
 ```ts
 import { FormBuilder } from "ire-forms"
@@ -197,4 +199,76 @@ form.fields.fruit.patch({
     { value: "watermelon", label: "Watermelon 🍉" },
   ],
 })
+```
+
+## Chips and Checkboxes
+
+`ChipsField` is a custom `<select>` element controller and `CheckboxesField` controls `<input type="checkbox">` elements. Both are multi select fields.
+
+You can choose tons of icons thanks to [last-icon](https://www.npmjs.com/package/last-icon).
+
+```ts
+import { FormBuilder, Icon, html } from "ire-forms"
+
+const form = FormBuilder.build({
+  fields: {
+    fruit: FormBuilder.chips({
+      label: "Fruits",
+      options: [
+        { value: "apple", label: "Apple 🍎" },
+        { value: "banana", label: "Banana 🍌" },
+        { value: "orange", label: "Orange 🍊" },
+      ],
+      removeIcon: Icon.bootstrap("x-circle-fill"),
+    }),
+    animal: FormBuilder.checkboxes({
+      label: "Animals",
+      options: [
+        { value: 1, label: "Cat 🐈" },
+        { value: 2, label: "Dog 🐕" },
+        { value: 3, label: "Mouse 🐁" },
+      ],
+      optionHtmlTemplateBuilder: (option, index) => {
+        // Use Lit Element html template
+        return html`<span>${index + 1} ${option.label}</span>`
+      },
+    }),
+  },
+})
+
+// Change value
+form.fields.fruit.value = ["banana"] // [🍌]
+
+// Add a new option
+form.fields.animal.patch({
+  options: [
+    ...form.fields.animal.valueState.options,
+    { value: 4, label: "Fish 🐟" },
+  ],
+})
+```
+
+### File
+
+`FileField` controls `<input type="file">` element.
+
+```ts
+import { FormBuilder } from "ire-forms"
+
+const form = FormBuilder.build({
+  fields: {
+    fruit: FormBuilder.file({
+      label: "Fruits",
+      buttonText: "Select a file",
+      multiple: true, // false by default
+      accept: "image/*",
+    }),
+  },
+})
+
+// Change value
+form.fields.fruit.value = [someFile] // File[] even if not multiple
+
+// Change UI
+form.fields.fruit.uiState.placeholder = "Choose a fruit"
 ```
