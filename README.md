@@ -1,12 +1,16 @@
 # ire-forms
 
-Lit Element forms with Bootstrap CSS styles. Let the editor guide you. As a Web Component, its compatible with React, Angular, Vue, and more.
+**Lit Element Forms with Bootstrap Styles**
 
-Do you need super fast forms and deligful typing? You are in the right place.
+Enhance your web applications with ire-forms, a robust library that integrates Lit Element forms with Bootstrap CSS styles. Designed to be editor-friendly and compatible across various frameworks like React, Angular, Vue, and more, ire-forms offers a seamless experience for developers.
+
+**Fast, Delightful Typing Experience**
+
+Embrace a refined coding experience. Leveraging TypeScript's powerful typing features, this library seamlessly integrates with editor's intelligent code suggestions and auto-completion.
 
 ## Usage
 
-Use `FormBuilder` for creating a form controller.
+To create a form controller, utilize the `FormBuilder` as follows:
 
 ```ts
 import { FormBuilder } from "ire-forms"
@@ -30,9 +34,7 @@ const form = FormBuilder.build({
 })
 ```
 
-Then use it for rendering an `ire-form` element.
-
-`ExampleForm.vue`
+Next, use it to render an ire-form element in your component, such as in `ExampleForm.vue`:
 
 ```html
 <template>
@@ -40,16 +42,16 @@ Then use it for rendering an `ire-form` element.
 </template>
 ```
 
-Remember `ire-form` is a Web Component, so you need to ensure to import `"ire-forms"` in the same component or file you will use it.
+Remember that `ire-form` is a Web Component, so ensure you import `"ire-forms"` in the same component or file where you intend to use it.
 
-You can access to the values this way.
+Accessing the values can be done as follows:
 
 ```ts
 form.value.firstName // string
 form.fields.firstName.value // string
 ```
 
-You can also change the state
+You can also modify the state in the following manner:
 
 ```ts
 form.fields.age.patch({
@@ -64,7 +66,7 @@ form.fields.firstName.uiState.placeholder = "Your name"
 
 ## Events
 
-You can subscribe to value and rendering changes
+You have the option to subscribe to value and rendering changes:
 
 ```ts
 import { FormBuilder } from "ire-forms"
@@ -89,7 +91,7 @@ const form = FormBuilder.build({
 })
 ```
 
-Its possible to subscribe in a (?) way
+Alternatively, you can subscribe in the following manner:
 
 ```ts
 form.fields.firstName.valueStateChanges.subscribe(
@@ -109,7 +111,7 @@ form.fields.firstName.uiStateChanges.subscribe(({ htmlElement }) => {
 
 ## Validation
 
-Check fields validity and create custom validators
+Ensure field validity and create custom validators
 
 ```ts
 import { FormBuilder } from 'ire-forms'
@@ -140,7 +142,7 @@ const submit = () => {
 
 ## Fields
 
-The following table shows the main properties of the available fields.
+The table below provides an overview of the primary properties for the available fields:
 
 | Field                            | `FormBuilder` function | Value type  | HTML referent             |
 | -------------------------------- | ---------------------- | ----------- | ------------------------- |
@@ -153,7 +155,7 @@ The following table shows the main properties of the available fields.
 
 ### Text
 
-`TextField` is the controls `<input>` element.
+The `TextField` is responsible for controlling the `<input>` element.
 
 ```ts
 import { FormBuilder } from "ire-forms"
@@ -181,7 +183,7 @@ form.fields.age.patch({
 
 ### Select and Radios
 
-`NativeSelectField` controls `<select>` element and `RadiosField` controls `<input type="radio">` elements. They are single select fields.
+`NativeSelectField` manages the `<select>` element, and `RadiosField` handles `<input type="radio">` elements. They are both designed for single select fields.
 
 ```ts
 import { FormBuilder } from "ire-forms"
@@ -214,9 +216,9 @@ form.fields.fruit.patch({
 
 ### Chips and Checkboxes
 
-`ChipsField` is a custom `<select>` element controller and `CheckboxesField` controls `<input type="checkbox">` elements. Both are multi select fields.
+`ChipsField` is a custom controller for `<select>` elements, and `CheckboxesField` manages `<input type="checkbox">` elements. Both are designed for multi-select fields.
 
-You can choose tons of icons thanks to [last-icon](https://www.npmjs.com/package/last-icon).
+You can choose from a variety of icons thanks to [last-icon](https://www.npmjs.com/package/last-icon).
 
 ```ts
 import { FormBuilder, Icon, html } from "ire-forms"
@@ -261,7 +263,7 @@ form.fields.animal.patch({
 
 ### File
 
-`FileField` controls `<input type="file">` element.
+`FileField` manages the `<input type="file">` element.
 
 ```ts
 import { FormBuilder } from "ire-forms"
@@ -286,9 +288,9 @@ form.fields.fruit.uiState.placeholder = "Choose a fruit"
 
 ## Responsiveness
 
-You can group fields by using `FormBuilder.fieldset`. `FormUILayouts.autoGrid` is the easiest way to have responsiveness.
+You can organize your fields into groups using `FormBuilder.fieldset`. When it comes to achieving responsiveness, the go-to choice is `FormUILayouts.autoGrid`.
 
-So, this styles
+So, for styles like these:
 
 ```css
 .auto-grid {
@@ -303,7 +305,7 @@ So, this styles
 }
 ```
 
-could be applied this way
+You can easily apply them like this:
 
 ```ts
 import { FormBuilder, FormUILayouts } from "ire-forms"
@@ -349,3 +351,5 @@ const form = FormBuilder.build({
   },
 })
 ```
+
+Now you can keep your form layouts responsive without breaking a sweat! 😎
