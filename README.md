@@ -140,6 +140,17 @@ const submit = () => {
 
 ## Fields
 
+The following table shows the main properties of the available fields.
+
+| Field                            | `FormBuilder` function | Value type  | HTML referent             |
+| -------------------------------- | ---------------------- | ----------- | ------------------------- |
+| `TextFieldDefinition`            | `text`                 | `string`    | `<input type="text">`     |
+| `NativeSelectFieldDefinition<T>` | `nativeSelect`         | `T \| null` | `<select>`                |
+| `RadiosFieldDefinition<T>`       | `radios`               | `T \| null` | `<input type="radio">`    |
+| `ChipsFieldDefinition<T>`        | `chips`                | `T[]`       | Custom `<select>`         |
+| `CheckboxesFieldDefinition<T>`   | `checkboxes`           | `T[]`       | `<input type="checkbox">` |
+| `FileFieldDefinition`            | `file`                 | `File[]`    | `<input type="file">`     |
+
 ### Text
 
 `TextField` is the controls `<input>` element.
@@ -168,7 +179,7 @@ form.fields.age.patch({
 })
 ```
 
-## Select and Radios
+### Select and Radios
 
 `NativeSelectField` controls `<select>` element and `RadiosField` controls `<input type="radio">` elements. They are single select fields.
 
@@ -201,7 +212,7 @@ form.fields.fruit.patch({
 })
 ```
 
-## Chips and Checkboxes
+### Chips and Checkboxes
 
 `ChipsField` is a custom `<select>` element controller and `CheckboxesField` controls `<input type="checkbox">` elements. Both are multi select fields.
 
@@ -271,4 +282,70 @@ form.fields.fruit.value = [someFile] // File[] even if not multiple
 
 // Change UI
 form.fields.fruit.uiState.placeholder = "Choose a fruit"
+```
+
+## Responsiveness
+
+You can group fields by using `FormBuilder.fieldset`. `FormUILayouts.autoGrid` is the easiest way to have responsiveness.
+
+So, this styles
+
+```css
+.auto-grid {
+  --auto-grid-min-size: 10rem;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, var(--auto-grid-min-size)), 1fr)
+  );
+  grid-auto-flow: dense;
+}
+```
+
+could be applied this way
+
+```ts
+import { FormBuilder, FormUILayouts } from "ire-forms"
+
+const form = FormBuilder.build({
+  fields: {
+    personalInfo: FormBuilder.fieldset({
+      uiConfig: {
+        layout: FormUILayouts.autoGrid, // 10rem
+      },
+      fields: {
+        firstName: FormBuilder.text({
+          label: "First Name",
+        }),
+        lastName: FormBuilder.text({
+          label: "Last Name",
+        }),
+      },
+    }),
+    skills: FormBuilder.fieldset({
+      uiConfig: {
+        layout: FormUILayouts.autoGridRem(22), // 22rem
+      },
+      fields: {
+        languages: FormBuilder.chips({
+          label: "Languages",
+          options: [
+            { value: "en", label: "English" },
+            { value: "es", label: "Spanish" },
+            { value: "fr", label: "French" },
+          ],
+        }),
+        frameworks: FormBuilder.checkboxes({
+          label: "Frameworks",
+          options: [
+            { value: "react", label: "React" },
+            { value: "angular", label: "Angular" },
+            { value: "vue", label: "Vue" },
+          ],
+        }),
+      },
+    }),
+  },
+})
 ```
