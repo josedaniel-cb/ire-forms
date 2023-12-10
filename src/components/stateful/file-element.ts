@@ -23,22 +23,9 @@ export class IreFileElement extends FieldElement {
     baseCss,
     bootstrapCss2,
     css`
-      /* .btn-outline-secondary {
-        --bs-btn-color: #6c757d;
-        --bs-btn-border-color: #6c757d;
-        --bs-btn-hover-color: #fff;
-        --bs-btn-hover-bg: #6c757d;
-        --bs-btn-hover-border-color: #6c757d;
-        --bs-btn-focus-shadow-rgb: 108,117,125;
-        --bs-btn-active-color: #fff;
-        --bs-btn-active-bg: #6c757d;
-        --bs-btn-active-border-color: #6c757d;
-        --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-        --bs-btn-disabled-color: #6c757d;
-        --bs-btn-disabled-bg: transparent;
-        --bs-btn-disabled-border-color: #6c757d;
-        --bs-gradient: none;
-      } */
+      .input-group {
+        cursor: pointer
+      }
 
       .input-group:hover .btn {
         color: var(--bs-btn-hover-color);
@@ -46,13 +33,10 @@ export class IreFileElement extends FieldElement {
         border-color: var(--bs-btn-hover-border-color);
       }
 
-      /* .input-group:hover, .input-group:active {
-        box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
-      } */
-
       .form-control {
-        cursor: pointer;
-        caret-color: transparent;
+        /* cursor: pointer; */
+        /* caret-color: transparent; */
+        color: var(--bs-secondary-color);
       }
     `,
   ]
@@ -60,8 +44,8 @@ export class IreFileElement extends FieldElement {
   @query('input[type=file]')
   fileInputEl!: HTMLInputElement
 
-  @query('input[type=text]')
-  textInputEl!: HTMLInputElement
+  // @query('input[type=text]')
+  // textInputEl!: HTMLInputElement
 
   @query('button')
   buttonEl!: HTMLButtonElement
@@ -134,14 +118,22 @@ export class IreFileElement extends FieldElement {
     //       : undefined
     //   }
     // `
+
     return html`
       <input
         class="hidden"
         type="file"
         accept="${ifDefined(this.#uiState?.accept ?? undefined)}"
         capture="${ifDefined(this.#uiState?.capture ?? undefined)}"
-        ?multiple="${!(this.#uiState?.multiple ?? true) ? true : undefined}"
+        ?multiple="${this.#uiState?.multiple ?? false ? true : undefined}"
         ?disabled="${!(this.#valueState?.enabled ?? true) ? true : undefined}"
+        @input=${(event: Event) => {
+          if (this.fileInputEl.files === null) {
+            return
+          }
+          event.preventDefault()
+          this.controller.value = [...this.fileInputEl.files]
+        }}
       />
       <div
         class="input-group"
@@ -154,36 +146,31 @@ export class IreFileElement extends FieldElement {
           class="btn btn-outline-secondary"
           type="button"
           ?disabled="${!(this.#valueState?.enabled ?? true) ? true : undefined}"
-          @click=${(event: Event) => {
-            // event.preventDefault()
-            // this.fileInputEl.click()
-          }}
         >
           ${this.#uiState?.buttonText ?? 'Choose File'}
         </button>
-        <!-- <input
-          class="form-control"
-          type="text"
-          placeholder="${ifDefined(
-            this.#uiState?.placeholder ?? 'No file chosen',
-          )}"
-          @click=${(event: Event) => {
-            event.preventDefault()
-          }}
-          @input=${(event: Event) => {
-            event.preventDefault()
-          }}
-        /> -->
         <div
-          class="form-control"
+          class="form-control ${validationState}"
           type="text"
           tabindex="0"
-          style="color: var(--bs-secondary-color);"
         >
-          ${this.#uiState?.placeholder ?? 'No file chosen'}
+          <div style="position: absolute; top: 0; left: 0; bottom: 0; right: 0; display: flex; align-items: center">
+            <span style="display: block;white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;">
+              ${this.#buildText(this.#valueState?.value ?? [])}
+            </span>
+          </div>
         </div>
       </div>
     `
+  }
+
+  #buildText(value: File[]): string {
+    if (value.length === 0) {
+      return this.#uiState?.placeholder ?? 'No file chosen'
+    }
+    return value.map((f) => f.name).join(', ')
   }
 
   override firstUpdated(): void {
@@ -194,7 +181,8 @@ export class IreFileElement extends FieldElement {
       this.#valueState = state
       this.requestUpdate()
       await this.updateComplete
-      // this.el.value = state.value
+      // this.textInputEl.value =
+      //   this.#valueState.value.map((f) => f.name).join(', ') ?? ''
     })
 
     // Subscribe to UI changes

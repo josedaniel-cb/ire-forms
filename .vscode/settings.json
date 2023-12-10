@@ -8,7 +8,7 @@
   },
   "conventionalCommits.scopes": [],
   "editor.codeActionsOnSave": {
-    "source.organizeImports.rome": true
+    "source.organizeImports.rome": "explicit"
   },
   "lit-plugin.rules.no-invalid-css": "off",
   "cSpell.words": ["datetime", "iconized", "rome"]
