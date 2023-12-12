@@ -1,6 +1,6 @@
 {
   "name": "ire-forms",
-  "version": "1.0.2",
+  "version": "2.0.0-alpha.0",
   "description": "Lit Element forms to use declaratively",
   "main": "lib/index.js",
   "types": "lib",
