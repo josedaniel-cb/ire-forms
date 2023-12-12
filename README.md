@@ -4,7 +4,7 @@
 
 Enhance your web applications with ire-forms, a robust library that integrates Lit Element forms with Bootstrap CSS styles. Designed to be editor-friendly and compatible across various frameworks like React, Angular, Vue, and more, ire-forms offers a seamless experience for developers.
 
-<img src="https://raw.githubusercontent.com/josedaniel-cb/ire-forms/main/documentation/vscode-screen-record.gif"/>
+![demo](https://raw.githubusercontent.com/josedaniel-cb/ire-forms/main/documentation/vscode-screen-record.gif)
 
 **Fast, Delightful Typing Experience**
 
